@@ -87,28 +87,6 @@
                     <password>jboss-local-admin-password</password>
                     <name>${project.build.finalName}.${project.packaging}</name>
                 </configuration>
-                <executions>
-                    <!-- Undeploy the application on clean -->
-                    <execution>
-                        <id>undeploy</id>
-                        <phase>clean</phase>
-                        <goals>
-                            <goal>undeploy</goal>
-                        </goals>
-                        <configuration>
-                            <ignoreMissingDeployment>true</ignoreMissingDeployment>
-                        </configuration>
-                    </execution>
-
-                    <!-- Deploy the application on install -->
-                    <execution>
-                        <id>deploy</id>
-                        <phase>install</phase>
-                        <goals>
-                            <goal>deploy</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
         </plugins>
     </build>
