@@ -13,6 +13,8 @@ public class User {
     private String password;
     @Enumerated(EnumType.STRING)
     private Role role;
+    private String email;
+    private String phone;
 
     public Long getId() {
         return id;
