@@ -47,6 +47,8 @@ public class UserStore {
         user.setUsername(username);
         user.setPassword(pwdHash);
         user.setRole(role);
+        user.setEmail();
+        user.getPhone();
         em.persist(user);
         return user;
     }
