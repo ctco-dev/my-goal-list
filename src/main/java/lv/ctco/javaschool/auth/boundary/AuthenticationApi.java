@@ -59,10 +59,12 @@ public class AuthenticationApi {
     public Response register(UserLoginDto userLogin, @Context HttpServletRequest request, @Context HttpServletResponse response) {
         String username = userLogin.getUsername();
         String password = userLogin.getPassword();
+        String email = userLogin.getEmail();
+        String phone = userLogin.getPhone();
         String errorCode = "UNKNOWN";
         Response.Status status = Response.Status.BAD_REQUEST;
         try {
-            User user = userStore.createUser(username, password, Role.USER);
+            User user = userStore.createUser(username, password, email, phone, Role.USER);
             log.info(String.format("User is registered %s", user));
             return login(userLogin, request, response);
         } catch (UsernameAlreadyExistsException e) {

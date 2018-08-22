@@ -29,10 +29,7 @@ public class UserLoginDto {
     public String getEmail() {
         return email;
     }
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
+    public void setEmail(String email) { this.email = email; }
     public void setPhone(String phone) {
         this.phone = phone;
     }
