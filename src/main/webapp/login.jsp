@@ -2,7 +2,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html>
-<title>W3.CSS</title>
+<title>My Goal List</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 <script src="http://www.w3schools.com/lib/w3data.js"></script>
@@ -28,6 +28,14 @@
         <p>
             <input id="username-txt" class="w3-input" type="text" style="width:90%" required>
             <label for="username-txt">Name</label>
+        </p>
+        <p id="email-grp" class="w3-hide">
+            <input id="email-txt" class="w3-input" type="text" style="width:90%" required>
+            <label for="email-txt">E-mail</label>
+        </p>
+        <p id="phone-grp" class="w3-hide">
+            <input id="phone-txt" class="w3-input" type="text" style="width:90%" required>
+            <label for="phone-txt">Phone</label>
         </p>
         <p>
             <input id="password1-txt" class="w3-input" type="password" style="width:90%" required>
@@ -57,14 +65,20 @@
         hideError();
         var checkbox = document.getElementById("register-cb");
         var pwd2 = document.getElementById("password2-grp");
+        var email = document.getElementById("email-grp");
+        var phone = document.getElementById("phone-grp");
         var loginBtn = document.getElementById("login-btn");
         var registerBtn = document.getElementById("register-btn");
         if (checkbox.checked) {
             pwd2.classList.remove("w3-hide");
+            email.classList.remove("w3-hide");
+            phone.classList.remove("w3-hide");
             loginBtn.classList.add("w3-hide");
             registerBtn.classList.remove("w3-hide");
         } else {
             pwd2.classList.add("w3-hide");
+            email.classList.add("w3-hide");
+            phone.classList.add("w3-hide");
             loginBtn.classList.remove("w3-hide");
             registerBtn.classList.add("w3-hide");
         }
@@ -103,6 +117,9 @@
         var usernameTxt = document.getElementById("username-txt");
         var password1Txt = document.getElementById("password1-txt");
         var password2Txt = document.getElementById("password2-txt");
+        var emailTxt = document.getElementById("email-txt");
+        var phoneTxt = document.getElementById("phone-txt");
+
         var pwd1 = password1Txt.value;
         var pwd2 = password2Txt.value;
         if (pwd1 !== pwd2) {
@@ -111,7 +128,10 @@
         }
         var dto = {
             "username": usernameTxt.value,
+            "email": emailTxt.value,
+            "phone": phoneTxt.value,
             "password": pwd1
+
         };
         console.log("sending registration data");
         fetch("<c:url value='/api/auth/register'/>", {
