@@ -51,8 +51,8 @@ public class UserStore {
         user.setPassword(pwdHash);
         user.setEmail(email);
         user.setPhone(phone);
-        em.persist(user);
         user.setRole(role);
+        em.persist(user);
 
         return user;
     }
