@@ -38,6 +38,24 @@ class UserStoreTest {
     }
 
 */
+
+
+    @Test
+    void createUserWithInvalidPassword() {
+        UserStore uc = new UserStore();
+        Executable invalidPassword = () -> uc.createUser(
+                "username",
+                null,
+                "hello@email.com",
+                "123",
+                Role.USER
+        );
+        assertThrows(InvalidPasswordException.class, invalidPassword);
+
+    }
+
+
+
     @Test
     void validateUsername() {
         UserStore uc = new UserStore();
