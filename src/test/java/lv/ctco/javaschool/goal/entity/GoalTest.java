@@ -29,7 +29,6 @@ public class GoalTest {
     void getAndSetUser() {
         User user = new User();
         user.setId(123456789L);
-        user.setId(123456789L);
         user.setPassword("12346");
         user.setEmail("qqq@qqq.qqq");
         user.setPhone("+37123456789");
