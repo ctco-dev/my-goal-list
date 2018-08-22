@@ -15,7 +15,10 @@
         <button style="color: white; background-color: deepskyblue; padding: 15px 32px; text-align: center; text-decoration: none; border-radius: 4px; display: inline-block; font-size: 100%;" onclick="logout()" type="button">Log out</button>
     </div>
     <div style="float: right;">
-        <button style="color: white; background-color: deepskyblue; padding: 15px 32px; text-align: center; text-decoration: none; border-radius: 4px; display: inline-block; font-size: 100%;" type="button">Add new goal</button>
+        <button style="color: white; background-color: deepskyblue; padding: 15px 32px; text-align: center; text-decoration: none; border-radius: 4px; display: inline-block; font-size: 100%;" onclick="findGoals()" type="button">Find goals</button>
+    </div>
+    <div style="float: right;">
+        <button style="color: white; background-color: deepskyblue; padding: 15px 32px; text-align: center; text-decoration: none; border-radius: 4px; display: inline-block; font-size: 100%;" onclick="addNewGoal()" type="button">Add new goal</button>
     </div>
 </div>
 <input id="personal-data" style = "display: inline-block; float: left" class="w3-check" type="checkbox" onchange="switchPersonalData();">
@@ -69,13 +72,13 @@
         }).then(function (user) {
             console.log(JSON.stringify(user))
             document.getElementById("name").innerHTML = user.username;
-            document.getElementById("phone_email").innerHTML = user.phone+"  "+user.email;
+            document.getElementById("phone_email").innerHTML = "Phone: "+user.phone+" |  E-mail: "+user.email;
         });
     }
 
     function showUserGoals() {
         console.log("User Goals List");
-        fetch("<c:url value='/api/game/mygoals'/>", {
+        fetch("<c:url value='/api/goal/mygoals'/>", {
             "method": "GET",
             headers: {
                 'Accept': 'application/json',
@@ -86,6 +89,18 @@
         }).then(function (goals) {
             console.log(JSON.stringify(goals));
         });
+    }
+    function addNewGoal() {
+        fetch("<c:url value='/api/goal'/>", {"method": "POST"})
+            .then(function (response) {
+                location.href = "/app/addgoal.jsp";
+            });
+    }
+    function findGoals() {
+        fetch("<c:url value='/api/goal'/>", {"method": "POST"})
+            .then(function (response) {
+                location.href = "/app/findgoals.jsp";
+            });
     }
 </script>
 </body>
