@@ -39,7 +39,7 @@
 
     function showUserProfile() {
         console.log("User Profile Data");
-        fetch("<c:url value='/api/game/myprofile'/>", {
+        fetch("<c:url value='/api/auth/myprofile'/>", {
             "method": "GET",
             headers: {
                 'Accept': 'application/json',
@@ -54,7 +54,7 @@
 
     function showUserGoals() {
         console.log("User Goals List");
-        fetch("<c:url value='/api/game/mygoals'/>", {
+        fetch("<c:url value='/api/goal/mygoals'/>", {
             "method": "GET",
             headers: {
                 'Accept': 'application/json',
