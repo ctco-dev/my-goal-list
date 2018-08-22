@@ -11,7 +11,7 @@
 <button type="button" onclick="logout()">Log out</button>
 
 <H1>Name and Surname</H1>
-<input id="personal-data" class="w3-check" type="checkbox" onchange="">
+<input id="personal-data" class="w3-check" type="checkbox" onchange="switchPersonalData();">
 <label for="personal-data">Personal Data</label>
 
 <div id="personal-block" class="w3-hide">
@@ -27,7 +27,7 @@
             });
     }
 
-    function switchRegistration() {
+    function switchPersonalData() {
         var checkbox = document.getElementById("personal-data");
         var block = document.getElementById("personal-block");
         if (checkbox.checked) {
