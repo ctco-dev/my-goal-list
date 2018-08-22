@@ -14,7 +14,6 @@ public class GoalDto {
     }
 
     public String getUsername() {
-
         return username;
     }
 

@@ -9,20 +9,23 @@
 </head>
 <body onload="showUserProfile();showUserGoals();">
 <h1 style="text-align:center;font-family:Cursive;color:#000000;">My goals</h1>
-<H2>name</H2>
+<H2 id="name">name</H2>
 <div style="display: inline;" align="center">
     <div style="float: right;">
         <button style="color: white; background-color: deepskyblue; padding: 15px 32px; text-align: center; text-decoration: none; border-radius: 4px; display: inline-block; font-size: 100%;" onclick="logout()" type="button">Log out</button>
     </div>
     <div style="float: right;">
-        <button style="color: white; background-color: deepskyblue; padding: 15px 32px; text-align: center; text-decoration: none; border-radius: 4px; display: inline-block; font-size: 100%;" type="button">Add new goal</button>
+        <button style="color: white; background-color: deepskyblue; padding: 15px 32px; text-align: center; text-decoration: none; border-radius: 4px; display: inline-block; font-size: 100%;" onclick="findGoals()" type="button">Find goals</button>
+    </div>
+    <div style="float: right;">
+        <button style="color: white; background-color: deepskyblue; padding: 15px 32px; text-align: center; text-decoration: none; border-radius: 4px; display: inline-block; font-size: 100%;" onclick="addNewGoal()" type="button">Add new goal</button>
     </div>
 </div>
 <input id="personal-data" style = "display: inline-block; float: left" class="w3-check" type="checkbox" onchange="switchPersonalData();">
 <label for="personal-data" style = "display: inline-block; float: left;">Personal Data</label>
 
 <div id="personal-block" class="w3-hide" style = "display: inline-block; float: left;" >
-    <H3>Phone Number /// E-mail</H3>
+    <H3 id="phone_email"></H3>
 </div>
 
 <table class="w3-table-all w3-hoverable">
@@ -58,7 +61,7 @@
 
     function showUserProfile() {
         console.log("User Profile Data");
-        fetch("<c:url value='/api/game/myprofile'/>", {
+        fetch("<c:url value='/api/auth/myprofile'/>", {
             "method": "GET",
             headers: {
                 'Accept': 'application/json',
@@ -67,13 +70,15 @@
         }).then(function (response) {
             return response.json();
         }).then(function (user) {
-            console.log(JSON.stringify(user));
+            console.log(JSON.stringify(user))
+            document.getElementById("name").innerHTML = user.username;
+            document.getElementById("phone_email").innerHTML = "Phone: "+user.phone+" |  E-mail: "+user.email;
         });
     }
 
     function showUserGoals() {
         console.log("User Goals List");
-        fetch("<c:url value='/api/game/mygoals'/>", {
+        fetch("<c:url value='/api/goal/mygoals'/>", {
             "method": "GET",
             headers: {
                 'Accept': 'application/json',
@@ -84,6 +89,18 @@
         }).then(function (goals) {
             console.log(JSON.stringify(goals));
         });
+    }
+    function addNewGoal() {
+        fetch("<c:url value='/api/goal'/>", {"method": "POST"})
+            .then(function (response) {
+                location.href = "/app/addgoal.jsp";
+            });
+    }
+    function findGoals() {
+        fetch("<c:url value='/api/goal'/>", {"method": "POST"})
+            .then(function (response) {
+                location.href = "/app/findgoals.jsp";
+            });
     }
 </script>
 </body>
