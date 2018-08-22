@@ -1,6 +1,7 @@
 package lv.ctco.javaschool.auth.entity.domain;
 
 import javax.persistence.*;
+import javax.persistence.Entity;
 
 @Entity
 @Table(name = "users")
