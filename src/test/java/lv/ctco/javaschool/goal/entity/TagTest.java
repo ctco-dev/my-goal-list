@@ -28,7 +28,7 @@ class TagTest {
         goal.setUser(new User());
         goal.setGoalMessage("test");
         goal.setRegisteredDate( LocalDateTime.now());
-        goal.setDeadlineDate( LocalDateTime.now());
+        goal.setDeadlineDate( LocalDate.now());
         Tag tag = new Tag();
         tag.setGoal(goal);
         assertEquals(goal, tag.getGoal());

@@ -4,8 +4,10 @@ import lv.ctco.javaschool.goal.entity.GoalDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Month;
+import java.time.format.DateTimeFormatter;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -31,9 +33,10 @@ class GoalDtoTest {
     @Test
     @DisplayName("DeadlineDate should be equal")
     void getAndSetDeadlineDate() {
-        LocalDateTime newDt = LocalDateTime.now();
+        LocalDate newDt = LocalDate.now();
         GoalDto dto = new GoalDto();
-        dto.setDeadlineDate(newDt);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+        dto.setDeadlineDate(newDt.format(formatter));
         assertEquals(newDt, dto.getDeadlineDate() );
     }
 
@@ -42,7 +45,8 @@ class GoalDtoTest {
     void getAndSetRegisteredDate() {
         LocalDateTime newDt = LocalDateTime.now();
         GoalDto dto = new GoalDto();
-        dto.setRegisteredDate(newDt);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy kk:mm");
+        dto.setRegisteredDate(newDt.format(formatter));
         assertEquals(newDt, dto.getRegisteredDate() );
     }
 

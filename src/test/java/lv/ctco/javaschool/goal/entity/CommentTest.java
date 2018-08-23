@@ -4,6 +4,7 @@ import lv.ctco.javaschool.auth.entity.domain.User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -38,7 +39,7 @@ class CommentTest {
         goal.setUser(new User());
         goal.setGoalMessage("test");
         goal.setRegisteredDate( LocalDateTime.now());
-        goal.setDeadlineDate( LocalDateTime.now());
+        goal.setDeadlineDate( LocalDate.now());
         Comment comment = new Comment();
         comment.setGoal(goal);
         assertEquals(goal, comment.getGoal());

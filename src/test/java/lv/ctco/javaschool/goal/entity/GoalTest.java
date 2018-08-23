@@ -5,6 +5,7 @@ import lv.ctco.javaschool.goal.entity.Goal;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Month;
 
@@ -49,7 +50,7 @@ public class GoalTest {
     @Test
     @DisplayName("DeadlineDate should be equal")
     void getAndSetDeadlineDate() {
-        LocalDateTime newDt = LocalDateTime.now();
+        LocalDate newDt = LocalDate.now();
         Goal goal = new Goal();
         goal.setDeadlineDate(newDt);
         assertEquals(newDt, goal.getDeadlineDate() );
