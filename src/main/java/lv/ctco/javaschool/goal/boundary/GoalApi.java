@@ -3,7 +3,10 @@ package lv.ctco.javaschool.goal.boundary;
 import lv.ctco.javaschool.auth.control.UserStore;
 import lv.ctco.javaschool.auth.entity.domain.User;
 import lv.ctco.javaschool.goal.control.GoalStore;
+import lv.ctco.javaschool.goal.entity.Goal;
+import lv.ctco.javaschool.goal.entity.GoalDto;
 import lv.ctco.javaschool.goal.entity.TagDto;
+
 
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
@@ -13,9 +16,11 @@ import javax.ejb.Stateless;
 import javax.ws.rs.Path;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Path("/goal")
 @Stateless
@@ -27,12 +32,45 @@ public class GoalApi {
     @Inject
     private GoalStore goalStore;
 
-    /*      for start.jsp
-     * Add player to existing game or creates a new one     */
+    //   may be deleted
     @POST
     @RolesAllowed({"ADMIN", "USER"})
     public void startPage() {
 //        User currentUser = userStore.getCurrentUser();
+    }
+
+    @GET
+    @RolesAllowed({"ADMIN", "USER"})
+    @Path("/mygoals")
+    public List<GoalDto> getMyGoals() {
+        User currentUser = userStore.getCurrentUser();
+        List<Goal> goalsList = goalStore.getGoalsListFor(currentUser);
+        if (goalsList.size() != 0) {
+            return goalsList.stream()
+                    .map(this::convertToDto)
+                    .collect(Collectors.toList());
+        } else {
+            return Collections.emptyList();
+        }
+    }
+
+    private GoalDto convertToDto(Goal goal) {
+        GoalDto dto = new GoalDto();
+        dto.setUsername(goal.getUser().getUsername());
+        dto.setGoalMessage(goal.getGoalMessage());
+        dto.setDeadlineDate(convertDate(goal.getDeadlineDate()));
+        dto.setRegisteredDate(convertDateTime(goal.getRegisteredDate()));
+        return dto;
+    }
+
+    private String convertDate (LocalDate date) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+        return date.format(formatter);
+    }
+
+    private String convertDateTime (LocalDateTime date) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy kk:mm");
+        return date.format(formatter);
     }
 
     @GET
