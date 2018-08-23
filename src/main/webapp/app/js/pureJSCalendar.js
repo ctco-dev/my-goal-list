@@ -95,7 +95,7 @@ var pureJSCalendar = (function () {
             }
         }
         if (eFormMaximalDate !== undefined) {
-            if (year > eFormMinimalDate.year || year >= eFormMaximalDate.year && month >= eFormMaximalDate.month - 1) {
+            if (year > eFormMaximalDate.year || year >= eFormMaximalDate.year && month >= eFormMaximalDate.month - 1) {
                 const emptyCount = document.querySelector('.curr table').rows[0].querySelectorAll('td:empty').length;
                 const tdDisabled = document.querySelectorAll('.eformDay');
                 for (var i = 0; i < tdDisabled.length; ++i) {

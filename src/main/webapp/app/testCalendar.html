@@ -11,11 +11,18 @@
 <h1>Calendar's test</h1>
 <input type="text" id="dealineDate" />
 
-
-
 <script>
   function onBodyLoad() {
-      pureJSCalendar.open('dd.MM.yyyy', 400, 30, 1, '2018-5-5', '2019-8-20', 'dealineDate', 20);
+      var d = new Date();
+      var year = d.getFullYear();
+      var month = d.getMonth()+1;
+      var day = d.getDate();
+      if(day<10) day='0'+day;
+      if(month<10) month='0'+month;
+
+      var today = year +'-'+month+'-'+day;
+      var nextYear = (year+1) +'-'+month+'-'+(day+1);
+      pureJSCalendar.open('dd.MM.yyyy', 400, 30, 1, today, nextYear, 'dealineDate', 20);
   }
 </script>
 </body>
