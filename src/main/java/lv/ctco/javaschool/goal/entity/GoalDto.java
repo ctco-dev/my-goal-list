@@ -27,18 +27,16 @@ public class GoalDto {
         return goalMessage;
     }
 
-    public void setDeadlineDate(LocalDate deadlineDate) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.mm.yyyy");
-        this.deadlineDate = deadlineDate.format(formatter);
+    public void setDeadlineDate(String deadlineDate) {
+        this.deadlineDate = deadlineDate;
     }
 
     public String getDeadlineDate() {
         return deadlineDate;
     }
 
-    public void setRegisteredDate(LocalDateTime registeredDate) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy kk:mm");
-        this.registeredDate = registeredDate.format(formatter);
+    public void setRegisteredDate(String registeredDate) {
+        this.registeredDate = registeredDate;
     }
 
     public String getRegisteredDate() {
