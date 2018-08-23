@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="css/calendar.css" />
+    <script type="text/javascript" src="js/pureJSCalendar.js"></script>
+    <meta charset="UTF-8">
+    <title>TestCalendar</title>
+
+</head>
+<body onload="onBodyLoad();">
+<h1>Calendar's test</h1>
+<input type="text" id="dealineDate" />
+
+
+
+<script>
+  function onBodyLoad() {
+      pureJSCalendar.open('dd.MM.yyyy', 400, 30, 1, '2018-5-5', '2019-8-20', 'dealineDate', 20);
+  }
+</script>
+</body>
+</html>

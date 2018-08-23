@@ -8,7 +8,6 @@ import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-
 class CommentTest {
     @Test
     @DisplayName("Ids should be equal")
