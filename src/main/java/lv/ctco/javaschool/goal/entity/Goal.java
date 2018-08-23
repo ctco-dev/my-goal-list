@@ -17,7 +17,7 @@ public class Goal {
     private User user;
 
     private String goalMessage;
-    private LocalDateTime deadlineDate;
+    private LocalDate deadlineDate;
     private LocalDateTime registeredDate;
 
     public Long getId() {
@@ -44,11 +44,11 @@ public class Goal {
         this.goalMessage = goalMessage;
     }
 
-    public LocalDateTime getDeadlineDate() {
+    public LocalDate getDeadlineDate() {
         return deadlineDate;
     }
 
-    public void setDeadlineDate(LocalDateTime deadlineDate) {
+    public void setDeadlineDate(LocalDate deadlineDate) {
         this.deadlineDate = deadlineDate;
     }
 
