@@ -12,8 +12,9 @@
     <title>Add goals</title>
     <link rel="stylesheet" href="css/calendar.css" />
     <script type="text/javascript" src="js/pureJSCalendar.js"></script>
+    <script src="https://www.w3schools.com/lib/w3.js"></script>
 </head>
-<body onload="onBodyLoad();">
+<body onload="onBodyLoad();getAllTagsList();">
 <br>
 <h1 style="text-align:center;font-family:Cursive;color:#000000;">Add new goal</h1>
 <form style="margin-top: 100px; margin-left: 400px;">
@@ -26,7 +27,7 @@
     Input tags
     <input type="text" id="myInput" placeholder="Title...">
     <span onclick="newElement()" class="addBtn"
-    style="padding: 5px;
+          style="padding: 5px;
     width: 10%;
     background: lightblue;
     color: black;
@@ -38,6 +39,13 @@
     <ul id="myUL">
     </ul>
     <br>
+
+<h2 style="color:red">  filled drop downlist (for test purpusses)
+    <select id="tags-list">
+        <option w3-repeat="tags">{{tagMessage}}</option>
+    </select>
+</h2>
+
 
     <input type="submit" value="Submit" onclick="submitData()">
 </form>
@@ -65,6 +73,7 @@
             console.log("DONE");
         });
     }
+
     function onBodyLoad() {
         var d = new Date();
         var year = d.getFullYear();
@@ -76,6 +85,23 @@
         var today = year +'-'+month+'-'+day;
         var nextYear = (year+1) +'-'+month+'-'+(day+1);
         pureJSCalendar.open('dd.MM.yyyy', 400, 30, 1, today, nextYear, 'dealineDate', 20);
+    }
+
+    function getAllTagsList(){
+        console.log( "All Tags list from DB" );
+        fetch("<c:url value='/api/goal/taglist'/>", {
+            "method": "GET",
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
+        }).then(function (response) {
+            return response.json();
+        }).then(function (tag) {
+            var tagData = {"tags": tag };
+            console.log(JSON.stringify(tagData));
+            w3.displayObject("tags-list", tagData);
+        });
     }
 </script>
 </body>
