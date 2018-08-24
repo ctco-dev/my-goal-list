@@ -6,6 +6,9 @@ import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Entity
 public class Goal {
@@ -19,6 +22,20 @@ public class Goal {
     private String goalMessage;
     private LocalDate deadlineDate;
     private LocalDateTime registeredDate;
+
+    @OneToMany
+    @JoinTable(name = "goal_tags",
+    joinColumns = @JoinColumn(name = "goal_id"),
+    inverseJoinColumns = @JoinColumn(name = "tag_id"))
+    private Set<Tag> tags;
+
+    public Set<Tag> getTags() {
+        return tags;
+    }
+
+    public void setTags(Set<Tag> tags) {
+        this.tags = tags;
+    }
 
     public Long getId() {
         return id;
