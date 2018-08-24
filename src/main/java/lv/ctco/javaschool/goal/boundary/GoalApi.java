@@ -135,7 +135,7 @@ public class GoalApi {
 
     public void createNewGoal(GoalDto goalDto) {
         Goal goal = convertDtoToGoal(goalDto);
-        em.persist(goal);
+        goalStore.addGoal(goal);
     }
 
     public Goal convertDtoToGoal(GoalDto dto) {
