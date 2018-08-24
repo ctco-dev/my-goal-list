@@ -1,6 +1,12 @@
 package lv.ctco.javaschool.auth.entity.domain;
 
-import javax.persistence.*;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 
 @Entity
 @Table(name = "users")
@@ -13,6 +19,11 @@ public class User {
     private String password;
     @Enumerated(EnumType.STRING)
     private Role role;
+
+
+
+    private String email;
+    private String phone;
 
     public Long getId() {
         return id;
@@ -45,4 +56,21 @@ public class User {
     public void setRole(Role role) {
         this.role = role;
     }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
 }

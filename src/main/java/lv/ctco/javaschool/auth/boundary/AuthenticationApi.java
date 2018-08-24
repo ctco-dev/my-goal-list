@@ -9,6 +9,7 @@ import lv.ctco.javaschool.auth.entity.domain.User;
 import lv.ctco.javaschool.auth.entity.dto.UserLoginDto;
 import lv.ctco.javaschool.auth.entity.dto.ErrorDto;
 
+import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.json.Json;
 import javax.security.enterprise.AuthenticationStatus;
@@ -18,12 +19,14 @@ import javax.security.enterprise.credential.UsernamePasswordCredential;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 import static javax.security.enterprise.authentication.mechanism.http.AuthenticationParameters.withParams;
 
@@ -59,10 +62,12 @@ public class AuthenticationApi {
     public Response register(UserLoginDto userLogin, @Context HttpServletRequest request, @Context HttpServletResponse response) {
         String username = userLogin.getUsername();
         String password = userLogin.getPassword();
+        String email = userLogin.getEmail();
+        String phone = userLogin.getPhone();
         String errorCode = "UNKNOWN";
         Response.Status status = Response.Status.BAD_REQUEST;
         try {
-            User user = userStore.createUser(username, password, Role.USER);
+            User user = userStore.createUser(username, password, email, phone, Role.USER);
             log.info(String.format("User is registered %s", user));
             return login(userLogin, request, response);
         } catch (UsernameAlreadyExistsException e) {
@@ -95,4 +100,19 @@ public class AuthenticationApi {
         }
     }
 
+    @GET
+    @RolesAllowed({"ADMIN", "USER"})
+    @Path("/myprofile")
+    public UserLoginDto returnUserDto() {
+        User currentUser = userStore.getCurrentUser();
+        return convertToDto(currentUser);
+    }
+
+    private UserLoginDto convertToDto(User user) {
+        UserLoginDto dto = new UserLoginDto();
+        dto.setUsername(user.getUsername());
+        dto.setPhone(user.getPhone());
+        dto.setEmail(user.getEmail());
+        return dto;
+    }
 }
