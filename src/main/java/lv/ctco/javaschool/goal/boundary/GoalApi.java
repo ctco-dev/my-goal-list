@@ -11,20 +11,18 @@ import lv.ctco.javaschool.goal.entity.TagDto;
 
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
-import javax.json.JsonObject;
-import javax.json.JsonString;
-import javax.json.JsonValue;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.ejb.Stateless;
 import javax.ws.rs.Path;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
-import javax.xml.ws.Response;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Path("/goal")
@@ -68,12 +66,12 @@ public class GoalApi {
         return dto;
     }
 
-    private String convertDate(LocalDate date) {
+    private String convertDate (LocalDate date) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
         return date.format(formatter);
     }
 
-    private String convertDateTime(LocalDateTime date) {
+    private String convertDateTime (LocalDateTime date) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy kk:mm");
         return date.format(formatter);
     }
@@ -121,18 +119,14 @@ public class GoalApi {
         TagDto dto = new TagDto();
         dto.setTagMessage(tag.getTagMessage());
         return dto;
-
     }
-
-    private static String generateRandomWord() {
-        String randomStrings = new String("");
-        Random random = new Random();
-        char[] word = new char[random.nextInt(8) + 3]; // words of length 3 through 10. (1 and 2 letter words are boring.)
-        for (int j = 0; j < word.length; j++) {
-            word[j] = (char) ('a' + random.nextInt(26));
-        }
-        randomStrings = new String(word);
-        return randomStrings;
+    private List<String> generateTagsList(String goal){
+        Pattern stopWords = Pattern.compile("\\b(?:change|become|language|field|apply|app|application|start|end|more|this|that|maybe|year|one|two|three|four|five|six|seven|eight|nine|ten|from|i|a|and|about|an|are|if|of|off|on|by|next|last|use|using|used|do|doing|what|determined|am|want|wanted|goal|goals|achieve|me|my|in|out|above|wish|will|was|is|not|new|old|get|got|going|to|for|have|has|the|can)\\b\\s*", Pattern.CASE_INSENSITIVE);
+        String noSymbols = goal.replaceAll("[$,.:;_#@!?&*()+1234567890-]", "");
+        Matcher matcher = stopWords.matcher(noSymbols);
+        String clean = matcher.replaceAll("");
+        List<String> tagList = new ArrayList<>(Arrays.asList(clean.split(" ")));
+        return tagList;
     }
 
     @POST
