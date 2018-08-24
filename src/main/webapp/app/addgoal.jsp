@@ -47,7 +47,7 @@
         var ul = document.getElementById("dynamic-list");
         var tag = document.getElementById("tag");
         var li = document.createElement("li");
-        if(tag.value == "")
+        if(tag.value === "")
         {
             alert("empty");
             return false;

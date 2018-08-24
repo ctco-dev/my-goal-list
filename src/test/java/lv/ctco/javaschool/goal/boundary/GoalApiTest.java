@@ -6,22 +6,31 @@ import lv.ctco.javaschool.goal.control.GoalStore;
 import lv.ctco.javaschool.goal.entity.Goal;
 import lv.ctco.javaschool.goal.entity.GoalDto;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
+import javax.persistence.EntityManager;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.Month;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class GoalApiTest {
+    @Test
+    void createNewGoal() {
+    }
+    @Mock
+    EntityManager em;
     @Mock
     private UserStore userStore;
     @Mock
@@ -64,4 +73,40 @@ class GoalApiTest {
         assertEquals(dto.getRegisteredDate(), "01.02.2018 10:41");
         assertEquals(dto.getDeadlineDate(), "10.02.2018");
     }
+
+    @Test
+    @DisplayName("Check crate new Goal from dto")
+    void convertDtoToGoal() {
+        User user = new User();
+        user.setUsername("aa");
+        List<String> tagList = Arrays.asList("tag", "tag2", "tag3", "tag1", "tag2");
+
+        goal = new Goal();
+        GoalDto dto = new GoalDto();
+
+        dto.setGoalMessage("goal-mwessage");
+        dto.setDeadlineDate("10.02.2018");
+        dto.setTagList(tagList);
+        LocalTime regTime = LocalTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy kk");
+        String regTimeText = regTime.format(formatter);
+        dto.setRegisteredDate(regTimeText);
+
+
+
+        Mockito.when(userStore.getCurrentUser()).thenReturn(user);
+
+
+
+        assertEquals(dto.getUsername(), "aa");
+        assertEquals(dto.getGoalMessage(), "goal-mwessage");
+
+        regTime = LocalTime.now();
+        formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy kk");
+        regTimeText = regTime.format(formatter);
+        assertEquals(dto.getRegisteredDate(), regTimeText);
+        assertEquals(dto.getRegisteredDate(), "01.02.2018 10:41");
+        assertEquals(dto.getDeadlineDate(), "10.02.2018");
+    }
+
 }

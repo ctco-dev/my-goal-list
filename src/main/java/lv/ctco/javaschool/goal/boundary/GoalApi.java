@@ -11,12 +11,16 @@ import lv.ctco.javaschool.goal.entity.TagDto;
 
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
+import javax.json.JsonObject;
+import javax.json.JsonString;
+import javax.json.JsonValue;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.ejb.Stateless;
 import javax.ws.rs.Path;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.xml.ws.Response;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -64,12 +68,12 @@ public class GoalApi {
         return dto;
     }
 
-    private String convertDate (LocalDate date) {
+    private String convertDate(LocalDate date) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
         return date.format(formatter);
     }
 
-    private String convertDateTime (LocalDateTime date) {
+    private String convertDateTime(LocalDateTime date) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy kk:mm");
         return date.format(formatter);
     }
@@ -117,6 +121,48 @@ public class GoalApi {
         TagDto dto = new TagDto();
         dto.setTagMessage(tag.getTagMessage());
         return dto;
+
     }
 
+    private static String generateRandomWord() {
+        String randomStrings = new String("");
+        Random random = new Random();
+        char[] word = new char[random.nextInt(8) + 3]; // words of length 3 through 10. (1 and 2 letter words are boring.)
+        for (int j = 0; j < word.length; j++) {
+            word[j] = (char) ('a' + random.nextInt(26));
+        }
+        randomStrings = new String(word);
+        return randomStrings;
+    }
+
+    @POST
+    @RolesAllowed({"ADMIN", "USER"})
+    @Path("/newgoal")
+
+    public void createNewGoal(GoalDto goalDto) {
+        Goal goal = convertDtoToGoal(goalDto);
+        em.persist(goal);
+    }
+
+    public Goal convertDtoToGoal(GoalDto dto) {
+        Set<Tag> tagSet = new HashSet<>();
+        dto.getTagList()
+                .forEach(t -> {
+                    Tag tag = goalStore.addTag(t);
+                    tagSet.add(tag);
+                });
+
+        User user = userStore.getCurrentUser();
+        Goal goal = new Goal();
+
+        goal.setUser(user);
+        goal.setGoalMessage(dto.getGoalMessage());
+        goal.setTags(tagSet);
+
+        DateTimeFormatter dataFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+        String deadLineDate = dto.getDeadlineDate();
+        goal.setDeadlineDate(LocalDate.parse(deadLineDate, dataFormatter));
+        goal.setRegisteredDate(LocalDateTime.now());
+        return goal;
+    }
 }
