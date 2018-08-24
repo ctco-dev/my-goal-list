@@ -5,6 +5,7 @@ import lv.ctco.javaschool.auth.entity.domain.User;
 import lv.ctco.javaschool.goal.control.GoalStore;
 import lv.ctco.javaschool.goal.entity.Goal;
 import lv.ctco.javaschool.goal.entity.GoalDto;
+import lv.ctco.javaschool.goal.entity.Tag;
 import lv.ctco.javaschool.goal.entity.TagDto;
 
 
@@ -76,28 +77,46 @@ public class GoalApi {
     @GET
     @RolesAllowed({"ADMIN", "USER"})
     @Path("/taglist")
-    public List<TagDto> drawRecordTable() {
-        List<TagDto> dto = new ArrayList<>();
-        int tagCount=new Random().nextInt(5)+3;
-        for(int i=0; i<tagCount; i++) {
-            dto.add(new TagDto(generateRandomWord()));
+    public List<TagDto> returnAllTags() {
+
+        ///--- TODO: temporaty for test purpusses!!! ----------------
+        Set<Tag> tagSet = new HashSet<>();
+
+        Tag tag = goalStore.addTag("tag1");
+        tagSet.add(tag);
+
+        tag = goalStore.addTag("tag2");
+        tagSet.add(tag);
+
+        tag = goalStore.addTag("tag3");
+        tagSet.add(tag);
+
+        tag = goalStore.addTag("tAg1");
+        tagSet.add(tag);
+
+        User user = userStore.getCurrentUser();
+        Goal goal = new Goal();
+        goal.setUser(user);
+        goal.setGoalMessage("MyGoal!");
+        goal.setTags(tagSet);
+        goalStore.addGoal(goal);
+        ///--- endTODO ----------------------------------------------
+
+        Set<Tag> tagListFromDB = goalStore.getTagList();
+        if (tagSet.size() != 0) {
+            return tagSet.stream()
+                    .map(this::convertToTagDto)
+                    .sorted(Comparator.comparing(t -> t.getTagMessage().toLowerCase()))
+                    .collect(Collectors.toList());
+        } else {
+            return Collections.emptyList();
         }
+    }
+
+    private TagDto convertToTagDto(Tag tag) {
+        TagDto dto = new TagDto();
+        dto.setTagMessage(tag.getTagMessage());
         return dto;
-//        return goalStore.getTagList();
-//        List<TagDto> dto = goalStore.getTagList();
-//        return new Gson().toJson(dto);
     }
-
-    private static String generateRandomWord() {
-        String randomStrings = new String("");
-        Random random = new Random();
-        char[] word = new char[random.nextInt(8) + 3]; // words of length 3 through 10. (1 and 2 letter words are boring.)
-        for (int j = 0; j < word.length; j++) {
-            word[j] = (char) ('a' + random.nextInt(26));
-        }
-        randomStrings = new String(word);
-        return randomStrings;
-    }
-
 
 }

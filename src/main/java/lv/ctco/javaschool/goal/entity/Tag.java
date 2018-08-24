@@ -10,9 +10,7 @@ public class Tag {
     @GeneratedValue
     private Long id;
 
-    @ManyToOne
-    private Goal goal;
-
+    @Column(unique = true)
     private String tagMessage;
 
     public void setId(Long id) {
@@ -21,14 +19,6 @@ public class Tag {
 
     public Long getId() {
         return id;
-    }
-
-    public void setGoal(Goal goal) {
-        this.goal = goal;
-    }
-
-    public Goal getGoal() {
-        return goal;
     }
 
     public void setTagMessage(String tagMessage) {

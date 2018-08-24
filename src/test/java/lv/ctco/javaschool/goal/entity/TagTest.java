@@ -21,20 +21,6 @@ class TagTest {
     }
 
     @Test
-    @DisplayName("Goals should be equal")
-    void getAndSetGoal() {
-        Goal goal = new Goal();
-        goal.setId(123456789L);
-        goal.setUser(new User());
-        goal.setGoalMessage("test");
-        goal.setRegisteredDate( LocalDateTime.now());
-        goal.setDeadlineDate( LocalDate.now());
-        Tag tag = new Tag();
-        tag.setGoal(goal);
-        assertEquals(goal, tag.getGoal());
-    }
-
-    @Test
     @DisplayName("TagMessages should be equal")
     void getAndSetTagMessage() {
         String newMsg="test tag";

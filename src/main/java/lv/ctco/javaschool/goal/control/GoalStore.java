@@ -6,8 +6,10 @@ import lv.ctco.javaschool.goal.entity.*;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Stateless
 public class GoalStore {
@@ -22,4 +24,30 @@ public class GoalStore {
                 .setParameter("user", user)
                 .getResultList();
     }
+
+    public void addGoal(Goal goal) {
+        em.persist(goal);
+    }
+
+    public Set<Tag> getTagList(){
+        return new HashSet<>(em.createQuery("select distinct t from Tag t ", Tag.class)
+                .getResultList());
+    }
+
+    public Tag addTag( String tagMsg ){
+        Optional<Tag> tagFromDB= em.createQuery("select t from Tag t " +
+                "where upper(t.tagMessage) = :tagMsg ", Tag.class)
+                .setParameter("tagMsg", tagMsg.toUpperCase() )
+                .getResultStream()
+                .findFirst();
+        if (tagFromDB.isPresent()) return tagFromDB.get();
+        else {
+            Tag tag = new Tag();
+            tag.setTagMessage(tagMsg);
+            em.persist(tag);
+            return tag;
+        }
+    }
+
+
 }
