@@ -21,6 +21,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Path("/goal")
@@ -118,5 +120,12 @@ public class GoalApi {
         dto.setTagMessage(tag.getTagMessage());
         return dto;
     }
-
+    private List<String> generateTagsList(String goal){
+        Pattern stopWords = Pattern.compile("\\b(?:change|become|language|field|apply|app|application|start|end|more|this|that|maybe|year|one|two|three|four|five|six|seven|eight|nine|ten|from|i|a|and|about|an|are|if|of|off|on|by|next|last|use|using|used|do|doing|what|determined|am|want|wanted|goal|goals|achieve|me|my|in|out|above|wish|will|was|is|not|new|old|get|got|going|to|for|have|has|the|can)\\b\\s*", Pattern.CASE_INSENSITIVE);
+        String noSymbols = goal.replaceAll("[$,.:;_#@!?&*()+1234567890-]", "");
+        Matcher matcher = stopWords.matcher(noSymbols);
+        String clean = matcher.replaceAll("");
+        List<String> tagList = new ArrayList<>(Arrays.asList(clean.split(" ")));
+        return tagList;
+    }
 }
