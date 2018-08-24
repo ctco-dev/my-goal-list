@@ -10,7 +10,8 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 
 class AuthenticationApiTest {
     @Mock
@@ -25,7 +26,7 @@ class AuthenticationApiTest {
     }
 
     @Test
-    void testCreateUser() {
+    void testReturnUserDto() {
         User user = new User();
         user.setUsername("aa");
         user.setPhone("1234567");
