@@ -33,11 +33,11 @@ public class GoalApi {
     @Inject
     private GoalStore goalStore;
 
-    //   may be deleted
     @POST
     @RolesAllowed({"ADMIN", "USER"})
     public void startPage() {
-//        User currentUser = userStore.getCurrentUser();
+        /// place for methods on page reload
+        /// currently - none
     }
 
     @GET

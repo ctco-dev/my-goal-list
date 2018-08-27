@@ -53,7 +53,6 @@ public class UserStore {
         user.setPhone(phone);
         user.setRole(role);
         em.persist(user);
-
         return user;
     }
 

@@ -10,10 +10,10 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 
 class AuthenticationApiTest {
-
     @Mock
     private UserStore userStore;
 
@@ -26,7 +26,7 @@ class AuthenticationApiTest {
     }
 
     @Test
-    void test() {
+    void testReturnUserDto() {
         User user = new User();
         user.setUsername("aa");
         user.setPhone("1234567");
@@ -36,9 +36,5 @@ class AuthenticationApiTest {
         assertEquals(user.getUsername(), dto.getUsername());
         assertEquals(user.getEmail(), dto.getEmail());
         assertEquals(user.getPhone(), dto.getPhone());
-
-//        assertEquals(dto.getUsername(), "aa");
-//        assertEquals(dto.getEmail(), "a@b.com");
-//        assertEquals(dto.getPhone(), "1234567");
     }
 }

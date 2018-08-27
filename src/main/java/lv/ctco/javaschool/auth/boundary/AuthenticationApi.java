@@ -103,7 +103,7 @@ public class AuthenticationApi {
     @GET
     @RolesAllowed({"ADMIN", "USER"})
     @Path("/myprofile")
-    public UserLoginDto returnUserDto(){
+    public UserLoginDto returnUserDto() {
         User currentUser = userStore.getCurrentUser();
         return convertToDto(currentUser);
     }

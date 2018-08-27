@@ -7,7 +7,7 @@
     <script src="http://www.w3schools.com/lib/w3data.js"></script>
     <title>My Goals</title>
 </head>
-<body onload="showUserProfile();showUserGoals();">
+<body onload="showUserProfile();showUserGoals();switchPersonalData();">
 <h1 style="text-align:center;font-family:Cursive;color:#000000;">My goals</h1>
 <H2 id="name">name</H2>
 <div style="display: inline;" align="center">
@@ -31,14 +31,13 @@
 <table class="w3-table-all w3-hoverable">
     <tr class="w3-blue">
         <th>My goals</th>
+        <th>Deadline date</th>
         <th>Days left</th>
     </tr>
     <tr>
-
-            <td>goal</td>
-
-            <td>days left</td>
-
+        <td>You have no added goals yet. Please go to "Add new Goal"</td>
+        <td> </td>
+        <td> </td>
     </tr>
 </table>
 <script>

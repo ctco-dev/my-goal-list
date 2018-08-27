@@ -4,12 +4,11 @@ import lv.ctco.javaschool.auth.control.exceptions.InvalidPasswordException;
 import lv.ctco.javaschool.auth.control.exceptions.InvalidUsernameException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
-import org.opentest4j.AssertionFailedError;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.fail;
 
 class UserStoreTest {
-
 
     @Test
     void validateUsername() {
