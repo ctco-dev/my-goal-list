@@ -27,6 +27,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import static java.time.temporal.ChronoUnit.DAYS;
+
 @Path("/goal")
 @Stateless
 public class GoalApi {
@@ -65,7 +67,14 @@ public class GoalApi {
         dto.setGoalMessage(goal.getGoalMessage());
         dto.setDeadlineDate(convertDate(goal.getDeadlineDate()));
         dto.setRegisteredDate(convertDateTime(goal.getRegisteredDate()));
+        dto.setDaysLeft(countDaysLeft(goal.getDeadlineDate()));
+        dto.setId(goal.getId());
         return dto;
+    }
+
+    private long countDaysLeft(LocalDate deadlineDate) {
+        LocalDate localDate = LocalDate.now();
+        return DAYS.between(localDate, deadlineDate);
     }
 
     private String convertDate (LocalDate date) {
@@ -151,6 +160,7 @@ public class GoalApi {
         switch (adr){
             case ("goal"):
                 goal.setGoalMessage(value);
+                goal.setTags(parseStringToTags(value));
                 break;
             case ("deadline"):
                 DateTimeFormatter formatterD = DateTimeFormatter.ofPattern("dd.MM.yyyy");
@@ -161,5 +171,17 @@ public class GoalApi {
                 throw new IllegalArgumentException();
         }
         return goal;
+    }
+
+    private Set<Tag> parseStringToTags(String value) {
+        List<String> tagList = generateTagsList(value);
+        Set<Tag> tagSet = new HashSet<>();
+
+        for (String item : tagList) {
+            Tag tag;
+            tag = goalStore.addTag(item);
+            tagSet.add(tag);
+        }
+        return tagSet;
     }
 }

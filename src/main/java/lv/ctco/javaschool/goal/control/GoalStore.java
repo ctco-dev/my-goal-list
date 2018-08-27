@@ -1,7 +1,8 @@
 package lv.ctco.javaschool.goal.control;
 
 import lv.ctco.javaschool.auth.entity.domain.User;
-import lv.ctco.javaschool.goal.entity.*;
+import lv.ctco.javaschool.goal.entity.Goal;
+import lv.ctco.javaschool.goal.entity.Tag;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -50,6 +51,5 @@ public class GoalStore {
             return tag;
         }
     }
-
 
 }
