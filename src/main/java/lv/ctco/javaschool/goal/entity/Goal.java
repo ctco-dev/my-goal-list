@@ -25,8 +25,8 @@ public class Goal {
 
     @OneToMany
     @JoinTable(name = "goal_tags",
-    joinColumns = @JoinColumn(name = "goal_id"),
-    inverseJoinColumns = @JoinColumn(name = "tag_id"))
+            joinColumns = @JoinColumn(name = "goal_id"),
+            inverseJoinColumns = @JoinColumn(name = "tag_id"))
     private Set<Tag> tags;
 
     public Set<Tag> getTags() {

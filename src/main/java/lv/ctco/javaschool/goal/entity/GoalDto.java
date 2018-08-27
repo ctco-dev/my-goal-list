@@ -4,12 +4,22 @@ package lv.ctco.javaschool.goal.entity;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 public class GoalDto {
     private String username;
     private String goalMessage;
     private String deadlineDate;
     private String registeredDate;
+    private List <String> tagList;
+
+    public List<String> getTagList() {
+        return tagList;
+    }
+
+    public void setTagList(List<String> tagList) {
+        this.tagList = tagList;
+    }
 
     public void setUsername(String username) {
         this.username = username;
