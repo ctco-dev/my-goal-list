@@ -1,10 +1,12 @@
 package lv.ctco.javaschool.goal.entity;
 
+import lv.ctco.javaschool.goal.entity.GoalDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Month;
 import java.time.format.DateTimeFormatter;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -35,7 +37,7 @@ class GoalDtoTest {
         GoalDto dto = new GoalDto();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
         dto.setDeadlineDate(newDt.format(formatter));
-        assertEquals(newDt.format(formatter), dto.getDeadlineDate());
+        assertEquals(newDt, dto.getDeadlineDate());
     }
 
     @Test
@@ -45,7 +47,7 @@ class GoalDtoTest {
         GoalDto dto = new GoalDto();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy kk:mm");
         dto.setRegisteredDate(newDt.format(formatter));
-        assertEquals(newDt.format(formatter), dto.getRegisteredDate());
+        assertEquals(newDt, dto.getRegisteredDate());
     }
 
 
