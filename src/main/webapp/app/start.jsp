@@ -39,7 +39,7 @@
 
         <td>{{goalMessage}}</td>
 
-        <td>{{}}</td>
+        <td>{{daysLeft}}</td>
 
     </tr>
 </table>
@@ -89,9 +89,9 @@
         }).then(function (response) {
             return response.json();
         }).then(function (goals) {
-            console.log(JSON.stringify(goals));
             var tabledata = {"goals": goals};
-            document.getElementById("topic-list").classList.remove("w3-hide");
+            console.log(JSON.stringify(tabledata));
+            //document.getElementById("hide-goals").classList.remove("w3-hide");
             w3DisplayData("goals-list", tabledata);
         });
     }

@@ -27,6 +27,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import static java.time.temporal.ChronoUnit.DAYS;
+
 @Path("/goal")
 @Stateless
 public class GoalApi {
@@ -65,7 +67,13 @@ public class GoalApi {
         dto.setGoalMessage(goal.getGoalMessage());
         dto.setDeadlineDate(convertDate(goal.getDeadlineDate()));
         dto.setRegisteredDate(convertDateTime(goal.getRegisteredDate()));
+        dto.setDaysLeft(countDaysLeft(goal.getDeadlineDate()));
         return dto;
+    }
+
+    private long countDaysLeft(LocalDate deadlineDate) {
+        LocalDate localDate = LocalDate.now();
+        return DAYS.between(localDate, deadlineDate);
     }
 
     private String convertDate (LocalDate date) {
