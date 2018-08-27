@@ -11,6 +11,9 @@ import lv.ctco.javaschool.goal.entity.TagDto;
 
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
+import javax.json.JsonObject;
+import javax.json.JsonString;
+import javax.json.JsonValue;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.ejb.Stateless;
@@ -132,31 +135,55 @@ public class GoalApi {
     @POST
     @RolesAllowed({"ADMIN", "USER"})
     @Path("/newgoal")
-
-    public void createNewGoal(GoalDto goalDto) {
-        Goal goal = convertDtoToGoal(goalDto);
+    public void createNewGoal(JsonObject goalDto) {
+        User user = userStore.getCurrentUser();
+        Goal goal = new Goal();
+        for(Map.Entry<String,JsonValue> pair : goalDto.entrySet()){
+            String adr = pair.getKey();
+            String value = ((JsonString) pair.getValue()).getString();
+            goal = setFieldsToGoal(goal, adr, value);
+        }
+        goal.setUser(user);
+        goal.setRegisteredDate(LocalDateTime.now());
         goalStore.addGoal(goal);
     }
 
-    public Goal convertDtoToGoal(GoalDto dto) {
-        Set<Tag> tagSet = new HashSet<>();
-        dto.getTagList()
-                .forEach(t -> {
-                    Tag tag = goalStore.addTag(t);
-                    tagSet.add(tag);
-                });
-
-        User user = userStore.getCurrentUser();
-        Goal goal = new Goal();
-
-        goal.setUser(user);
-        goal.setGoalMessage(dto.getGoalMessage());
-        goal.setTags(tagSet);
-
-        DateTimeFormatter dataFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-        String deadLineDate = dto.getDeadlineDate();
-        goal.setDeadlineDate(LocalDate.parse(deadLineDate, dataFormatter));
-        goal.setRegisteredDate(LocalDateTime.now());
+    private Goal setFieldsToGoal(Goal goal, String adr, String value) throws IllegalArgumentException {
+        switch (adr){
+            case ("goal"):
+                goal.setGoalMessage(value);
+                break;
+            case ("deadline"):
+                DateTimeFormatter formatterD = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+                LocalDate localDate = LocalDate.parse(value, formatterD);
+                goal.setDeadlineDate(localDate);
+                break;
+            default:
+                throw new IllegalArgumentException();
+        }
         return goal;
     }
+
+
+//    public Goal convertDtoToGoal(GoalDto dto) {
+//        Set<Tag> tagSet = new HashSet<>();
+//        dto.getTagList()
+//                .forEach(t -> {
+//                    Tag tag = goalStore.addTag(t);
+//                    tagSet.add(tag);
+//                });
+//
+//        User user = userStore.getCurrentUser();
+//        Goal goal = new Goal();
+//
+//        goal.setUser(user);
+//        goal.setGoalMessage(dto.getGoalMessage());
+//        goal.setTags(tagSet);
+//
+//        DateTimeFormatter dataFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+//        String deadLineDate = dto.getDeadlineDate();
+//        goal.setDeadlineDate(LocalDate.parse(deadLineDate, dataFormatter));
+//        goal.setRegisteredDate(LocalDateTime.now());
+//        return goal;
+//    }
 }

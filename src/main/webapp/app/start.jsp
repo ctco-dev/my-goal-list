@@ -7,7 +7,9 @@
     <script src="http://www.w3schools.com/lib/w3data.js"></script>
     <title>My Goals</title>
 </head>
+
 <body onload="showUserProfile();showUserGoals();">
+
 <h1 style="text-align:center;font-family:Cursive;color:#000000;">My goals</h1>
 <H2 id="name">name</H2>
 <div style="display: inline;" align="center">

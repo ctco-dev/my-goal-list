@@ -8,22 +8,27 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
+
 <head>
     <title>Add goals</title>
     <link rel="stylesheet" href="css/calendar.css" />
     <script type="text/javascript" src="js/pureJSCalendar.js"></script>
     <script src="https://www.w3schools.com/lib/w3.js"></script>
 </head>
+
 <body onload="onBodyLoad();">
 <br>
+
 <h1 style="text-align:center;font-family:Cursive;color:#000000;">Add new goal</h1>
+
 <form style="margin-top: 100px; margin-left: 400px;">
     Input your goal:<br>
     <input id="goal-txt" style="height:100px; width:300px;" type="text" name="goal"><br>
     Click deadline on calendar:<br>
     <input id="deadlineDate" type="text" id="txtTest" />
-    <input type="submit" value="Submit" onclick="submitData()">
+    <input type="button" value="Submit" onclick="submitData()">
 </form>
+
 <script>
     function submitData() {
         var goalTxt = document.getElementById("goal-txt");
@@ -33,7 +38,6 @@
             alert("Not all fields filled out!");
             return false;
         }
-
         var dto = {
             "goal": goalTxt.value,
             "deadline": deadlineTxt.value,
@@ -47,7 +51,7 @@
             },
             body: JSON.stringify(dto)
         }).then(function (response) {
-
+            location.href="<c:url value='/app/start.jsp'/>";
         });
     }
     function onBodyLoad() {
@@ -60,7 +64,7 @@
 
         var today = year +'-'+month+'-'+day;
         var nextYear = (year+1) +'-'+month+'-'+(day+1);
-        pureJSCalendar.open('dd.MM.yyyy', 400, 30, 1, today, nextYear, 'deadlineDate', 20);
+        pureJSCalendar.open('dd.MM.yyyy', 100, 30, 1, today, nextYear, 'deadlineDate', 20);
     }
 </script>
 </body>
