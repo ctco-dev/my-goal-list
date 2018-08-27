@@ -91,39 +91,7 @@ public class GoalApi {
     @RolesAllowed({"ADMIN", "USER"})
     @Path("/taglist")
     public List<TagDto> returnAllTags() {
-
-        ///--- TODO: temporaty for test purpusses!!! ----------------
-        Set<Tag> tagSet = new HashSet<>();
-
-        Tag tag = goalStore.addTag("tag1");
-        tagSet.add(tag);
-
-        tag = goalStore.addTag("tag2");
-        tagSet.add(tag);
-
-        tag = goalStore.addTag("tag3");
-        tagSet.add(tag);
-
-        tag = goalStore.addTag("tAg1");
-        tagSet.add(tag);
-
-        User user = userStore.getCurrentUser();
-        Goal goal = new Goal();
-        goal.setUser(user);
-        goal.setGoalMessage("MyGoal!");
-        goal.setTags(tagSet);
-        goalStore.addGoal(goal);
-        ///--- endTODO ----------------------------------------------
-
         return goalStore.getAllTagList();
-//        if (allTagSet.size() != 0) {
-//            return allTagSet.stream()
-//                    .map(this::convertToTagDto)
-//                    .sorted(Comparator.comparing(t -> t.getTagMessage().toLowerCase()))
-//                    .collect(Collectors.toList());
-//        } else {
-//            return Collections.emptyList();
-//        }
     }
 
     private TagDto convertToTagDto(Tag tag) {
@@ -131,6 +99,7 @@ public class GoalApi {
         dto.setTagMessage(tag.getTagMessage());
         return dto;
     }
+
     private List<String> generateTagsList(String goal){
         Pattern stopWords = Pattern.compile("\\b(?:change|become|language|field|apply|app|application|start|end|more|this|that|maybe|year|one|two|three|four|five|six|seven|eight|nine|ten|from|i|a|and|about|an|are|if|of|off|on|by|next|last|use|using|used|do|doing|what|determined|am|want|wanted|goal|goals|achieve|me|my|in|out|above|wish|will|was|is|not|new|old|get|got|going|to|for|have|has|the|can)\\b\\s*", Pattern.CASE_INSENSITIVE);
         String noSymbols = goal.replaceAll("[$,.:;_#@!?&*()+1234567890-]", "");

@@ -3,6 +3,7 @@ package lv.ctco.javaschool.goal.control;
 import lv.ctco.javaschool.auth.entity.domain.User;
 import lv.ctco.javaschool.goal.entity.Goal;
 import lv.ctco.javaschool.goal.entity.Tag;
+import lv.ctco.javaschool.goal.entity.TagDto;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
