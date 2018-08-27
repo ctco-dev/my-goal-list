@@ -30,16 +30,16 @@
     <H3 id="phone_email"></H3>
 </div>
 
-<table class="w3-table-all w3-hoverable">
+<table id="goals-list" class="w3-table-all w3-hoverable">
     <tr class="w3-blue">
         <th>My goals</th>
         <th>Days left</th>
     </tr>
-    <tr>
+    <tr w3-repeat="goals">
 
-            <td>goal</td>
+        <td>{{goalMessage}}</td>
 
-            <td>days left</td>
+        <td>{{}}</td>
 
     </tr>
 </table>
@@ -72,7 +72,7 @@
         }).then(function (response) {
             return response.json();
         }).then(function (user) {
-            console.log(JSON.stringify(user))
+            console.log(JSON.stringify(user));
             document.getElementById("name").innerHTML = user.username;
             document.getElementById("phone_email").innerHTML = "Phone: "+user.phone+" |  E-mail: "+user.email;
         });
@@ -90,6 +90,9 @@
             return response.json();
         }).then(function (goals) {
             console.log(JSON.stringify(goals));
+            var tabledata = {"goals": goals};
+            document.getElementById("topic-list").classList.remove("w3-hide");
+            w3DisplayData("goals-list", tabledata);
         });
     }
     function addNewGoal() {

@@ -8,18 +8,17 @@ import lv.ctco.javaschool.goal.entity.GoalDto;
 import lv.ctco.javaschool.goal.entity.Tag;
 import lv.ctco.javaschool.goal.entity.TagDto;
 
-
 import javax.annotation.security.RolesAllowed;
+import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.json.JsonObject;
 import javax.json.JsonString;
 import javax.json.JsonValue;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.ejb.Stateless;
-import javax.ws.rs.Path;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.Path;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -163,27 +162,4 @@ public class GoalApi {
         }
         return goal;
     }
-
-
-//    public Goal convertDtoToGoal(GoalDto dto) {
-//        Set<Tag> tagSet = new HashSet<>();
-//        dto.getTagList()
-//                .forEach(t -> {
-//                    Tag tag = goalStore.addTag(t);
-//                    tagSet.add(tag);
-//                });
-//
-//        User user = userStore.getCurrentUser();
-//        Goal goal = new Goal();
-//
-//        goal.setUser(user);
-//        goal.setGoalMessage(dto.getGoalMessage());
-//        goal.setTags(tagSet);
-//
-//        DateTimeFormatter dataFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-//        String deadLineDate = dto.getDeadlineDate();
-//        goal.setDeadlineDate(LocalDate.parse(deadLineDate, dataFormatter));
-//        goal.setRegisteredDate(LocalDateTime.now());
-//        return goal;
-//    }
 }
