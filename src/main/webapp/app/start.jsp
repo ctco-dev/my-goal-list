@@ -33,11 +33,15 @@
 <table id="goals-list" class="w3-table-all w3-hoverable">
     <tr class="w3-blue">
         <th>My goals</th>
+        <th>Deadline</th>
         <th>Days left</th>
+
     </tr>
-    <tr w3-repeat="goals">
+    <tr w3-repeat="goals" id="{{id}}" onclick="redirectToGoalsAndComments(id)">
 
         <td>{{goalMessage}}</td>
+
+        <td>{{deadlineDate}}</td>
 
         <td>{{daysLeft}}</td>
 
@@ -62,7 +66,6 @@
     }
 
     function showUserProfile() {
-        console.log("User Profile Data");
         fetch("<c:url value='/api/auth/myprofile'/>", {
             "method": "GET",
             headers: {
@@ -72,14 +75,12 @@
         }).then(function (response) {
             return response.json();
         }).then(function (user) {
-            console.log(JSON.stringify(user));
             document.getElementById("name").innerHTML = user.username;
             document.getElementById("phone_email").innerHTML = "Phone: "+user.phone+" |  E-mail: "+user.email;
         });
     }
 
     function showUserGoals() {
-        console.log("User Goals List");
         fetch("<c:url value='/api/goal/mygoals'/>", {
             "method": "GET",
             headers: {
@@ -89,12 +90,26 @@
         }).then(function (response) {
             return response.json();
         }).then(function (goals) {
-            var tabledata = {"goals": goals};
-            console.log(JSON.stringify(tabledata));
-            //document.getElementById("hide-goals").classList.remove("w3-hide");
+            var tabledata;
+            if (goals.length > 0) {
+                tabledata = {"goals": goals};
+            } else {
+                tabledata = {
+                    "goals": [{
+                        "id": "-1",
+                        "daysLeft": "",
+                        "deadlineDate": "",
+                        "goalMessage": "You need to create new Goals"
+                    }]
+                };
+            }
             w3DisplayData("goals-list", tabledata);
         });
     }
+    function redirectToGoalsAndComments(id) {
+        location.href = "<c:url value='/app/goal.jsp/'/>" + id;
+    }
+
     function addNewGoal() {
         fetch("<c:url value='/api/goal'/>", {"method": "POST"})
             .then(function (response) {

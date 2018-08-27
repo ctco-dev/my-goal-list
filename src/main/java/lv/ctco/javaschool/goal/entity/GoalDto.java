@@ -10,6 +10,15 @@ public class GoalDto {
     private String registeredDate;
     private List <String> tagList;
     private long daysLeft;
+    private long id;
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
 
     public long getDaysLeft() {
         return daysLeft;

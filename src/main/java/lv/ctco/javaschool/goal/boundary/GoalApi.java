@@ -68,6 +68,7 @@ public class GoalApi {
         dto.setDeadlineDate(convertDate(goal.getDeadlineDate()));
         dto.setRegisteredDate(convertDateTime(goal.getRegisteredDate()));
         dto.setDaysLeft(countDaysLeft(goal.getDeadlineDate()));
+        dto.setId(goal.getId());
         return dto;
     }
 
