@@ -3,7 +3,7 @@ package lv.ctco.javaschool.goal.entity;
 
 public class TagDto {
     private String tagMessage;
-    private Long   cnt;
+    private Long    cnt;
 
     public TagDto(){
         this("", 0L);

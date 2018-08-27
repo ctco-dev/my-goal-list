@@ -6,10 +6,7 @@ import lv.ctco.javaschool.goal.entity.*;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @Stateless
 public class GoalStore {
@@ -29,9 +26,14 @@ public class GoalStore {
         em.persist(goal);
     }
 
-    public Set<Tag> getTagList(){
-        return new HashSet<>(em.createQuery("select distinct t from Tag t ", Tag.class)
-                .getResultList());
+
+    public List<TagDto> getAllTagList() {
+        return new ArrayList<>( em.createQuery(
+                "SELECT new lv.ctco.javaschool.goal.entity.TagDto(t.tagMessage, COUNT(t)) " +
+                        "FROM Tag t, Goal g " +
+                        "WHERE t MEMBER OF g.tags " +
+                        "GROUP BY t.id"
+        ).getResultList());
     }
 
     public Tag addTag( String tagMsg ){

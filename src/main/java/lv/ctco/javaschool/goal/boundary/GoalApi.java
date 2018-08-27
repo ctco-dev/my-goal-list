@@ -106,15 +106,15 @@ public class GoalApi {
         goalStore.addGoal(goal);
         ///--- endTODO ----------------------------------------------
 
-        Set<Tag> tagListFromDB = goalStore.getTagList();
-        if (tagSet.size() != 0) {
-            return tagSet.stream()
-                    .map(this::convertToTagDto)
-                    .sorted(Comparator.comparing(t -> t.getTagMessage().toLowerCase()))
-                    .collect(Collectors.toList());
-        } else {
-            return Collections.emptyList();
-        }
+        return goalStore.getAllTagList();
+//        if (allTagSet.size() != 0) {
+//            return allTagSet.stream()
+//                    .map(this::convertToTagDto)
+//                    .sorted(Comparator.comparing(t -> t.getTagMessage().toLowerCase()))
+//                    .collect(Collectors.toList());
+//        } else {
+//            return Collections.emptyList();
+//        }
     }
 
     private TagDto convertToTagDto(Tag tag) {
