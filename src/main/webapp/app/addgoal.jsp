@@ -23,8 +23,16 @@
     Click deadline on calendar:<br>
     <input id="deadlineDate" type="text" id="txtTest" />
     <input type="submit" value="Submit" onclick="submitData()">
+    <input type="button" value="Back to my goals" onclick="redirectToMyGoalPage()">
 </form>
 <script>
+
+    function redirectToMyGoalPage(){
+        fetch("<c:url value='/api/goal'/>", {"method": "POST"})
+            .then(function (response) {
+                location.href = "/app/start.jsp";
+            });
+    }
     function submitData() {
         var goalTxt = document.getElementById("goal-txt");
         var deadlineTxt = document.getElementById("deadlineDate");
