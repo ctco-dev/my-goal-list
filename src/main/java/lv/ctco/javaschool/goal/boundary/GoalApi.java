@@ -159,6 +159,7 @@ public class GoalApi {
         switch (adr){
             case ("goal"):
                 goal.setGoalMessage(value);
+                goal.setTags(parseStringToTags(value));
                 break;
             case ("deadline"):
                 DateTimeFormatter formatterD = DateTimeFormatter.ofPattern("dd.MM.yyyy");
@@ -169,5 +170,17 @@ public class GoalApi {
                 throw new IllegalArgumentException();
         }
         return goal;
+    }
+
+    private Set<Tag> parseStringToTags(String value) {
+        List<String> tagList = generateTagsList(value);
+        Set<Tag> tagSet = new HashSet<>();
+
+        for (String item : tagList) {
+            Tag tag;
+            tag = goalStore.addTag(item);
+            tagSet.add(tag);
+        }
+        return tagSet;
     }
 }
