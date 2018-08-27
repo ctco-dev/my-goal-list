@@ -37,7 +37,7 @@ class GoalDtoTest {
         GoalDto dto = new GoalDto();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
         dto.setDeadlineDate(newDt.format(formatter));
-        assertEquals(newDt, dto.getDeadlineDate());
+        assertEquals(newDt.format(formatter), dto.getDeadlineDate());
     }
 
     @Test
@@ -47,7 +47,7 @@ class GoalDtoTest {
         GoalDto dto = new GoalDto();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy kk:mm");
         dto.setRegisteredDate(newDt.format(formatter));
-        assertEquals(newDt, dto.getRegisteredDate());
+        assertEquals(newDt.format(formatter), dto.getRegisteredDate());
     }
 
 
