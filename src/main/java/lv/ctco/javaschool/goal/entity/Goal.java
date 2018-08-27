@@ -5,9 +5,6 @@ import lv.ctco.javaschool.auth.entity.domain.User;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Entity

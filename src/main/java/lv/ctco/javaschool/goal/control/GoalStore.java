@@ -1,6 +1,7 @@
 package lv.ctco.javaschool.goal.control;
 
 import lv.ctco.javaschool.auth.entity.domain.User;
+import lv.ctco.javaschool.goal.entity.Comment;
 import lv.ctco.javaschool.goal.entity.Goal;
 import lv.ctco.javaschool.goal.entity.Tag;
 import lv.ctco.javaschool.goal.entity.TagDto;
@@ -53,4 +54,18 @@ public class GoalStore {
         }
     }
 
+    public Optional<Goal> getGoalById(long goalId) {
+        return em.createQuery("select g from Goal g " +
+                "where g.id = :id ", Goal.class)
+                .setParameter("id", goalId)
+                .getResultStream()
+                .findFirst();
+    }
+
+    public List<Comment> getCommentsForGoal(long goalId) {
+        return em.createQuery("select c from Comment c " +
+                "where c.goalId = :goalId", Comment.class)
+                .setParameter("goalId", goalId)
+                .getResultList();
+    }
 }

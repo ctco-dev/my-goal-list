@@ -5,10 +5,7 @@ import lv.ctco.javaschool.auth.control.UserStore;
 import lv.ctco.javaschool.auth.entity.dto.UserLoginDto;
 import lv.ctco.javaschool.auth.entity.domain.User;
 import lv.ctco.javaschool.goal.control.GoalStore;
-import lv.ctco.javaschool.goal.entity.Goal;
-import lv.ctco.javaschool.goal.entity.GoalDto;
-import lv.ctco.javaschool.goal.entity.Tag;
-import lv.ctco.javaschool.goal.entity.TagDto;
+import lv.ctco.javaschool.goal.entity.*;
 
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
@@ -21,6 +18,7 @@ import javax.persistence.PersistenceContext;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -86,6 +84,31 @@ public class GoalApi {
                     .collect(Collectors.toList());
         } else {
             return Collections.emptyList();
+        }
+    }
+
+    @GET
+    @RolesAllowed({"ADMIN", "USER"})
+    @Path("/comments/{id}")
+    public List<Comment> getCommentsGoalById(@PathParam("id") long goalId) {
+        Optional<Goal> goal = goalStore.getGoalById(goalId);
+        if (goal.isPresent()) {
+            return goalStore.getCommentsForGoal(goalId);
+        } else {
+            return new ArrayList<>();
+        }
+    }
+
+    @GET
+    @RolesAllowed({"ADMIN", "USER"})
+    @Path("/mygoals/{id}")
+    public GoalDto getGoalById(@PathParam("id") long goalId) {
+        Optional<Goal> goal = goalStore.getGoalById(goalId);
+        if (goal.isPresent()) {
+            Goal g = goal.get();
+            return convertToDto(g);
+        } else {
+            return new GoalDto();
         }
     }
 

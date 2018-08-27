@@ -107,7 +107,7 @@
         });
     }
     function redirectToGoalsAndComments(id) {
-        location.href = "<c:url value='/app/goal.jsp/'/>" + id;
+        location.href = "<c:url value='/app/goal.jsp?id='/>" + id;
     }
 
     function addNewGoal() {

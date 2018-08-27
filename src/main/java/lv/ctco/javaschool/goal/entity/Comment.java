@@ -1,26 +1,39 @@
 package lv.ctco.javaschool.goal.entity;
 
-
-import lv.ctco.javaschool.auth.entity.domain.User;
-
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import java.time.LocalDateTime;
 
+@Entity
 public class Comment {
+
     @Id
     @GeneratedValue
     private Long id;
-
     @ManyToOne
-    private User user;
-
+    private String userName;
     @ManyToOne
-    private Goal goal;
-
+    private long goalId;
     private LocalDateTime registeredDate;
     private String commentMessage;
+
+    public long getGoalId() {
+        return goalId;
+    }
+
+    public void setGoalId(long goalId) {
+        this.goalId = goalId;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
 
     public Long getId() {
         return id;
@@ -30,21 +43,6 @@ public class Comment {
         this.id = id;
     }
 
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public Goal getGoal() {
-        return goal;
-    }
-
-    public void setGoal(Goal goal) {
-        this.goal = goal;
-    }
 
     public LocalDateTime getRegisteredDate() {
         return registeredDate;
@@ -54,11 +52,11 @@ public class Comment {
         this.registeredDate = registeredDate;
     }
 
-    public void setCommentMessage(String commentMessage) {
-        this.commentMessage = commentMessage;
-    }
-
     public String getCommentMessage() {
         return commentMessage;
+    }
+
+    public void setCommentMessage(String commentMessage) {
+        this.commentMessage = commentMessage;
     }
 }
