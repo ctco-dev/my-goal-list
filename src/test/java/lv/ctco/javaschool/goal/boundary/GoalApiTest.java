@@ -36,6 +36,7 @@ class GoalApiTest {
     List<GoalDto> goalDtoList = new ArrayList<>();
     List<User> userList = new ArrayList<>();
     List<UserLoginDto> userDtoList = new ArrayList<>();
+    UserLoginDto dto = new UserLoginDto();
     @Mock
     private UserStore userStore;
     @Mock
@@ -108,4 +109,12 @@ class GoalApiTest {
         assertEquals(userDtoList.get(0).getEmail(), goalApi.getSearchedUser("us").get(0).getEmail());
         assertEquals(userDtoList.get(0).getPhone(), goalApi.getSearchedUser("us").get(0).getPhone());
     }
+    @Test
+    @DisplayName("getSearchedUser(String searchedUserName): User has no search results")
+    void getSearchedUser2() {
+        when(userStore.getUserByUsername("us"))
+                .thenReturn(userList);
+        assertTrue(goalApi.getSearchedUser("us").isEmpty());
+    }
+
 }
