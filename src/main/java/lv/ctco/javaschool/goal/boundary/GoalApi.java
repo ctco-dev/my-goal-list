@@ -20,13 +20,7 @@ import javax.ws.rs.PathParam;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Arrays;
-import java.util.Map;
-import java.util.Set;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-import java.util.HashSet;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -111,14 +105,6 @@ public class GoalApi {
         return date.format(formatter);
     }
 
-    private List<String> generateTagsList(String goal){
-        Pattern stopWords = Pattern.compile("\\b(?:change|become|language|field|apply|app|application|start|end|more|this|that|maybe|year|one|two|three|four|five|six|seven|eight|nine|ten|from|i|a|and|about|an|are|if|of|off|on|by|next|last|use|using|used|do|doing|what|determined|am|want|wanted|goal|goals|achieve|me|my|in|out|above|wish|will|was|is|not|new|old|get|got|going|to|for|have|has|the|can)\\b\\s*", Pattern.CASE_INSENSITIVE);
-        String noSymbols = goal.replaceAll("[$,.:;_#@!?&*()+1234567890-]", "");
-        Matcher matcher = stopWords.matcher(noSymbols);
-        String clean = matcher.replaceAll("");
-        return Arrays.asList(clean.split(" "));
-    }
-
     private Goal setFieldsToGoal(Goal goal, String adr, String value) throws IllegalArgumentException {
         switch (adr){
             case ("goal"):
@@ -147,4 +133,23 @@ public class GoalApi {
         }
         return tagSet;
     }
+
+    private String[] patternList = new String[] {
+            "change|become|i|language|field|apply|app|application|start|end|more|this|that",
+            "maybe|year|one|two|three|four|five|six|seven|eight|nine|ten|from|i|a|and|about",
+            "are|if|of|off|on|by|next|last|use|using|used|do|doing|what|determined|am|want",
+            "an|wanted|goal|goals|achieve|me|my|in|out|above|wish|will|was|is|not|new|old",
+            "get|got|going|to|for|have|has|the|can|will|+|-"
+    };
+
+    List<String> generateTagsList(String goal){
+        String noSymbols = goal.replaceAll("[$,.:;#@!?&*()1234567890]", "");
+        for( String s:patternList){
+            Pattern stopWords = Pattern.compile("\\b(?:"+s+")\\b\\s*", Pattern.CASE_INSENSITIVE);
+            Matcher matcher = stopWords.matcher(noSymbols);
+            noSymbols = matcher.replaceAll("");
+        }
+        return Arrays.asList(noSymbols.split(" "));
+    }
+
 }
