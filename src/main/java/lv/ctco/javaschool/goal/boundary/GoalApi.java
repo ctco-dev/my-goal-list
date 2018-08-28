@@ -2,11 +2,9 @@ package lv.ctco.javaschool.goal.boundary;
 
 import lv.ctco.javaschool.auth.control.UserStore;
 import lv.ctco.javaschool.auth.entity.domain.User;
+import lv.ctco.javaschool.auth.entity.dto.UserLoginDto;
 import lv.ctco.javaschool.goal.control.GoalStore;
-import lv.ctco.javaschool.goal.entity.Goal;
-import lv.ctco.javaschool.goal.entity.GoalDto;
-import lv.ctco.javaschool.goal.entity.Tag;
-import lv.ctco.javaschool.goal.entity.TagDto;
+import lv.ctco.javaschool.goal.entity.*;
 
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
@@ -14,11 +12,10 @@ import javax.inject.Inject;
 import javax.json.JsonObject;
 import javax.json.JsonString;
 import javax.json.JsonValue;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -32,18 +29,37 @@ import static java.time.temporal.ChronoUnit.DAYS;
 @Path("/goal")
 @Stateless
 public class GoalApi {
-    @PersistenceContext
-    private EntityManager em;
     @Inject
     private UserStore userStore;
     @Inject
     private GoalStore goalStore;
 
+
+    @GET
+    @RolesAllowed({"ADMIN", "USER"})
+    @Path("/search-user")
+    public List<UserLoginDto> getSearchedUser(String searchedUserName) {
+        List<User> userList = userStore.getUserByUsername(searchedUserName);
+        if (userList.size() != 0) {
+            return userList.stream()
+                    .map(userStore::convertToDto)
+                    .collect(Collectors.toList());
+        } else {
+            return Collections.emptyList();
+        }
+    }
+
     @POST
     @RolesAllowed({"ADMIN", "USER"})
-    public void startPage() {
-        /// place for methods on page reload
-        /// currently - none
+    @Path("/search-user")
+    public void getSearchParameters(JsonObject searchDto) {
+        for (Map.Entry<String, JsonValue> pair : searchDto.entrySet()) {
+            String adr = pair.getKey();
+            String value = ((JsonString) pair.getValue()).getString();
+            if (adr.equals("usersearch")) {
+                getSearchedUser(value);
+            }
+        }
     }
 
     @GET
@@ -59,6 +75,76 @@ public class GoalApi {
         } else {
             return Collections.emptyList();
         }
+    }
+
+    @GET
+    @RolesAllowed({"ADMIN", "USER"})
+    @Path("/mygoals/{id}")
+    public GoalDto getGoalById(@PathParam("id") long goalId) {
+        Optional<Goal> goal = goalStore.getGoalById(goalId);
+        if (goal.isPresent()) {
+            Goal g = goal.get();
+            return convertToDto(g);
+        } else {
+            return new GoalDto();
+        }
+    }
+
+    @GET
+    @RolesAllowed({"ADMIN", "USER"})
+    @Path("{id}/comments")
+    public List<CommentDto> getCommentsGoalById(@PathParam("id") long goalId) {
+        Optional<Goal> goal = goalStore.getGoalById(goalId);
+        List<CommentDto> commentDtos = new ArrayList<>();
+        if (goal.isPresent()) {
+            List<Comment> comments = goalStore.getCommentsForGoal(goal.get());
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy kk:mm");
+            for (Comment c : comments) {
+                CommentDto commentDto = new CommentDto(c.getUser().getUsername(), c.getRegisteredDate().format(formatter), c.getCommentMessage());
+                commentDtos.add(commentDto);
+            }
+        }
+        return commentDtos;
+    }
+
+    @POST
+    @RolesAllowed({"ADMIN", "USER"})
+    @Path("{id}/comments")
+    public void setCommentsGoalById(@PathParam("id") long goalId, MessageDto msg) {
+        Optional<Goal> goal = goalStore.getGoalById(goalId);
+        if (goal.isPresent()) {
+            Comment comment = new Comment();
+            comment.setUser(userStore.getCurrentUser());
+            comment.setGoal(goal.get());
+            comment.setRegisteredDate(LocalDateTime.now());
+            comment.setCommentMessage(msg.getMessage());
+            goalStore.addComment(comment);
+        } else {
+            throw new IllegalArgumentException();
+        }
+    }
+
+    @POST
+    @RolesAllowed({"ADMIN", "USER"})
+    @Path("/newgoal")
+    public void createNewGoal(JsonObject goalDto) {
+        User user = userStore.getCurrentUser();
+        Goal goal = new Goal();
+        for (Map.Entry<String, JsonValue> pair : goalDto.entrySet()) {
+            String adr = pair.getKey();
+            String value = ((JsonString) pair.getValue()).getString();
+            goal = setFieldsToGoal(goal, adr, value);
+        }
+        goal.setUser(user);
+        goal.setRegisteredDate(LocalDateTime.now());
+        goalStore.addGoal(goal);
+    }
+
+    @GET
+    @RolesAllowed({"ADMIN", "USER"})
+    @Path("/taglist")
+    public List<TagDto> returnAllTags() {
+        return goalStore.getAllTagList();
     }
 
     private GoalDto convertToDto(Goal goal) {
@@ -87,13 +173,6 @@ public class GoalApi {
         return date.format(formatter);
     }
 
-    @GET
-    @RolesAllowed({"ADMIN", "USER"})
-    @Path("/taglist")
-    public List<TagDto> returnAllTags() {
-        return goalStore.getAllTagList();
-    }
-
     private TagDto convertToTagDto(Tag tag) {
         TagDto dto = new TagDto();
         dto.setTagMessage(tag.getTagMessage());
@@ -105,24 +184,7 @@ public class GoalApi {
         String noSymbols = goal.replaceAll("[$,.:;_#@!?&*()+1234567890-]", "");
         Matcher matcher = stopWords.matcher(noSymbols);
         String clean = matcher.replaceAll("");
-        List<String> tagList = new ArrayList<>(Arrays.asList(clean.split(" ")));
-        return tagList;
-    }
-
-    @POST
-    @RolesAllowed({"ADMIN", "USER"})
-    @Path("/newgoal")
-    public void createNewGoal(JsonObject goalDto) {
-        User user = userStore.getCurrentUser();
-        Goal goal = new Goal();
-        for(Map.Entry<String,JsonValue> pair : goalDto.entrySet()){
-            String adr = pair.getKey();
-            String value = ((JsonString) pair.getValue()).getString();
-            goal = setFieldsToGoal(goal, adr, value);
-        }
-        goal.setUser(user);
-        goal.setRegisteredDate(LocalDateTime.now());
-        goalStore.addGoal(goal);
+        return Arrays.asList(clean.split(" "));
     }
 
     private Goal setFieldsToGoal(Goal goal, String adr, String value) throws IllegalArgumentException {

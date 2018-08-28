@@ -6,7 +6,6 @@ public class TagDto {
     private Long    cnt;
 
     public TagDto(){
-        this("", 0L);
     }
 
     public TagDto(String tagMsg, Long cnt ){
@@ -14,12 +13,12 @@ public class TagDto {
         this.cnt = cnt;
     }
 
-    public void setTagMessage(String tagMessage) {
-        this.tagMessage = tagMessage;
-    }
-
     public String getTagMessage() {
         return tagMessage;
+    }
+
+    public void setTagMessage(String tagMessage) {
+        this.tagMessage = tagMessage;
     }
 
     public Long getCnt() {

@@ -105,14 +105,6 @@ public class AuthenticationApi {
     @Path("/myprofile")
     public UserLoginDto returnUserDto() {
         User currentUser = userStore.getCurrentUser();
-        return convertToDto(currentUser);
-    }
-
-    private UserLoginDto convertToDto(User user) {
-        UserLoginDto dto = new UserLoginDto();
-        dto.setUsername(user.getUsername());
-        dto.setPhone(user.getPhone());
-        dto.setEmail(user.getEmail());
-        return dto;
+        return userStore.convertToDto(currentUser);
     }
 }

@@ -4,10 +4,9 @@ import lv.ctco.javaschool.auth.entity.domain.User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class CommentTest {
     @Test
@@ -32,18 +31,6 @@ class CommentTest {
         assertEquals(user, comment.getUser());
     }
 
-    @Test
-    void getAndSetGoal() {
-        Goal goal = new Goal();
-        goal.setId(123456789L);
-        goal.setUser(new User());
-        goal.setGoalMessage("test");
-        goal.setRegisteredDate( LocalDateTime.now());
-        goal.setDeadlineDate( LocalDate.now());
-        Comment comment = new Comment();
-        comment.setGoal(goal);
-        assertEquals(goal, comment.getGoal());
-    }
 
     @Test
     @DisplayName("RegisteredDate should be equal")

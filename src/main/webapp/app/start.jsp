@@ -107,20 +107,19 @@
         });
     }
     function redirectToGoalsAndComments(id) {
-        location.href = "<c:url value='/app/goal.jsp/'/>" + id;
+        if (id >= 0) {
+            location.href = "<c:url value='/app/goal.jsp?id='/>" + id;
+        } else {
+            addNewGoal()
+        }
     }
 
     function addNewGoal() {
-        fetch("<c:url value='/api/goal'/>", {"method": "POST"})
-            .then(function (response) {
-                location.href = "/app/addgoal.jsp";
-            });
+        location.href = "<c:url value='/app/addgoal.jsp'/>";
+
     }
     function findGoals() {
-        fetch("<c:url value='/api/goal'/>", {"method": "POST"})
-            .then(function (response) {
-                location.href = "/app/findgoals.jsp";
-            });
+        location.href = "<c:url value='/app/findgoals.jsp'/>";
     }
 </script>
 </body>
