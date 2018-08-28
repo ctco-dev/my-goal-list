@@ -29,17 +29,6 @@ public class GoalStore {
         em.persist(goal);
     }
 
-/*
-    public List<TagDto> getAllTagList() {
-        return new ArrayList<>( em.createQuery(
-                "SELECT new lv.ctco.javaschool.goal.entity.TagDto(t.tagMessage, COUNT(t)) " +
-                        "FROM Tag t, Goal g " +
-                        "WHERE t MEMBER OF g.tags " +
-                        "GROUP BY t.id"
-        ).getResultList());
-    }
-*/
-
     public Tag addTag( String tagMsg ){
         Optional<Tag> tagFromDB= em.createQuery("select t from Tag t " +
                 "where upper(t.tagMessage) = :tagMsg ", Tag.class)
@@ -62,17 +51,5 @@ public class GoalStore {
                 .getResultStream()
                 .findFirst();
     }
-/*
-    public List<Comment> getCommentsForGoal(Goal goal) {
-        return em.createQuery("select c from Comment c " +
-                "where c.goal = :goal", Comment.class)
-                .setParameter("goal", goal)
-                .getResultList();
-    }
 
-    public void addComment(Comment comment) {
-        em.persist(comment);
-    }
-
-*/
 }
