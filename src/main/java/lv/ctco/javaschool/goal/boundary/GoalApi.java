@@ -2,9 +2,10 @@ package lv.ctco.javaschool.goal.boundary;
 
 import lv.ctco.javaschool.auth.control.UserStore;
 import lv.ctco.javaschool.auth.entity.domain.User;
-import lv.ctco.javaschool.auth.entity.dto.UserLoginDto;
 import lv.ctco.javaschool.goal.control.GoalStore;
-import lv.ctco.javaschool.goal.entity.*;
+import lv.ctco.javaschool.goal.entity.Goal;
+import lv.ctco.javaschool.goal.entity.GoalDto;
+import lv.ctco.javaschool.goal.entity.Tag;
 
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
@@ -19,7 +20,13 @@ import javax.ws.rs.PathParam;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Map;
+import java.util.Set;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+import java.util.HashSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -34,37 +41,6 @@ public class GoalApi {
     @Inject
     private GoalStore goalStore;
 
-
-
-/*
-    @GET
-    @RolesAllowed({"ADMIN", "USER"})
-    @Path("/search-user")
-    public List<UserLoginDto> getSearchedUser(String searchedUserName) {
-        List<User> userList = userStore.getUserByUsername(searchedUserName);
-        if (userList.size() != 0) {
-            return userList.stream()
-                    .map(userStore::convertToDto)
-                    .collect(Collectors.toList());
-        } else {
-            return Collections.emptyList();
-        }
-    }
-*/
-
-/*    @POST
-    @RolesAllowed({"ADMIN", "USER"})
-    @Path("/search-user")
-    public void getSearchParameters(JsonObject searchDto) {
-        for (Map.Entry<String, JsonValue> pair : searchDto.entrySet()) {
-            String adr = pair.getKey();
-            String value = ((JsonString) pair.getValue()).getString();
-            if (adr.equals("usersearch")) {
-                getSearchedUser(value);
-            }
-        }
-    }
-*/
     @GET
     @RolesAllowed({"ADMIN", "USER"})
     @Path("/mygoals")
@@ -92,41 +68,6 @@ public class GoalApi {
             return new GoalDto();
         }
     }
-/*
-    @GET
-    @RolesAllowed({"ADMIN", "USER"})
-    @Path("{id}/comments")
-    public List<CommentDto> getCommentsGoalById(@PathParam("id") long goalId) {
-        Optional<Goal> goal = goalStore.getGoalById(goalId);
-        List<CommentDto> commentDtos = new ArrayList<>();
-        if (goal.isPresent()) {
-            List<Comment> comments = goalStore.getCommentsForGoal(goal.get());
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy kk:mm");
-            for (Comment c : comments) {
-                CommentDto commentDto = new CommentDto(c.getUser().getUsername(), c.getRegisteredDate().format(formatter), c.getCommentMessage());
-                commentDtos.add(commentDto);
-            }
-        }
-        return commentDtos;
-    }
-
-    @POST
-    @RolesAllowed({"ADMIN", "USER"})
-    @Path("{id}/comments")
-    public void setCommentsGoalById(@PathParam("id") long goalId, MessageDto msg) {
-        Optional<Goal> goal = goalStore.getGoalById(goalId);
-        if (goal.isPresent()) {
-            Comment comment = new Comment();
-            comment.setUser(userStore.getCurrentUser());
-            comment.setGoal(goal.get());
-            comment.setRegisteredDate(LocalDateTime.now());
-            comment.setCommentMessage(msg.getMessage());
-            goalStore.addComment(comment);
-        } else {
-            throw new IllegalArgumentException();
-        }
-    }
-*/
 
     @POST
     @RolesAllowed({"ADMIN", "USER"})
@@ -144,13 +85,6 @@ public class GoalApi {
         goalStore.addGoal(goal);
     }
 
-/*    @GET
-    @RolesAllowed({"ADMIN", "USER"})
-    @Path("/taglist")
-    public List<TagDto> returnAllTags() {
-        return goalStore.getAllTagList();
-    }
-*/
     private GoalDto convertToDto(Goal goal) {
         GoalDto dto = new GoalDto();
         dto.setUsername(goal.getUser().getUsername());
@@ -176,13 +110,6 @@ public class GoalApi {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy kk:mm");
         return date.format(formatter);
     }
-
- /*   private TagDto convertToTagDto(Tag tag) {
-        TagDto dto = new TagDto();
-        dto.setTagMessage(tag.getTagMessage());
-        return dto;
-    }
-    */
 
     private List<String> generateTagsList(String goal){
         Pattern stopWords = Pattern.compile("\\b(?:change|become|language|field|apply|app|application|start|end|more|this|that|maybe|year|one|two|three|four|five|six|seven|eight|nine|ten|from|i|a|and|about|an|are|if|of|off|on|by|next|last|use|using|used|do|doing|what|determined|am|want|wanted|goal|goals|achieve|me|my|in|out|above|wish|will|was|is|not|new|old|get|got|going|to|for|have|has|the|can)\\b\\s*", Pattern.CASE_INSENSITIVE);
