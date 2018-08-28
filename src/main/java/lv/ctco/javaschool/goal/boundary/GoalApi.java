@@ -122,7 +122,7 @@ public class GoalApi {
         return goal;
     }
 
-    private Set<Tag> parseStringToTags(String value) {
+    Set<Tag> parseStringToTags(String value) {
         List<String> tagList = generateTagsList(value);
         Set<Tag> tagSet = new HashSet<>();
 

@@ -5,6 +5,7 @@ import lv.ctco.javaschool.auth.entity.domain.User;
 import lv.ctco.javaschool.goal.control.GoalStore;
 import lv.ctco.javaschool.goal.entity.Goal;
 import lv.ctco.javaschool.goal.entity.GoalDto;
+import lv.ctco.javaschool.goal.entity.Tag;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -16,10 +17,13 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertIterableEquals;
 import static org.mockito.Mockito.when;
 
 
@@ -106,4 +110,31 @@ class GoalApiTest {
         assertFalse(expResult2.equals( String.join(" ", goalApi.generateTagsList(testLine1))));
         assertFalse(expResult1.equals( String.join(" ", goalApi.generateTagsList(testLine2))));
     }
+
+    @Test
+    @DisplayName("parseStringToTags(String value): Checks work of tag list generation from goal message")
+    void testParsingGoalStringToTags() {
+        String testLine1 = "I will become a programmer this year!";
+        String tagMsg1 = "programmer";
+        Tag tag1 = new Tag(tagMsg1);
+        Set<Tag> tagset1 = new HashSet<>();
+        tagset1.add(tag1);
+
+        String testLine2 = "I will start to learn Java!";
+        String tagMsg2a = "learn";
+        String tagMsg2b = "Java";
+        Tag tag2a = new Tag(tagMsg2a);
+        Tag tag2b = new Tag(tagMsg2b);
+        Set<Tag> tagset2 = new HashSet<>();
+        tagset1.add(tag2a);
+        tagset1.add(tag2b);
+
+        when(goalStore.addTag(tagMsg1)).thenReturn(tag1);
+        assertIterableEquals(tagset1, goalApi.parseStringToTags(testLine1));
+
+        when(goalStore.addTag(tagMsg2a)).thenReturn(tag2a);
+        when(goalStore.addTag(tagMsg2b)).thenReturn(tag2b);
+        assertEquals(tagset2, goalApi.parseStringToTags(testLine2));
+    }
+
 }
