@@ -1,6 +1,8 @@
 package lv.ctco.javaschool.goal.boundary;
 
+import lv.ctco.javaschool.auth.boundary.AuthenticationApi;
 import lv.ctco.javaschool.auth.control.UserStore;
+import lv.ctco.javaschool.auth.entity.dto.UserLoginDto;
 import lv.ctco.javaschool.auth.entity.domain.User;
 import lv.ctco.javaschool.goal.control.GoalStore;
 import lv.ctco.javaschool.goal.entity.Goal;
@@ -44,6 +46,32 @@ public class GoalApi {
     public void startPage() {
         /// place for methods on page reload
         /// currently - none
+    }
+    @POST
+    @RolesAllowed({"ADMIN", "USER"})
+    @Path("/search-user")
+    public void getSearchParameters(JsonObject searchDto) {
+        for(Map.Entry<String,JsonValue> pair : searchDto.entrySet()){
+            String adr = pair.getKey();
+            String value = ((JsonString) pair.getValue()).getString();
+            if (adr.equals("usersearch")) {
+                getSearchedUser(value);
+            }
+        }
+    }
+
+    @GET
+    @RolesAllowed({"ADMIN", "USER"})
+    @Path("/search-user")
+    public List<UserLoginDto> getSearchedUser(String searchedUserName) {
+        List<User> userList = userStore.getUserByUsername(searchedUserName);
+        if (userList.size() != 0) {
+            return userList.stream()
+                    .map(userStore::convertToDto)
+                    .collect(Collectors.toList());
+        } else {
+            return Collections.emptyList();
+        }
     }
 
     @GET
@@ -105,8 +133,7 @@ public class GoalApi {
         String noSymbols = goal.replaceAll("[$,.:;_#@!?&*()+1234567890-]", "");
         Matcher matcher = stopWords.matcher(noSymbols);
         String clean = matcher.replaceAll("");
-        List<String> tagList = new ArrayList<>(Arrays.asList(clean.split(" ")));
-        return tagList;
+        return Arrays.asList(clean.split(" "));
     }
 
     @POST

@@ -5,6 +5,7 @@ import lv.ctco.javaschool.auth.control.exceptions.InvalidUsernameException;
 import lv.ctco.javaschool.auth.control.exceptions.UsernameAlreadyExistsException;
 import lv.ctco.javaschool.auth.entity.domain.Role;
 import lv.ctco.javaschool.auth.entity.domain.User;
+import lv.ctco.javaschool.auth.entity.dto.UserLoginDto;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -36,6 +37,14 @@ public class UserStore {
                 .setParameter("username", username.toUpperCase())
                 .getResultList();
         return user.isEmpty() ? Optional.empty() : Optional.of(user.get(0));
+    }
+
+    public List<User> getUserByUsername(String user){
+        return em.createQuery(
+                "select u " +
+                        "from User u " +
+                        "where u.username like '%"+user+"%'", User.class)
+                .getResultList();
     }
 
     public User createUser(String username, String password, String email, String phone, Role role) throws InvalidUsernameException, InvalidPasswordException, UsernameAlreadyExistsException {
@@ -74,6 +83,13 @@ public class UserStore {
         if (password == null || password.length() < MIN_PASSWORD_LENGTH || password.startsWith(" ") || password.endsWith(" ")) {
             throw new InvalidPasswordException();
         }
+    }
+    public UserLoginDto convertToDto(User user) {
+        UserLoginDto dto = new UserLoginDto();
+        dto.setUsername(user.getUsername());
+        dto.setPhone(user.getPhone());
+        dto.setEmail(user.getEmail());
+        return dto;
     }
 
 }
