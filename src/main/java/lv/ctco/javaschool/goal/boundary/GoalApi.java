@@ -39,12 +39,7 @@ public class GoalApi {
     @Inject
     private GoalStore goalStore;
 
-    @POST
-    @RolesAllowed({"ADMIN", "USER"})
-    public void startPage() {
-        /// place for methods on page reload
-        /// currently - none
-    }
+
     @POST
     @RolesAllowed({"ADMIN", "USER"})
     @Path("/search-user")
@@ -89,13 +84,35 @@ public class GoalApi {
 
     @GET
     @RolesAllowed({"ADMIN", "USER"})
-    @Path("/comments/{id}")
-    public List<Comment> getCommentsGoalById(@PathParam("id") long goalId) {
+    @Path("{id}/comments")
+    public List<CommentDto> getCommentsGoalById(@PathParam("id") long goalId) {
+        Optional<Goal> goal = goalStore.getGoalById(goalId);
+        List<CommentDto> commentDtos = new ArrayList<>();
+        if (goal.isPresent()) {
+            List<Comment> comments = goalStore.getCommentsForGoal(goal.get());
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy kk:mm");
+            for (Comment c : comments) {
+                CommentDto commentDto = new CommentDto(c.getUser().getUsername(), c.getRegisteredDate().format(formatter), c.getCommentMessage());
+                commentDtos.add(commentDto);
+            }
+        }
+        return commentDtos;
+    }
+
+    @POST
+    @RolesAllowed({"ADMIN", "USER"})
+    @Path("{id}/comments")
+    public void setCommentsGoalById(@PathParam("id") long goalId, MessageDto msg) {
         Optional<Goal> goal = goalStore.getGoalById(goalId);
         if (goal.isPresent()) {
-            return goalStore.getCommentsForGoal(goalId);
+            Comment comment = new Comment();
+            comment.setUser(userStore.getCurrentUser());
+            comment.setGoal(goal.get());
+            comment.setRegisteredDate(LocalDateTime.now());
+            comment.setCommentMessage(msg.getMessage());
+            goalStore.addComment(comment);
         } else {
-            return new ArrayList<>();
+            throw new IllegalArgumentException();
         }
     }
 

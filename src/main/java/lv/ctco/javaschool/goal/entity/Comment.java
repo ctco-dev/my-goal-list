@@ -1,5 +1,7 @@
 package lv.ctco.javaschool.goal.entity;
 
+import lv.ctco.javaschool.auth.entity.domain.User;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -12,27 +14,29 @@ public class Comment {
     @Id
     @GeneratedValue
     private Long id;
+
     @ManyToOne
-    private String userName;
+    private User user;
+
     @ManyToOne
-    private long goalId;
+    private Goal goal;
     private LocalDateTime registeredDate;
     private String commentMessage;
 
-    public long getGoalId() {
-        return goalId;
+    public User getUser() {
+        return user;
     }
 
-    public void setGoalId(long goalId) {
-        this.goalId = goalId;
+    public void setUser(User user) {
+        this.user = user;
     }
 
-    public String getUserName() {
-        return userName;
+    public Goal getGoal() {
+        return goal;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setGoal(Goal goal) {
+        this.goal = goal;
     }
 
     public Long getId() {

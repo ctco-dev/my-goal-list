@@ -1,15 +1,19 @@
 package lv.ctco.javaschool.goal.entity;
 
-
-import lv.ctco.javaschool.auth.entity.domain.User;
-
-
-import java.time.LocalDateTime;
-
 public class CommentDto {
     private String username;
-    private LocalDateTime registeredDate;
+
+    private String registeredDate;
     private String commentMessage;
+
+    public CommentDto() {
+    }
+
+    public CommentDto(String username, String localDateTime, String msg) {
+        this.username = username;
+        this.registeredDate = localDateTime;
+        this.commentMessage = msg;
+    }
 
     public String getUsername() {
         return username;
@@ -19,11 +23,11 @@ public class CommentDto {
         this.username = username;
     }
 
-    public LocalDateTime getRegisteredDate() {
+    public String getRegisteredDate() {
         return registeredDate;
     }
 
-    public void setRegisteredDate(LocalDateTime registeredDate) {
+    public void setRegisteredDate(String registeredDate) {
         this.registeredDate = registeredDate;
     }
 

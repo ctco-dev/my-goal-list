@@ -4,6 +4,7 @@
 <head>
     <title id="title">{{goalMessage}}</title>
     <script src="https://www.w3schools.com/lib/w3.js"></script>
+    <script src="http://www.w3schools.com/lib/w3data.js"></script>
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
     <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
@@ -32,32 +33,36 @@
             <div class="input-group">
                 <input type="text" id="userComment" class="form-control input-sm chat-input"
                        placeholder="Write your message here..."/>
-                <span class="input-group-btn" onclick="addComment()">
-                    <a href="#" class="btn btn-primary btn-sm"><span class="glyphicon glyphicon-comment"></span> Add Comment</a>
+                <span class="input-group-btn">
+                    <a onclick="addComment()" class="btn btn-primary btn-sm"> Add Comment</a>
                 </span>
             </div>
             <hr data-brackets-id="12673">
 
 
             <ul data-brackets-id="12674" id="sortable" class="list-unstyled ui-sortable w3-hide">
-                <strong class="pull-left primary-font">{{Comentator}}</strong>
-                <small class="pull-right text-muted">
-                    <span class="glyphicon glyphicon-time"></span>{{Time Since Post}}
-                </small>
-                </br>
-                <li class="ui-state-default">{{comentText}}</li>
-                </br>
+                <li class="ui-state-default" w3-repeat="comments">
+                    <strong class="pull-left primary-font">{{username}}</strong>
+                    <small class="pull-right text-muted">
+                        <span class="glyphicon glyphicon-time"></span>{{registeredDate}}
+                    </small>
+                    </br>
+                    </br>
+                    <p>{{commentMessage}}</p>
+                </li>
             </ul>
 
         </div>
     </div>
+</div>
+>
 
 
     <script>
         var id = getQueryVariable("id");
 
         function getComments() {
-            fetch("<c:url value='/api/goal/comments/'/>" + id, {
+            fetch("<c:url value='/api/goal/'/>" + id + "/comments", {
                 "method": "GET",
                 headers: {
                     'Accept': 'application/json',
@@ -68,7 +73,9 @@
             }).then(function (coments) {
                 console.log(coments);
                 if (coments.length > 0) {
+                    var tabledata = {'comments': coments};
                     document.getElementById("sortable").classList.remove("w3-hide");
+                    w3DisplayData("sortable", tabledata);
                 }
 
             });
@@ -86,8 +93,8 @@
             }).then(function (goal) {
                 w3.displayObject("title", goal);
                 w3.displayObject("goal-fields", goal);
+                getComments();
             });
-            getComments();
         }
 
         function getQueryVariable(variable) {
@@ -95,11 +102,25 @@
             var vars = query.split("&");
             for (var i = 0; i < vars.length; i++) {
                 var pair = vars[i].split("=");
-                if (pair[0] == variable) {
+                if (pair[0] === variable) {
                     return pair[1];
                 }
             }
             return (false);
+        }
+
+
+        function addComment() {
+            var data = {'message': document.getElementById("userComment").value};
+            fetch("<c:url value='/api/goal/'/>" + id + "/comments", {
+                "method": "POST",
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                }, body: JSON.stringify(data)
+            }).then(function (response) {
+                onLoad();
+            });
         }
 
 

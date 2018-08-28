@@ -27,8 +27,8 @@ class CommentTest {
         user.setEmail("qqq@qqq.qqq");
         user.setPhone("+37123456789");
         Comment comment = new Comment();
-        comment.setUserName(user.getUsername());
-        assertEquals(user.getUsername(), comment.getUserName());
+        comment.setUser(user);
+        assertEquals(user, comment.getUser());
     }
 
 

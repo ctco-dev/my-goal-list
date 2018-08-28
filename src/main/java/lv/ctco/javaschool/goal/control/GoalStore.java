@@ -62,10 +62,14 @@ public class GoalStore {
                 .findFirst();
     }
 
-    public List<Comment> getCommentsForGoal(long goalId) {
+    public List<Comment> getCommentsForGoal(Goal goal) {
         return em.createQuery("select c from Comment c " +
-                "where c.goalId = :goalId", Comment.class)
-                .setParameter("goalId", goalId)
+                "where c.goal = :goal", Comment.class)
+                .setParameter("goal", goal)
                 .getResultList();
+    }
+
+    public void addComment(Comment comment) {
+        em.persist(comment);
     }
 }

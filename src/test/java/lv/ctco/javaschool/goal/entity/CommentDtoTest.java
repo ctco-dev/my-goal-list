@@ -5,11 +5,8 @@ import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-/**
- * Created by olga.polinkina01 on 8/22/2018.
- */
 class CommentDtoTest {
     @Test
     @DisplayName("UserName should be equal")
@@ -34,8 +31,8 @@ class CommentDtoTest {
     void getAndSetCommentMessage() {
         LocalDateTime newDt = LocalDateTime.now();
         CommentDto dto = new CommentDto();
-        dto.setRegisteredDate(newDt);
-        assertEquals(newDt, dto.getRegisteredDate() );
+        dto.setRegisteredDate(newDt.toString());
+        assertEquals(newDt.toString(), dto.getRegisteredDate());
     }
 
 }
