@@ -22,6 +22,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.mockito.Mockito.when;
 
 
@@ -115,6 +116,26 @@ class GoalApiTest {
         when(userStore.getUserByUsername("us"))
                 .thenReturn(userList);
         assertTrue(goalApi.getSearchedUser("us").isEmpty());
+    }
+
+    @Test
+    @DisplayName("generateTagsList: Checks work of tag list generation from goal message")
+    void testGenerationOfTagsList(){
+        String testLine1 = "I will become a programmer this year!";
+        String expResult1 ="programmer";
+        String testLine2 = "I WILL BECOME A PROGRAMMER THIS YEAR!";
+        String expResult2 ="PROGRAMMER";
+        String testLine3 = "I WILL be two years old!";
+        String expResult3 ="";
+        String testLine4 = "I will start to learn Java!";
+        String expResult4 ="learn Java";
+
+        assertEquals(expResult1, String.join(" ", goalApi.generateTagsList(testLine1)));
+        assertEquals(expResult2, String.join(" ", goalApi.generateTagsList(testLine2)));
+        assertEquals(expResult3, String.join(" ", goalApi.generateTagsList(testLine3)));
+        assertEquals(expResult4, String.join(" ", goalApi.generateTagsList(testLine4)));
+        assertFalse(expResult2.equals( String.join(" ", goalApi.generateTagsList(testLine1))));
+        assertFalse(expResult1.equals( String.join(" ", goalApi.generateTagsList(testLine2))));
     }
 
 }

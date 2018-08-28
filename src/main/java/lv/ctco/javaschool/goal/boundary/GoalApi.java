@@ -179,13 +179,7 @@ public class GoalApi {
         return dto;
     }
 
-    private List<String> generateTagsList(String goal){
-        Pattern stopWords = Pattern.compile("\\b(?:change|become|language|field|apply|app|application|start|end|more|this|that|maybe|year|one|two|three|four|five|six|seven|eight|nine|ten|from|i|a|and|about|an|are|if|of|off|on|by|next|last|use|using|used|do|doing|what|determined|am|want|wanted|goal|goals|achieve|me|my|in|out|above|wish|will|was|is|not|new|old|get|got|going|to|for|have|has|the|can)\\b\\s*", Pattern.CASE_INSENSITIVE);
-        String noSymbols = goal.replaceAll("[$,.:;_#@!?&*()+1234567890-]", "");
-        Matcher matcher = stopWords.matcher(noSymbols);
-        String clean = matcher.replaceAll("");
-        return Arrays.asList(clean.split(" "));
-    }
+
 
     private Goal setFieldsToGoal(Goal goal, String adr, String value) throws IllegalArgumentException {
         switch (adr){
@@ -214,5 +208,23 @@ public class GoalApi {
             tagSet.add(tag);
         }
         return tagSet;
+    }
+
+    private String[] patternList = new String[] {
+            "change|become|i|language|field|apply|app|application|start|end|more|this|that",
+            "maybe|year|years|one|two|three|four|five|six|seven|eight|nine|ten|from|i|a|and",
+            "are|if|of|off|on|by|next|last|use|using|used|do|doing|what|determined|am|want",
+            "an|wanted|goal|goals|achieve|me|my|in|out|above|wish|will|was|is|not|new|old",
+            "get|got|going|to|for|have|has|the|can|will|be|about"
+    };
+
+    List<String> generateTagsList(String goal){
+        String noSymbols = goal.replaceAll("[$,.:;#@!?&*()1234567890]", "");
+        for( String s:patternList){
+            Pattern stopWords = Pattern.compile("\\b(?:"+s+")\\b\\s*", Pattern.CASE_INSENSITIVE);
+            Matcher matcher = stopWords.matcher(noSymbols);
+            noSymbols = matcher.replaceAll("");
+        }
+        return Arrays.asList(noSymbols.split(" "));
     }
 }
