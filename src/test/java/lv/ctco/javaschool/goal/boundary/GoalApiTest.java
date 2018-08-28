@@ -83,9 +83,7 @@ class GoalApiTest {
 
         assertEquals(goal.getUser().getUsername(), goalApi.getMyGoals().get(0).getUsername());
         assertEquals(goal.getGoalMessage(), goalApi.getMyGoals().get(0).getGoalMessage());
-        assertEquals(goal.getId(), goalApi.getMyGoals().get(0).getId());
-        assertEquals(goal.getGoalMessage(), goalApi.getMyGoals().get(0).getGoalMessage());
-        assertEquals(goal.getGoalMessage(), goalApi.getMyGoals().get(0).getGoalMessage());
+        assertEquals(goal.getId(), (Long) goalApi.getMyGoals().get(0).getId());
     }
 
 }
