@@ -99,11 +99,11 @@ class GoalApiTest {
         String testLine4 = "I will start to learn Java!";
         String expResult4 ="learn Java";
 
-        assertEquals(expResult1, goalApi.generateTagsList(testLine1));
-        assertEquals(expResult2, goalApi.generateTagsList(testLine2));
-        assertEquals(expResult3, goalApi.generateTagsList(testLine3));
-        assertEquals(expResult4, goalApi.generateTagsList(testLine4));
-        assertFalse(expResult2.equals( goalApi.generateTagsList(testLine1)));
-        assertFalse(expResult1.equals( goalApi.generateTagsList(testLine2)));
+        assertEquals(expResult1, String.join(" ", goalApi.generateTagsList(testLine1)));
+        assertEquals(expResult2, String.join(" ", goalApi.generateTagsList(testLine2)));
+        assertEquals(expResult3, String.join(" ", goalApi.generateTagsList(testLine3)));
+        assertEquals(expResult4, String.join(" ", goalApi.generateTagsList(testLine4)));
+        assertFalse(expResult2.equals( String.join(" ", goalApi.generateTagsList(testLine1))));
+        assertFalse(expResult1.equals( String.join(" ", goalApi.generateTagsList(testLine2))));
     }
 }
