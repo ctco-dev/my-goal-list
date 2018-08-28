@@ -2,16 +2,19 @@ package lv.ctco.javaschool.auth.control;
 
 import lv.ctco.javaschool.auth.control.exceptions.InvalidPasswordException;
 import lv.ctco.javaschool.auth.control.exceptions.InvalidUsernameException;
+import lv.ctco.javaschool.auth.entity.domain.User;
+import lv.ctco.javaschool.auth.entity.dto.UserLoginDto;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.fail;
 
 class UserStoreTest {
 
     @Test
-    void validateUsername() {
+    void testValidationOfUsername() {
         UserStore uc = new UserStore();
         Executable nullName = () -> uc.validateUsername(null);
         Executable emptyName1 = () -> uc.validateUsername("");
@@ -31,7 +34,7 @@ class UserStoreTest {
     }
 
     @Test
-    void validatePassword() {
+    void testValidationOfPassword() {
         UserStore uc = new UserStore();
         Executable nullPass = () -> uc.validatePassword(null);
         Executable emptyPass1 = () -> uc.validatePassword("");
@@ -54,5 +57,18 @@ class UserStoreTest {
         } catch (Throwable throwable) {
             fail(throwable.getMessage() + " was thrown");
         }
+    }
+
+    @Test
+    void testUserConverterToDto() {
+        UserStore uc = new UserStore();
+        User user = new User();
+        user.setUsername("aa");
+        user.setPhone("1234567");
+        user.setEmail("a@b.com");
+        UserLoginDto dto = uc.convertToDto(user);
+        assertEquals(user.getUsername(), dto.getUsername());
+        assertEquals(user.getEmail(), dto.getEmail());
+        assertEquals(user.getPhone(), dto.getPhone());
     }
 }
