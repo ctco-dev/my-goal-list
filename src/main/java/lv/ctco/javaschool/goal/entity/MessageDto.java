@@ -1,8 +1,5 @@
 package lv.ctco.javaschool.goal.entity;
 
-/**
- * Created by pavel.tihomirov01 on 8/28/2018.
- */
 public class MessageDto {
     private String message;
 

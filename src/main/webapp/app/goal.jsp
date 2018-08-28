@@ -25,7 +25,6 @@
     </tr>
 </table>
 
-
 <div class="container">
     <div class="col-lg-4 col-sm-6 text-center">
         <div class="well">
@@ -34,8 +33,8 @@
                 <input type="text" id="userComment" class="form-control input-sm chat-input"
                        placeholder="Write your message here..."/>
                 <span class="input-group-btn">
-                    <a onclick="addComment()" class="btn btn-primary btn-sm"> Add Comment</a>
-                </span>
+                        <a onclick="addComment()" class="btn btn-primary btn-sm"> Add Comment</a>
+                    </span>
             </div>
             <hr data-brackets-id="12673">
 
@@ -55,8 +54,6 @@
         </div>
     </div>
 </div>
->
-
 
     <script>
         var id = getQueryVariable("id");
@@ -109,7 +106,6 @@
             return (false);
         }
 
-
         function addComment() {
             var data = {'message': document.getElementById("userComment").value};
             fetch("<c:url value='/api/goal/'/>" + id + "/comments", {
@@ -122,8 +118,6 @@
                 onLoad();
             });
         }
-
-
     </script>
 </body>
 </html>
