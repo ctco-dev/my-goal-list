@@ -7,7 +7,9 @@
     <script src="http://www.w3schools.com/lib/w3data.js"></script>
     <title>My Goals</title>
 </head>
-<body onload="showUserProfile();switchPersonalData();">
+
+<body onload="showUserProfile();showUserGoals();switchPersonalData();">
+
 <h1 style="text-align:center;font-family:Cursive;color:#000000;">My goals</h1>
 <H2 id="name">name</H2>
 <div style="display: inline;" align="center">
@@ -28,16 +30,21 @@
     <H3 id="phone_email"></H3>
 </div>
 
-<table class="w3-table-all w3-hoverable">
+<table id="goals-list" class="w3-table-all w3-hoverable">
     <tr class="w3-blue">
         <th>My goals</th>
-        <th>Deadline date</th>
+        <th>Deadline</th>
         <th>Days left</th>
+
     </tr>
-    <tr>
-            <td>You have no added goals yet. Please go to "Add new Goal"</td>
-            <td> </td>
-            <td> </td>
+    <tr w3-repeat="goals" id="{{id}}" onclick="redirectToGoalsAndComments(id)">
+
+        <td>{{goalMessage}}</td>
+
+        <td>{{deadlineDate}}</td>
+
+        <td>{{daysLeft}}</td>
+
     </tr>
 </table>
 <script>
@@ -59,7 +66,6 @@
     }
 
     function showUserProfile() {
-        console.log("User Profile Data");
         fetch("<c:url value='/api/auth/myprofile'/>", {
             "method": "GET",
             headers: {
@@ -69,23 +75,51 @@
         }).then(function (response) {
             return response.json();
         }).then(function (user) {
-            console.log(JSON.stringify(user))
             document.getElementById("name").innerHTML = user.username;
             document.getElementById("phone_email").innerHTML = "Phone: "+user.phone+" |  E-mail: "+user.email;
         });
     }
 
+    function showUserGoals() {
+        fetch("<c:url value='/api/goal/mygoals'/>", {
+            "method": "GET",
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
+        }).then(function (response) {
+            return response.json();
+        }).then(function (goals) {
+            var tabledata;
+            if (goals.length > 0) {
+                tabledata = {"goals": goals};
+            } else {
+                tabledata = {
+                    "goals": [{
+                        "id": "-1",
+                        "daysLeft": "",
+                        "deadlineDate": "",
+                        "goalMessage": "You need to create new Goals"
+                    }]
+                };
+            }
+            w3DisplayData("goals-list", tabledata);
+        });
+    }
+    function redirectToGoalsAndComments(id) {
+        if (id >= 0) {
+            location.href = "<c:url value='/app/goal.jsp?id='/>" + id;
+        } else {
+            addNewGoal()
+        }
+    }
+
     function addNewGoal() {
-        fetch("<c:url value='/api/goal'/>", {"method": "POST"})
-            .then(function (response) {
-                location.href = "/app/addgoal.jsp";
-            });
+        location.href = "<c:url value='/app/addgoal.jsp'/>";
+
     }
     function findGoals() {
-        fetch("<c:url value='/api/goal'/>", {"method": "POST"})
-            .then(function (response) {
-                location.href = "/app/findgoals.jsp";
-            });
+        location.href = "<c:url value='/app/findgoals.jsp'/>";
     }
 </script>
 </body>
