@@ -7,10 +7,10 @@
     <script src="http://www.w3schools.com/lib/w3data.js"></script>
     <title>Find Goals</title>
 </head>
-<body onLoad="getTagList();">
+<body onLoad="getTagList();switchSearch();">
     <h1>Search for:<br/>
-        <input type="radio" name="colors" id="rbtnUser">Goal's Creator by Name
-        <input type="radio" name="colors" id="rbtnGoal">Goals by tags </h1>
+        <input type="radio" name="colors" id="rbtnUser" onclick="switchSearch(); checked ">Goal's Creator by Name
+        <input type="radio" name="colors" id="rbtnGoal" onclick="switchSearch();">Goals by tags </h1>
 <div id="search-by-Username" class="w3-hide" >
     <input id="username" type="text"  />
     <input type="button" value="Find" onclick="findUserByName();">
