@@ -23,12 +23,15 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -37,9 +40,14 @@ class GoalApiTest {
     Goal goal2 = new Goal();
     User user1 = new User();
     User user2 = new User();
+    Comment comment1 = new Comment();
     List<Goal> goalList1 = new ArrayList<>();
     List<Goal> goalList2 = new ArrayList<>();
     List<GoalDto> goalDtoList = new ArrayList<>();
+    List<Comment> comments = new ArrayList<>();
+    List<CommentDto> commentDtos = new ArrayList<>();
+
+
     List<User> userList = new ArrayList<>();
     List<UserLoginDto> userDtoList = new ArrayList<>();
     UserLoginDto dto = new UserLoginDto();
@@ -60,9 +68,15 @@ class GoalApiTest {
 
         user2.setUsername("admin");
         user2.setEmail("admin@admin.com");
-        user2.setId((long) 1);
+        user2.setId((long) 2);
         user2.setPassword("12345");
         user2.setPhone("87654321");
+
+        comment1.setGoal(goal);
+        comment1.setUser(user1);
+        comment1.setCommentMessage("hi");
+        comment1.setRegisteredDate(LocalDateTime.now());
+        comment1.setId((long) 1);
 
         goal.setUser(user1);
         goal.setGoalMessage("abc");
@@ -74,7 +88,7 @@ class GoalApiTest {
     }
 
     @Test
-    @DisplayName("Current user has No goals returns empty list of dto's")
+    @DisplayName("getMyGoals(): Current user has No goals returns empty list of dto's")
     void getMyGoals() {
         when(userStore.getCurrentUser())
                 .thenReturn(user1);
@@ -85,7 +99,7 @@ class GoalApiTest {
     }
 
     @Test
-    @DisplayName("Current user has goals returns list of dto's")
+    @DisplayName("getMyGoals(): Current user has goals returns list of dto's")
     void getMyGoals2() {
         goalList1.add(goal);
         when(userStore.getCurrentUser())
@@ -98,6 +112,81 @@ class GoalApiTest {
         assertEquals(goal.getId(), (Long) goalApi.getMyGoals().get(0).getId());
     }
 
+
+    @Test
+    @DisplayName("getGoalById(): returns dto of goal by id")
+    void getGoalById() {
+        when(goalStore.getGoalById((long) 1))
+                .thenReturn(java.util.Optional.ofNullable(goal));
+
+        assertEquals(1, goalApi.getGoalById((long) 1).getId());
+        assertEquals(user1.getUsername(), goalApi.getGoalById((long) 1).getUsername());
+        assertEquals("abc", goalApi.getGoalById((long) 1).getGoalMessage());
+    }
+
+    @Test
+    @DisplayName("getGoalById(): returns dto of goal by id")
+    void getGoalById2() {
+        when(goalStore.getGoalById((long) 1))
+                .thenReturn(java.util.Optional.empty());
+
+        assertEquals(GoalDto.class, goalApi.getGoalById((long) 1).getClass());
+        assertEquals(null, goalApi.getGoalById((long) 1).getGoalMessage());
+        assertEquals(0, goalApi.getGoalById((long) 1).getId());
+    }
+
+    @Test
+    @DisplayName("getCommentsForGoalById(): returns Comments dto of goal by id")
+    void getCommentsForGoalById() {
+        comments.add(comment1);
+        when(goalStore.getGoalById((long) 1))
+                .thenReturn(java.util.Optional.ofNullable(goal));
+        when(goalStore.getCommentsForGoal(goal))
+                .thenReturn(comments);
+
+        assertEquals(CommentDto.class, goalApi.getCommentsForGoalById(1).get(0).getClass());
+        assertEquals("hi", goalApi.getCommentsForGoalById(1).get(0).getCommentMessage());
+        assertEquals("user", goalApi.getCommentsForGoalById(1).get(0).getUsername());
+    }
+
+    @Test
+    @DisplayName("getCommentsForGoalById(): returns empty Comments dto of goal")
+    void getCommentsForGoalById2() {
+        when(goalStore.getGoalById((long) 1))
+                .thenReturn(java.util.Optional.ofNullable(goal));
+        when(goalStore.getCommentsForGoal(goal))
+                .thenReturn(comments);
+
+        assertEquals(0, goalApi.getCommentsForGoalById(1).size());
+        assertEquals(commentDtos.getClass(), goalApi.getCommentsForGoalById(1).getClass());
+    }
+
+    @Test
+    @DisplayName("setCommentForGoalById(): verify if persists Comments")
+    void setCommentForGoalById() {
+        MessageDto msg = new MessageDto();
+        msg.setMessage("hi");
+        when(userStore.getCurrentUser())
+                .thenReturn(user1);
+        when(goalStore.getGoalById((long) 1))
+                .thenReturn(Optional.ofNullable(goal));
+
+        goalApi.setCommentForGoalById(1, msg);
+
+        verify(goalStore, times(1)).addComment(any(Comment.class));
+    }
+
+    @Test
+    @DisplayName("setCommentForGoalById(): verify if throws exception if optional<goal> isEmpty")
+    void setCommentForGoalById2() {
+        MessageDto msg = new MessageDto();
+        msg.setMessage("hi");
+        when(goalStore.getGoalById((long) 1))
+                .thenReturn(Optional.empty());
+        assertThrows(IllegalArgumentException.class, () -> {
+            goalApi.setCommentForGoalById(1, msg);
+        });
+    }
     @Test
     @DisplayName("getSearchedUser(String searchedUserName): User has correct input search parameter")
     void getSearchParameters1() {

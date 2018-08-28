@@ -23,6 +23,7 @@ public class Comment {
     private LocalDateTime registeredDate;
     private String commentMessage;
 
+
     public User getUser() {
         return user;
     }

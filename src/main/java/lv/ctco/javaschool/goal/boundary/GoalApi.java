@@ -35,6 +35,20 @@ public class GoalApi {
     private GoalStore goalStore;
 
 
+    @GET
+    @RolesAllowed({"ADMIN", "USER"})
+    @Path("/search-user")
+    public List<UserLoginDto> getSearchedUser(String searchedUserName) {
+        List<User> userList = userStore.getUserByUsername(searchedUserName);
+        if (userList.size() != 0) {
+            return userList.stream()
+                    .map(userStore::convertToDto)
+                    .collect(Collectors.toList());
+        } else {
+            return Collections.emptyList();
+        }
+    }
+
     @POST
     @RolesAllowed({"ADMIN", "USER"})
     @Path("/search-user")
@@ -88,7 +102,7 @@ public class GoalApi {
     @GET
     @RolesAllowed({"ADMIN", "USER"})
     @Path("{id}/comments")
-    public List<CommentDto> getCommentsGoalById(@PathParam("id") long goalId) {
+    public List<CommentDto> getCommentsForGoalById(@PathParam("id") long goalId) {
         Optional<Goal> goal = goalStore.getGoalById(goalId);
         List<CommentDto> commentDtos = new ArrayList<>();
         if (goal.isPresent()) {
@@ -105,7 +119,7 @@ public class GoalApi {
     @POST
     @RolesAllowed({"ADMIN", "USER"})
     @Path("{id}/comments")
-    public void setCommentsGoalById(@PathParam("id") long goalId, MessageDto msg) {
+    public void setCommentForGoalById(@PathParam("id") long goalId, MessageDto msg) {
         Optional<Goal> goal = goalStore.getGoalById(goalId);
         if (goal.isPresent()) {
             Comment comment = new Comment();
@@ -142,7 +156,7 @@ public class GoalApi {
         return goalStore.getAllTagList();
     }
 
-    private GoalDto convertToDto(Goal goal) {
+    GoalDto convertToDto(Goal goal) {
         GoalDto dto = new GoalDto();
         dto.setUsername(goal.getUser().getUsername());
         dto.setGoalMessage(goal.getGoalMessage());
@@ -153,30 +167,29 @@ public class GoalApi {
         return dto;
     }
 
-    private long countDaysLeft(LocalDate deadlineDate) {
+    long countDaysLeft(LocalDate deadlineDate) {
         LocalDate localDate = LocalDate.now();
         return DAYS.between(localDate, deadlineDate);
     }
 
-    private String convertDate (LocalDate date) {
+    String convertDate(LocalDate date) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
         return date.format(formatter);
     }
 
-    private String convertDateTime (LocalDateTime date) {
+    String convertDateTime(LocalDateTime date) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy kk:mm");
         return date.format(formatter);
     }
 
-    private TagDto convertToTagDto(Tag tag) {
+    TagDto convertToTagDto(Tag tag) {
         TagDto dto = new TagDto();
         dto.setTagMessage(tag.getTagMessage());
         return dto;
     }
 
 
-
-    private Goal setFieldsToGoal(Goal goal, String adr, String value) throws IllegalArgumentException {
+    Goal setFieldsToGoal(Goal goal, String adr, String value) throws IllegalArgumentException {
         switch (adr){
             case ("goal"):
                 goal.setGoalMessage(value);
@@ -193,10 +206,9 @@ public class GoalApi {
         return goal;
     }
 
-    private Set<Tag> parseStringToTags(String value) {
+    Set<Tag> parseStringToTags(String value) {
         List<String> tagList = generateTagsList(value);
         Set<Tag> tagSet = new HashSet<>();
-
         for (String item : tagList) {
             Tag tag;
             tag = goalStore.addTag(item);
