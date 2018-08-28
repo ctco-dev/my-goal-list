@@ -58,10 +58,10 @@
    function findUserByName() {
        var username = document.getElementById("username");
        var dto = {
-           "username": username.value
+           "usersearch": username.value
        };
        console.log(JSON.stringify(dto));
-       fetch("<c:url value='/api/goal/finduser'/>", {
+       fetch("<c:url value='/api/goal/search-user'/>", {
            "method": "POST",
            headers: {
                'Accept': 'application/json',
