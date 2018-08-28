@@ -13,6 +13,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.security.enterprise.SecurityContext;
 import javax.security.enterprise.identitystore.Pbkdf2PasswordHash;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,18 +34,12 @@ public class UserStore {
 
     public Optional<User> findUserByUsername(String username) {
         username = username.trim();
-        List<User> user = em.createQuery("select u from User u where upper(u.username) = :username", User.class)
+        List<User> user = em.createQuery(
+                "select u from User u " +
+                        "where upper(u.username) = :username", User.class)
                 .setParameter("username", username.toUpperCase())
                 .getResultList();
         return user.isEmpty() ? Optional.empty() : Optional.of(user.get(0));
-    }
-
-    public List<User> getUserByUsername(String user){
-        return em.createQuery(
-                "select u " +
-                        "from User u " +
-                        "where u.username like '%"+user+"%'", User.class)
-                .getResultList();
     }
 
     public User createUser(String username, String password, String email, String phone, Role role) throws InvalidUsernameException, InvalidPasswordException, UsernameAlreadyExistsException {
@@ -84,6 +79,7 @@ public class UserStore {
             throw new InvalidPasswordException();
         }
     }
+
     public UserLoginDto convertToDto(User user) {
         UserLoginDto dto = new UserLoginDto();
         dto.setUsername(user.getUsername());

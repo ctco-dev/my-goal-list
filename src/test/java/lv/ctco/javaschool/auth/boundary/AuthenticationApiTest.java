@@ -27,14 +27,21 @@ class AuthenticationApiTest {
 
     @Test
     void testReturnUserDto() {
-//        User user = new User();
-//        user.setUsername("aa");
-//        user.setPhone("1234567");
-//        user.setEmail("a@b.com");
-//        Mockito.when(userStore.getCurrentUser()).thenReturn(user);
-//        UserLoginDto dto = authenticationApi.returnUserDto();
-//        assertEquals(user.getUsername(), dto.getUsername());
-//        assertEquals(user.getEmail(), dto.getEmail());
-//        assertEquals(user.getPhone(), dto.getPhone());
+        User user = new User();
+        user.setUsername("aa");
+        user.setPhone("1234567");
+        user.setEmail("a@b.com");
+        Mockito.when(userStore.getCurrentUser()).thenReturn(user);
+
+        UserLoginDto dto = new UserLoginDto();
+        dto.setUsername(user.getUsername());
+        dto.setPhone(user.getPhone());
+        dto.setEmail(user.getEmail());
+        Mockito.when(userStore.convertToDto(user)).thenReturn(dto);
+
+        UserLoginDto resultDto = authenticationApi.returnUserDto();
+        assertEquals(user.getUsername(), resultDto.getUsername());
+        assertEquals(user.getEmail(), resultDto.getEmail());
+        assertEquals(user.getPhone(), resultDto.getPhone());
     }
 }
