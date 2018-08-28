@@ -2,6 +2,7 @@ package lv.ctco.javaschool.goal.boundary;
 
 import lv.ctco.javaschool.auth.control.UserStore;
 import lv.ctco.javaschool.auth.entity.domain.User;
+import lv.ctco.javaschool.auth.entity.dto.UserLoginDto;
 import lv.ctco.javaschool.goal.control.GoalStore;
 import lv.ctco.javaschool.goal.entity.Goal;
 import lv.ctco.javaschool.goal.entity.GoalDto;
@@ -19,6 +20,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 
 
@@ -31,6 +34,8 @@ class GoalApiTest {
     List<Goal> goalList1 = new ArrayList<>();
     List<Goal> goalList2 = new ArrayList<>();
     List<GoalDto> goalDtoList = new ArrayList<>();
+    List<User> userList = new ArrayList<>();
+    List<UserLoginDto> userDtoList = new ArrayList<>();
     @Mock
     private UserStore userStore;
     @Mock
@@ -86,4 +91,21 @@ class GoalApiTest {
         assertEquals(goal.getId(), (Long) goalApi.getMyGoals().get(0).getId());
     }
 
+    @Test
+    @DisplayName("getSearchedUser(String searchedUserName): User has correct input search parameter")
+    void getSearchedUser1() {
+        userList.add(user1);
+        UserLoginDto dto = new UserLoginDto();
+        dto.setUsername(user1.getUsername());
+        dto.setPhone(user1.getPhone());
+        dto.setEmail(user1.getEmail());
+        userDtoList.add(dto);
+        when(userStore.getUserByUsername("us"))
+                .thenReturn(userList);
+        when(userStore.convertToDto(userList.get(0)))
+                .thenReturn(dto);
+        assertEquals(userDtoList.get(0).getUsername(), goalApi.getSearchedUser("us").get(0).getUsername());
+        assertEquals(userDtoList.get(0).getEmail(), goalApi.getSearchedUser("us").get(0).getEmail());
+        assertEquals(userDtoList.get(0).getPhone(), goalApi.getSearchedUser("us").get(0).getPhone());
+    }
 }
