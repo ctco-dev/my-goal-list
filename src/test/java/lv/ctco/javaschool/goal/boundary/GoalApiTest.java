@@ -42,7 +42,6 @@ class GoalApiTest {
     User user2 = new User();
     Comment comment1 = new Comment();
     List<Goal> goalList1 = new ArrayList<>();
-    List<Goal> goalList2 = new ArrayList<>();
     List<GoalDto> goalDtoList = new ArrayList<>();
     List<Comment> comments = new ArrayList<>();
     List<CommentDto> commentDtos = new ArrayList<>();
@@ -88,7 +87,7 @@ class GoalApiTest {
     }
 
     @Test
-    @DisplayName("getMyGoals(): Current user has No goals returns empty list of dto's")
+    @DisplayName("Test getMyGoals(): Current user has No goals returns empty list of dto's")
     void getMyGoals() {
         when(userStore.getCurrentUser())
                 .thenReturn(user1);
@@ -99,7 +98,7 @@ class GoalApiTest {
     }
 
     @Test
-    @DisplayName("getMyGoals(): Current user has goals returns list of dto's")
+    @DisplayName("Test getMyGoals(): Current user has goals returns list of dto's")
     void getMyGoals2() {
         goalList1.add(goal);
         when(userStore.getCurrentUser())
@@ -114,7 +113,7 @@ class GoalApiTest {
 
 
     @Test
-    @DisplayName("getGoalById(): returns dto of goal by id")
+    @DisplayName("Test getGoalById(): returns dto of goal by id")
     void getGoalById() {
         when(goalStore.getGoalById((long) 1))
                 .thenReturn(java.util.Optional.ofNullable(goal));
@@ -125,7 +124,7 @@ class GoalApiTest {
     }
 
     @Test
-    @DisplayName("getGoalById(): returns dto of goal by id")
+    @DisplayName("Test getGoalById(): returns dto of goal by id")
     void getGoalById2() {
         when(goalStore.getGoalById((long) 1))
                 .thenReturn(java.util.Optional.empty());
@@ -136,7 +135,7 @@ class GoalApiTest {
     }
 
     @Test
-    @DisplayName("getCommentsForGoalById(): returns Comments dto of goal by id")
+    @DisplayName("Test getCommentsForGoalById(): returns Comments dto of goal by id")
     void getCommentsForGoalById() {
         comments.add(comment1);
         when(goalStore.getGoalById((long) 1))
@@ -187,55 +186,4 @@ class GoalApiTest {
             goalApi.setCommentForGoalById(1, msg);
         });
     }
-    @Test
-    @DisplayName("getSearchedUser(String searchedUserName): User has correct input search parameter")
-    void getSearchParameters1() {
-        userList.add(user1);
-        UserLoginDto dto = new UserLoginDto();
-        dto.setUsername(user1.getUsername());
-        dto.setPhone(user1.getPhone());
-        dto.setEmail(user1.getEmail());
-        userDtoList.add(dto);
-        JsonObject searchDto = Json.createObjectBuilder()
-                .add("usersearch", "us")
-                .build();
-        when(userStore.getUserByUsername("us"))
-                .thenReturn(userList);
-        when(userStore.convertToDto(userList.get(0)))
-                .thenReturn(dto);
-        assertEquals(userDtoList.get(0).getUsername(), goalApi.getSearchParameters(searchDto).get(0).getUsername());
-        assertEquals(userDtoList.get(0).getEmail(), goalApi.getSearchParameters(searchDto).get(0).getEmail());
-        assertEquals(userDtoList.get(0).getPhone(), goalApi.getSearchParameters(searchDto).get(0).getPhone());
-    }
-    @Test
-    @DisplayName("getSearchedUser(String searchedUserName): User has no search results")
-    void getSearchParameters2() {
-        JsonObject searchDto = Json.createObjectBuilder()
-                .add("usersearch", "")
-                .build();
-        when(userStore.getUserByUsername(""))
-                .thenReturn(userList);
-        assertTrue(goalApi.getSearchParameters(searchDto).isEmpty());
-    }
-
-    @Test
-    @DisplayName("generateTagsList: Checks work of tag list generation from goal message")
-    void testGenerationOfTagsList(){
-        String testLine1 = "I will become a programmer this year!";
-        String expResult1 ="programmer";
-        String testLine2 = "I WILL BECOME A PROGRAMMER THIS YEAR!";
-        String expResult2 ="PROGRAMMER";
-        String testLine3 = "I WILL be two years old!";
-        String expResult3 ="";
-        String testLine4 = "I will start to learn Java!";
-        String expResult4 ="learn Java";
-
-        assertEquals(expResult1, String.join(" ", goalApi.generateTagsList(testLine1)));
-        assertEquals(expResult2, String.join(" ", goalApi.generateTagsList(testLine2)));
-        assertEquals(expResult3, String.join(" ", goalApi.generateTagsList(testLine3)));
-        assertEquals(expResult4, String.join(" ", goalApi.generateTagsList(testLine4)));
-        assertFalse(expResult2.equals( String.join(" ", goalApi.generateTagsList(testLine1))));
-        assertFalse(expResult1.equals( String.join(" ", goalApi.generateTagsList(testLine2))));
-    }
-
 }

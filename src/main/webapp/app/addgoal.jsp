@@ -47,7 +47,7 @@
             },
             body: JSON.stringify(dto)
         }).then(function (response) {
-            location.href="<c:url value='/app/start.jsp'/>";
+            <%--location.href="<c:url value='/app/start.jsp'/>";--%>
         });
     }
     function onBodyLoad() {

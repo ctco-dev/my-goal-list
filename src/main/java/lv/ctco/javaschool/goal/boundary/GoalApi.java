@@ -136,17 +136,21 @@ public class GoalApi {
     @POST
     @RolesAllowed({"ADMIN", "USER"})
     @Path("/newgoal")
-    public void createNewGoal(JsonObject goalDto) {
+    public void createNewGoal(GoalFormDto goalDto) {
         User user = userStore.getCurrentUser();
         Goal goal = new Goal();
-        for (Map.Entry<String, JsonValue> pair : goalDto.entrySet()) {
-            String adr = pair.getKey();
-            String value = ((JsonString) pair.getValue()).getString();
-            goal = setFieldsToGoal(goal, adr, value);
+        if (!goalDto.getGoal().isEmpty() && !goalDto.getDeadline().isEmpty()) {
+            goal.setGoalMessage(goalDto.getGoal());
+            goal.setTags(parseStringToTags(goalDto.getGoal()));
+
+            DateTimeFormatter formatterD = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+            LocalDate localDate = LocalDate.parse(goalDto.getDeadline(), formatterD);
+            goal.setDeadlineDate(localDate);
+
+            goal.setUser(user);
+            goal.setRegisteredDate(LocalDateTime.now());
+            goalStore.addGoal(goal);
         }
-        goal.setUser(user);
-        goal.setRegisteredDate(LocalDateTime.now());
-        goalStore.addGoal(goal);
     }
 
     @GET
