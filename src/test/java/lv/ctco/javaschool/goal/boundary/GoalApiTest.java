@@ -115,7 +115,7 @@ class GoalApiTest {
 
         assertEquals(GoalDto.class, goalApi.getGoalDtoByGoalId((long) 1).getClass());
         assertEquals(null, goalApi.getGoalDtoByGoalId((long) 1).getGoalMessage());
-        assertEquals(new Long(0), goalApi.getGoalDtoByGoalId((long) 1).getId());
+        assertEquals(null, goalApi.getGoalDtoByGoalId((long) 1).getId());
     }
 
     @Test
