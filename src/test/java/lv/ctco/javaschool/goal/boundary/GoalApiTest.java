@@ -5,6 +5,7 @@ import lv.ctco.javaschool.auth.entity.domain.User;
 import lv.ctco.javaschool.goal.control.GoalStore;
 import lv.ctco.javaschool.goal.entity.Goal;
 import lv.ctco.javaschool.goal.entity.GoalDto;
+import lv.ctco.javaschool.goal.entity.GoalFormDto;
 import lv.ctco.javaschool.goal.entity.Tag;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -28,6 +29,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -230,4 +233,32 @@ class GoalApiTest {
         assertNull(dto.getTagList());
     }
 
+    @Test
+    @DisplayName("createNewGoal() : check if persists new Goal")
+    void testCreateNewGoal() {
+        GoalFormDto goalFormDto = new GoalFormDto();
+        goalFormDto.setDeadline("25.10.2018");
+        goalFormDto.setGoalMessage("hi");
+        when(userStore.getCurrentUser())
+                .thenReturn(user1);
+
+        goalApi.createNewGoal(goalFormDto);
+
+        verify(goalStore, times(1)).addGoal(any(Goal.class));
+    }
+
+    @Test
+    @DisplayName("createNewGoal() : check if does not persists new Goal if empty or partial GoalFormDto")
+    void testCreateNewGoal2() {
+        GoalFormDto goalFormDto = new GoalFormDto();
+        when(userStore.getCurrentUser())
+                .thenReturn(user1);
+
+        goalApi.createNewGoal(goalFormDto);
+        verify(goalStore, times(0)).addGoal(any(Goal.class));
+
+        goalFormDto.setGoalMessage("hi");
+        goalApi.createNewGoal(goalFormDto);
+        verify(goalStore, times(0)).addGoal(any(Goal.class));
+    }
 }
