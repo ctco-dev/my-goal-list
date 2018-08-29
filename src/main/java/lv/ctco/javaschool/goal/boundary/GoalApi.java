@@ -93,21 +93,20 @@ public class GoalApi {
         }
     }
 
-//    @GET
-//    @RolesAllowed({"ADMIN", "USER"})
-//    @Path("/usergoals/{id}")
-//    public List<GoalDto> getGoalsByUser(@PathParam("id") Long userId) {
-//        User user = userStore.findUserById(userId);
-//        List<Goal> goalsList = goalStore.getGoalsListFor(searchedUser);
-//
-//        if (goalsList.size() != 0) {
-//            return goalsList.stream()
-//                    .map(this::convertToDto)
-//                    .collect(Collectors.toList());
-//        } else {
-//            return Collections.emptyList();
-//        }
-//    }
+    @GET
+    @RolesAllowed({"ADMIN", "USER"})
+    @Path("/usergoals/{id}")
+    public List<GoalDto> getGoalsByUserId(@PathParam("id") Long userId) {
+        User user = userStore.findUserById(userId);
+        List<Goal> goalsList = goalStore.getGoalsListFor(user);
+        if (goalsList.size() != 0) {
+            return goalsList.stream()
+                    .map(this::convertToDto)
+                    .collect(Collectors.toList());
+        } else {
+            return Collections.emptyList();
+        }
+    }
 
     @GET
     @RolesAllowed({"ADMIN", "USER"})
