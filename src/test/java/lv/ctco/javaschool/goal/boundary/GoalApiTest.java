@@ -2,23 +2,16 @@ package lv.ctco.javaschool.goal.boundary;
 
 import lv.ctco.javaschool.auth.control.UserStore;
 import lv.ctco.javaschool.auth.entity.domain.User;
-import lv.ctco.javaschool.auth.entity.dto.UserLoginDto;
 import lv.ctco.javaschool.goal.control.GoalStore;
-import lv.ctco.javaschool.goal.entity.Goal;
-import lv.ctco.javaschool.goal.entity.GoalDto;
+import lv.ctco.javaschool.goal.entity.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import javax.json.Json;
-import javax.json.JsonObject;
-import javax.json.JsonString;
-import javax.json.JsonValue;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -26,10 +19,6 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.mockito.Mockito.when;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
@@ -46,10 +35,6 @@ class GoalApiTest {
     List<Comment> comments = new ArrayList<>();
     List<CommentDto> commentDtos = new ArrayList<>();
 
-
-    List<User> userList = new ArrayList<>();
-    List<UserLoginDto> userDtoList = new ArrayList<>();
-    UserLoginDto dto = new UserLoginDto();
     @Mock
     private UserStore userStore;
     @Mock
@@ -182,8 +167,6 @@ class GoalApiTest {
         msg.setMessage("hi");
         when(goalStore.getGoalById((long) 1))
                 .thenReturn(Optional.empty());
-        assertThrows(IllegalArgumentException.class, () -> {
-            goalApi.setCommentForGoalById(1, msg);
-        });
+        assertThrows(IllegalArgumentException.class, () -> goalApi.setCommentForGoalById(1, msg));
     }
 }
