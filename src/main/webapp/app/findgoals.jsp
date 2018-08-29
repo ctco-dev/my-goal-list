@@ -69,7 +69,9 @@
            },
            body: JSON.stringify(dto)
        }).then(function (response) {
-
+           return response.json();
+       }).then(function (users) {
+           console.log(JSON.stringify(users));
        });
    }
 

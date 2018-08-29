@@ -3,6 +3,7 @@ package lv.ctco.javaschool.goal.boundary;
 import lv.ctco.javaschool.auth.control.UserStore;
 import lv.ctco.javaschool.auth.entity.domain.User;
 import lv.ctco.javaschool.auth.entity.dto.UserLoginDto;
+import lv.ctco.javaschool.auth.entity.dto.UserSearchDto;
 import lv.ctco.javaschool.goal.control.GoalStore;
 import lv.ctco.javaschool.goal.entity.*;
 
@@ -33,7 +34,13 @@ public class GoalApi {
     private UserStore userStore;
     @Inject
     private GoalStore goalStore;
-
+    private String[] patternList = new String[]{
+            "change|become|i|language|field|apply|app|application|start|end|more|this|that",
+            "maybe|year|years|one|two|three|four|five|six|seven|eight|nine|ten|from|i|a|and",
+            "are|if|of|off|on|by|next|last|use|using|used|do|doing|what|determined|am|want",
+            "an|wanted|goal|goals|achieve|me|my|in|out|above|wish|will|was|is|not|new|old",
+            "get|got|going|to|for|have|has|the|can|will|be|about"
+    };
 
     @GET
     @RolesAllowed({"ADMIN", "USER"})
@@ -52,8 +59,8 @@ public class GoalApi {
     @POST
     @RolesAllowed({"ADMIN", "USER"})
     @Path("/search-user")
-    public List<UserLoginDto> getSearchParameters(JsonObject searchDto) {
-        List<UserLoginDto> userDtoList= new ArrayList<>();
+    public List<UserSearchDto> getSearchParameters(JsonObject searchDto) {
+        List<UserSearchDto> userDtoList = new ArrayList<>();
         for (Map.Entry<String, JsonValue> pair : searchDto.entrySet()) {
             String adr = pair.getKey();
             String value = ((JsonString) pair.getValue()).getString();
@@ -61,7 +68,7 @@ public class GoalApi {
                  List<User> userList = userStore.getUserByUsername(value);
                 if (userList.size() != 0) {
                     userDtoList = userList.stream()
-                            .map(userStore::convertToDto)
+                            .map(userStore::convertToSearchDto)
                             .collect(Collectors.toList());
                 } else {
                     userDtoList = Collections.emptyList();
@@ -192,7 +199,6 @@ public class GoalApi {
         return dto;
     }
 
-
     Goal setFieldsToGoal(Goal goal, String adr, String value) throws IllegalArgumentException {
         switch (adr){
             case ("goal"):
@@ -220,14 +226,6 @@ public class GoalApi {
         }
         return tagSet;
     }
-
-    private String[] patternList = new String[] {
-            "change|become|i|language|field|apply|app|application|start|end|more|this|that",
-            "maybe|year|years|one|two|three|four|five|six|seven|eight|nine|ten|from|i|a|and",
-            "are|if|of|off|on|by|next|last|use|using|used|do|doing|what|determined|am|want",
-            "an|wanted|goal|goals|achieve|me|my|in|out|above|wish|will|was|is|not|new|old",
-            "get|got|going|to|for|have|has|the|can|will|be|about"
-    };
 
     List<String> generateTagsList(String goal){
         String noSymbols = goal.replaceAll("[$,.:;#@!?&*()1234567890]", "");
