@@ -5,14 +5,12 @@ import lv.ctco.javaschool.auth.entity.domain.User;
 import lv.ctco.javaschool.goal.control.GoalStore;
 import lv.ctco.javaschool.goal.entity.Goal;
 import lv.ctco.javaschool.goal.entity.GoalDto;
+import lv.ctco.javaschool.goal.entity.GoalFormDto;
 import lv.ctco.javaschool.goal.entity.Tag;
 
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
-import javax.json.JsonObject;
-import javax.json.JsonString;
-import javax.json.JsonValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -20,7 +18,12 @@ import javax.ws.rs.PathParam;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -53,7 +56,7 @@ public class GoalApi {
     @GET
     @RolesAllowed({"ADMIN", "USER"})
     @Path("/mygoals/{id}")
-    public GoalDto getGoalById(@PathParam("id") long goalId) {
+    public GoalDto getGoalDtoByGoalId(@PathParam("id") long goalId) {
         Optional<Goal> goal = goalStore.getGoalById(goalId);
         if (goal.isPresent()) {
             Goal g = goal.get();
@@ -66,17 +69,21 @@ public class GoalApi {
     @POST
     @RolesAllowed({"ADMIN", "USER"})
     @Path("/newgoal")
-    public void createNewGoal(JsonObject goalDto) {
+    public void createNewGoal(GoalFormDto goalDto) {
         User user = userStore.getCurrentUser();
         Goal goal = new Goal();
-        for (Map.Entry<String, JsonValue> pair : goalDto.entrySet()) {
-            String adr = pair.getKey();
-            String value = ((JsonString) pair.getValue()).getString();
-            goal = setFieldsToGoal(goal, adr, value);
+        if (!goalDto.getGoal().isEmpty() && !goalDto.getDeadline().isEmpty()) {
+            goal.setGoalMessage(goalDto.getGoal());
+            goal.setTags(parseStringToTags(goalDto.getGoal()));
+
+            DateTimeFormatter formatterD = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+            LocalDate localDate = LocalDate.parse(goalDto.getDeadline(), formatterD);
+            goal.setDeadlineDate(localDate);
+
+            goal.setUser(user);
+            goal.setRegisteredDate(LocalDateTime.now());
+            goalStore.addGoal(goal);
         }
-        goal.setUser(user);
-        goal.setRegisteredDate(LocalDateTime.now());
-        goalStore.addGoal(goal);
     }
 
     GoalDto convertToDto(Goal goal) {
@@ -103,23 +110,6 @@ public class GoalApi {
     String convertDateTime (LocalDateTime date) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy kk:mm");
         return date.format(formatter);
-    }
-
-    private Goal setFieldsToGoal(Goal goal, String adr, String value) throws IllegalArgumentException {
-        switch (adr){
-            case ("goal"):
-                goal.setGoalMessage(value);
-                goal.setTags(parseStringToTags(value));
-                break;
-            case ("deadline"):
-                DateTimeFormatter formatterD = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-                LocalDate localDate = LocalDate.parse(value, formatterD);
-                goal.setDeadlineDate(localDate);
-                break;
-            default:
-                throw new IllegalArgumentException();
-        }
-        return goal;
     }
 
     Set<Tag> parseStringToTags(String value) {

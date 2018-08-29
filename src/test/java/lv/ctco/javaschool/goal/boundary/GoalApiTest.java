@@ -20,9 +20,12 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.HashSet;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.when;
@@ -53,13 +56,13 @@ class GoalApiTest {
     void init() {
         user1.setUsername("user");
         user1.setEmail("user@user.com");
-        user1.setId((long) 1);
+        user1.setId( 1L);
         user1.setPassword("12345");
         user1.setPhone("12345678");
 
         user2.setUsername("admin");
         user2.setEmail("admin@admin.com");
-        user2.setId((long) 1);
+        user2.setId( 2L);
         user2.setPassword("12345");
         user2.setPhone("87654321");
 
@@ -67,7 +70,7 @@ class GoalApiTest {
         goal.setGoalMessage("abc");
         goal.setRegisteredDate(LocalDateTime.now());
         goal.setDeadlineDate(LocalDate.now().plusDays(1));
-        goal.setId((long) 1);
+        goal.setId( 1L);
         goal.setTags(null);
 
         goal2.setUser(user2);
@@ -80,7 +83,7 @@ class GoalApiTest {
     }
 
     @Test
-    @DisplayName("getMyGoals(): Current user has No goals returns empty list of dto's")
+    @DisplayName("Test getMyGoals(): Current user has No goals returns empty list of dto's")
     void testGetMyGoals() {
         when(userStore.getCurrentUser())
                 .thenReturn(user1);
@@ -91,7 +94,7 @@ class GoalApiTest {
     }
 
     @Test
-    @DisplayName("getMyGoals(): Current user has goals returns list of dto's")
+    @DisplayName("Test getMyGoals(): Current user has goals returns list of dto's")
     void testGetMyGoals2() {
         goalList1.add(goal);
         when(userStore.getCurrentUser())
@@ -102,6 +105,28 @@ class GoalApiTest {
         assertEquals(goal.getUser().getUsername(), goalApi.getMyGoals().get(0).getUsername());
         assertEquals(goal.getGoalMessage(), goalApi.getMyGoals().get(0).getGoalMessage());
         assertEquals(goal.getId(), (Long) goalApi.getMyGoals().get(0).getId());
+    }
+
+    @Test
+    @DisplayName("Test getGoalById(): returns dto of goal by id")
+    void getGoalById2() {
+        when(goalStore.getGoalById((long) 1))
+                .thenReturn(java.util.Optional.empty());
+
+        assertEquals(GoalDto.class, goalApi.getGoalDtoByGoalId((long) 1).getClass());
+        assertEquals(null, goalApi.getGoalDtoByGoalId((long) 1).getGoalMessage());
+        assertEquals(new Long(0), goalApi.getGoalDtoByGoalId((long) 1).getId());
+    }
+
+    @Test
+    @DisplayName("Test getGoalById(): returns dto of goal by id")
+    void testGetGoalById() {
+        when(goalStore.getGoalById( 1L))
+                .thenReturn(java.util.Optional.ofNullable(goal));
+
+        assertEquals(new Long(1), goalApi.getGoalDtoByGoalId( (long) 1).getId());
+        assertEquals(user1.getUsername(), goalApi.getGoalDtoByGoalId((long) 1).getUsername());
+        assertEquals("abc", goalApi.getGoalDtoByGoalId((long) 1).getGoalMessage());
     }
 
     @Test
@@ -161,7 +186,6 @@ class GoalApiTest {
         assertNotNull( goalApi.parseStringToTags("some_text"));
         assertThat(equals(emptySet, goalApi.parseStringToTags("")), is(true));
     }
-
 
     @Test
     @DisplayName("convertDateTime (LocalDateTime date): Checks that input dateTime corresponds output string")
