@@ -3,6 +3,7 @@ package lv.ctco.javaschool.goal.boundary;
 import lv.ctco.javaschool.auth.control.UserStore;
 import lv.ctco.javaschool.auth.entity.domain.User;
 import lv.ctco.javaschool.auth.entity.dto.UserLoginDto;
+import lv.ctco.javaschool.auth.entity.dto.UserSearchDto;
 import lv.ctco.javaschool.goal.control.GoalStore;
 import lv.ctco.javaschool.goal.entity.*;
 import org.junit.jupiter.api.BeforeEach;
@@ -40,7 +41,7 @@ class GoalApiTest {
     List<Comment> comments = new ArrayList<>();
     List<CommentDto> commentDtos = new ArrayList<>();
     List<User> userList = new ArrayList<>();
-    List<UserLoginDto> userDtoList = new ArrayList<>();
+    List<UserSearchDto> userDtoList = new ArrayList<>();
 
     @Mock
     private UserStore userStore;
@@ -118,7 +119,7 @@ class GoalApiTest {
     @DisplayName("SearchParameters: User has correct input search parameter")
     void getSearchParameters1() {
         userList.add(user1);
-        UserLoginDto dto = new UserLoginDto();
+        UserSearchDto dto = new UserSearchDto();
         dto.setUsername(user1.getUsername());
         dto.setPhone(user1.getPhone());
         dto.setEmail(user1.getEmail());
@@ -128,7 +129,7 @@ class GoalApiTest {
                 .build();
         when(userStore.getUserByUsername("us"))
                 .thenReturn(userList);
-        when(userStore.convertToDto(userList.get(0)))
+        when(userStore.convertToSearchDto(userList.get(0)))
                 .thenReturn(dto);
         assertEquals(userDtoList.get(0).getUsername(), goalApi.getSearchParameters(searchDto).get(0).getUsername());
         assertEquals(userDtoList.get(0).getEmail(), goalApi.getSearchParameters(searchDto).get(0).getEmail());
