@@ -30,6 +30,7 @@ public class GoalStore {
     }
 
     public Tag addTag( String tagMsg ){
+        if (tagMsg.equals("")) return null;
         Optional<Tag> tagFromDB= em.createQuery("select t from Tag t " +
                 "where upper(t.tagMessage) = :tagMsg ", Tag.class)
                 .setParameter("tagMsg", tagMsg.toUpperCase() )

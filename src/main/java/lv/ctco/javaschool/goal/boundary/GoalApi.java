@@ -79,7 +79,7 @@ public class GoalApi {
         goalStore.addGoal(goal);
     }
 
-    private GoalDto convertToDto(Goal goal) {
+    GoalDto convertToDto(Goal goal) {
         GoalDto dto = new GoalDto();
         dto.setUsername(goal.getUser().getUsername());
         dto.setGoalMessage(goal.getGoalMessage());
@@ -90,17 +90,17 @@ public class GoalApi {
         return dto;
     }
 
-    private long countDaysLeft(LocalDate deadlineDate) {
+    long countDaysLeft(LocalDate deadlineDate) {
         LocalDate localDate = LocalDate.now();
         return DAYS.between(localDate, deadlineDate);
     }
 
-    private String convertDate (LocalDate date) {
+    String convertDate (LocalDate date) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
         return date.format(formatter);
     }
 
-    private String convertDateTime (LocalDateTime date) {
+    String convertDateTime (LocalDateTime date) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy kk:mm");
         return date.format(formatter);
     }
@@ -129,7 +129,9 @@ public class GoalApi {
         for (String item : tagList) {
             Tag tag;
             tag = goalStore.addTag(item);
-            tagSet.add(tag);
+            if (tag!=null) {
+              tagSet.add(tag);
+            }
         }
         return tagSet;
     }

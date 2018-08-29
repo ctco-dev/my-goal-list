@@ -20,12 +20,14 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.HashSet;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertIterableEquals;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.when;
-
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 
 @ExtendWith(MockitoExtension.class)
 class GoalApiTest {
@@ -36,6 +38,10 @@ class GoalApiTest {
     List<Goal> goalList1 = new ArrayList<>();
     List<Goal> goalList2 = new ArrayList<>();
     List<GoalDto> goalDtoList = new ArrayList<>();
+
+    String testLine1, expResult1, testLine4, expResult4;
+
+
     @Mock
     private UserStore userStore;
     @Mock
@@ -62,13 +68,20 @@ class GoalApiTest {
         goal.setRegisteredDate(LocalDateTime.now());
         goal.setDeadlineDate(LocalDate.now().plusDays(1));
         goal.setId((long) 1);
+        goal.setTags(null);
+
         goal2.setUser(user2);
         goal2.setGoalMessage("cde");
+
+        testLine1 = "I will become a programmer this year!";
+        expResult1 ="programmer";
+        testLine4 = "I will start to learn Java!";
+        expResult4 ="learn Java";
     }
 
     @Test
-    @DisplayName("Current user has No goals returns empty list of dto's")
-    void getMyGoals() {
+    @DisplayName("getMyGoals(): Current user has No goals returns empty list of dto's")
+    void testGetMyGoals() {
         when(userStore.getCurrentUser())
                 .thenReturn(user1);
         when(goalStore.getGoalsListFor(user1))
@@ -78,8 +91,8 @@ class GoalApiTest {
     }
 
     @Test
-    @DisplayName("Current user has goals returns list of dto's")
-    void getMyGoals2() {
+    @DisplayName("getMyGoals(): Current user has goals returns list of dto's")
+    void testGetMyGoals2() {
         goalList1.add(goal);
         when(userStore.getCurrentUser())
                 .thenReturn(user1);
@@ -94,14 +107,10 @@ class GoalApiTest {
     @Test
     @DisplayName("generateTagsList: Checks work of tag list generation from goal message")
     void testGenerationOfTagsList(){
-        String testLine1 = "I will become a programmer this year!";
-        String expResult1 ="programmer";
         String testLine2 = "I WILL BECOME A PROGRAMMER THIS YEAR!";
         String expResult2 ="PROGRAMMER";
         String testLine3 = "I WILL be two years old!";
         String expResult3 ="";
-        String testLine4 = "I will start to learn Java!";
-        String expResult4 ="learn Java";
 
         assertEquals(expResult1, String.join(" ", goalApi.generateTagsList(testLine1)));
         assertEquals(expResult2, String.join(" ", goalApi.generateTagsList(testLine2)));
@@ -111,30 +120,90 @@ class GoalApiTest {
         assertFalse(expResult1.equals( String.join(" ", goalApi.generateTagsList(testLine2))));
     }
 
+    public static boolean equals(Set<?> set1, Set<?> set2){
+        if(set1 == null || set2 ==null){
+            return false;
+        }
+        if(set1.size()!=set2.size()){
+            return false;
+        }
+        return set1.containsAll(set2);
+    }
+
     @Test
     @DisplayName("parseStringToTags(String value): Checks work of tag list generation from goal message")
     void testParsingGoalStringToTags() {
-        String testLine1 = "I will become a programmer this year!";
-        String tagMsg1 = "programmer";
-        Tag tag1 = new Tag(tagMsg1);
+        Tag tag1 = new Tag(expResult1);
         Set<Tag> tagset1 = new HashSet<>();
         tagset1.add(tag1);
 
-        String testLine2 = "I will start to learn Java!";
-        String tagMsg2a = "learn";
-        String tagMsg2b = "Java";
-        Tag tag2a = new Tag(tagMsg2a);
-        Tag tag2b = new Tag(tagMsg2b);
-        Set<Tag> tagset2 = new HashSet<>();
-        tagset1.add(tag2a);
-        tagset1.add(tag2b);
+        String[] arr = expResult4.split(" ");
+        Tag tag4a = new Tag(arr[0]);
+        Tag tag4b = new Tag(arr[1]);
+        Set<Tag> tagset4 = new HashSet<>();
+        tagset4.add(tag4a);
+        tagset4.add(tag4b);
 
-        when(goalStore.addTag(tagMsg1)).thenReturn(tag1);
-        assertIterableEquals(tagset1, goalApi.parseStringToTags(testLine1));
+        Set<Tag> emptySet = new HashSet<>();
+        doAnswer(invocation -> {
+            String txt = invocation.getArgument(0).toString();
+            if (txt.equals("")) return null;
 
-        when(goalStore.addTag(tagMsg2a)).thenReturn(tag2a);
-        when(goalStore.addTag(tagMsg2b)).thenReturn(tag2b);
-        assertEquals(tagset2, goalApi.parseStringToTags(testLine2));
+            if (txt.equals(expResult1)) return tag1;
+            if (txt.equals(arr[0])) return tag4a;
+            if (txt.equals(arr[1])) return tag4b;
+            return new Tag(txt);
+        }).when(goalStore).addTag( any(String.class) );
+
+        assertThat(equals(tagset1, goalApi.parseStringToTags(testLine1)), is(true));
+        assertThat(equals(tagset4, goalApi.parseStringToTags(testLine4)), is(true));
+        assertThat(equals(tagset1, goalApi.parseStringToTags(testLine4)), is(false));
+        assertNotNull( goalApi.parseStringToTags("some_text"));
+        assertThat(equals(emptySet, goalApi.parseStringToTags("")), is(true));
+    }
+
+
+    @Test
+    @DisplayName("convertDateTime (LocalDateTime date): Checks that input dateTime corresponds output string")
+    void testConvertDateTime(){
+        LocalDateTime dt1 = LocalDateTime.of(2018,10,25,10,15,30);
+        String resultDt1 = "25.10.2018 10:15";
+        String resultDt2 = "10.12.2017 11:30";
+        assertEquals( resultDt1, goalApi.convertDateTime(dt1)  );
+        assertNotEquals( resultDt2, goalApi.convertDateTime(dt1)  );
+    }
+
+    @Test
+    @DisplayName("convertDate (LocalDate date): Checks that input date corresponds output string")
+    void testConvertDate(){
+        LocalDate dt1 = LocalDate.of(2018,10,25);
+        String resultDt1 = "25.10.2018";
+        String resultDt2 = "10.12.2017";
+        assertEquals( resultDt1, goalApi.convertDate(dt1)  );
+        assertNotEquals( resultDt2, goalApi.convertDate(dt1)  );
+    }
+
+    @Test
+    @DisplayName("countDaysLeft(LocalDate deadlineDate): Checks that input date corresponds output string")
+    void testCountDaysLeft(){
+        LocalDate today = LocalDate.now();
+        long fewDays = 4L;
+        LocalDate nextFewDays = LocalDate.now().plusDays(fewDays);
+        assertEquals( fewDays, goalApi.countDaysLeft(nextFewDays)  );
+        assertNotEquals( fewDays+1L, goalApi.countDaysLeft(nextFewDays)  );
+    }
+
+    @Test
+    @DisplayName("convertToDto(Goal goal): Checks that goal and goalDto contains same data (except List<Tag>)")
+    void testConvertToDto(){
+        GoalDto dto = goalApi.convertToDto(goal);
+        assertEquals( goal.getUser().getUsername(), dto.getUsername());
+        assertEquals( goal.getGoalMessage(), dto.getGoalMessage());
+        assertEquals( goalApi.convertDate(goal.getDeadlineDate()), dto.getDeadlineDate());
+        assertEquals( goal.getId(), dto.getId());
+        assertEquals( goalApi.convertDateTime(goal.getRegisteredDate()), dto.getRegisteredDate());
+        assertEquals( goalApi.countDaysLeft(goal.getDeadlineDate()), dto.getDaysLeft());
+        assertNull(dto.getTagList());
     }
 
 }
