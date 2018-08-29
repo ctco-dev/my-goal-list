@@ -40,7 +40,6 @@
             "goalMessage": goalTxt.value,
             "deadline": deadlineTxt.value,
         };
-        console.log(JSON.stringify(dto));
         fetch("<c:url value='/api/goal/newgoal'/>", {
             "method": "POST",
             headers: {
