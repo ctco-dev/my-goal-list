@@ -35,31 +35,26 @@ public class GoalApi {
     private GoalStore goalStore;
 
 
-    @GET
-    @RolesAllowed({"ADMIN", "USER"})
-    @Path("/search-user")
-    public List<UserLoginDto> getSearchedUser(String searchedUserName) {
-        List<User> userList = userStore.getUserByUsername(searchedUserName);
-        if (userList.size() != 0) {
-            return userList.stream()
-                    .map(userStore::convertToDto)
-                    .collect(Collectors.toList());
-        } else {
-            return Collections.emptyList();
-        }
-    }
-
     @POST
     @RolesAllowed({"ADMIN", "USER"})
     @Path("/search-user")
-    public void getSearchParameters(JsonObject searchDto) {
+    public List<UserLoginDto> getSearchParameters(JsonObject searchDto) {
+        List<UserLoginDto> userDtoList= new ArrayList<>();
         for (Map.Entry<String, JsonValue> pair : searchDto.entrySet()) {
             String adr = pair.getKey();
             String value = ((JsonString) pair.getValue()).getString();
             if (adr.equals("usersearch")) {
-                getSearchedUser(value);
+                 List<User> userList = userStore.getUserByUsername(value);
+                if (userList.size() != 0) {
+                    userDtoList = userList.stream()
+                            .map(userStore::convertToDto)
+                            .collect(Collectors.toList());
+                } else {
+                    userDtoList = Collections.emptyList();
+                }
             }
         }
+        return userDtoList;
     }
 
     @GET

@@ -12,8 +12,13 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import javax.json.Json;
+import javax.json.JsonObject;
+import javax.json.JsonString;
+import javax.json.JsonValue;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -95,27 +100,33 @@ class GoalApiTest {
 
     @Test
     @DisplayName("getSearchedUser(String searchedUserName): User has correct input search parameter")
-    void getSearchedUser1() {
+    void getSearchParameters1() {
         userList.add(user1);
         UserLoginDto dto = new UserLoginDto();
         dto.setUsername(user1.getUsername());
         dto.setPhone(user1.getPhone());
         dto.setEmail(user1.getEmail());
         userDtoList.add(dto);
+        JsonObject searchDto = Json.createObjectBuilder()
+                .add("usersearch", "us")
+                .build();
         when(userStore.getUserByUsername("us"))
                 .thenReturn(userList);
         when(userStore.convertToDto(userList.get(0)))
                 .thenReturn(dto);
-        assertEquals(userDtoList.get(0).getUsername(), goalApi.getSearchedUser("us").get(0).getUsername());
-        assertEquals(userDtoList.get(0).getEmail(), goalApi.getSearchedUser("us").get(0).getEmail());
-        assertEquals(userDtoList.get(0).getPhone(), goalApi.getSearchedUser("us").get(0).getPhone());
+        assertEquals(userDtoList.get(0).getUsername(), goalApi.getSearchParameters(searchDto).get(0).getUsername());
+        assertEquals(userDtoList.get(0).getEmail(), goalApi.getSearchParameters(searchDto).get(0).getEmail());
+        assertEquals(userDtoList.get(0).getPhone(), goalApi.getSearchParameters(searchDto).get(0).getPhone());
     }
     @Test
     @DisplayName("getSearchedUser(String searchedUserName): User has no search results")
-    void getSearchedUser2() {
-        when(userStore.getUserByUsername("us"))
+    void getSearchParameters2() {
+        JsonObject searchDto = Json.createObjectBuilder()
+                .add("usersearch", "")
+                .build();
+        when(userStore.getUserByUsername(""))
                 .thenReturn(userList);
-        assertTrue(goalApi.getSearchedUser("us").isEmpty());
+        assertTrue(goalApi.getSearchParameters(searchDto).isEmpty());
     }
 
     @Test
