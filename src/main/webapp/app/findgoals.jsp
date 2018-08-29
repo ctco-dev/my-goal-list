@@ -20,7 +20,11 @@
     <input type="button" value="Find" onclick="findGoalByTags();">
 </div>
 <div id="Users-List" class="w3-hide" >
-    <h1>Found Names ({{nameTemplate}})</h1>
+    <h2>Found Names</h2>
+    <ul id="users">
+        <li w3-repeat="users">{{username}}
+        </li>
+    </ul>
 </div>
 <div id="Goals-List" class="w3-hide" >
     <h1>Found Goals ({{tagsTemplate}})</h1>
@@ -71,7 +75,14 @@
        }).then(function (response) {
            return response.json();
        }).then(function (users) {
-           console.log(JSON.stringify(users));
+           console.log(users);
+           if (users.length > 0) {
+               var tabledata = {'users': users};
+               document.getElementById("Users-List").classList.remove("w3-hide");
+               w3DisplayData("users", tabledata);
+           } else {
+               document.getElementById("Users-List").classList.add("w3-hide");
+           }
        });
    }
 
