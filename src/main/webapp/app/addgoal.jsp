@@ -19,7 +19,9 @@
 <h1 style="text-align:center;font-family:Cursive;color:#000000;">Add new goal</h1>
 <form style="margin-top: 100px; margin-left: 400px;">
     Input your goal:<br>
-    <input id="goal-txt" style="height:100px; width:300px;" type="text" name="goal"><br>
+    <textarea style="resize: none" id="goal-txt" name="goal" rows="10" cols="30"
+              placeholder="Write here your goal..." autofocus></textarea>
+    <br>
     Click deadline on calendar:<br>
     <input id="deadlineDate" type="text" id="txtTest" />
     <input type="button" value="Submit" onclick="submitData()">
@@ -35,7 +37,7 @@
         }
 
         var dto = {
-            "goal": goalTxt.value,
+            "goalMessage": goalTxt.value,
             "deadline": deadlineTxt.value,
         };
         console.log(JSON.stringify(dto));

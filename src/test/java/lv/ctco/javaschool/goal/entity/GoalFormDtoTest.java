@@ -16,7 +16,10 @@ class GoalFormDtoTest {
 
     @Test
     void testGetAndSetDeadline() {
-
+        String newDeadline = "20.05.2019";
+        GoalFormDto dto = new GoalFormDto();
+        dto.setDeadline(newDeadline);
+        assertEquals(newDeadline, dto.getDeadline());
     }
 
 }

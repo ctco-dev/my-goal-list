@@ -13,7 +13,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.security.enterprise.SecurityContext;
 import javax.security.enterprise.identitystore.Pbkdf2PasswordHash;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 

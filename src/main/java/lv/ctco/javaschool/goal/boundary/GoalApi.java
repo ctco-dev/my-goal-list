@@ -102,12 +102,12 @@ public class GoalApi {
         return DAYS.between(localDate, deadlineDate);
     }
 
-    String convertDate (LocalDate date) {
+    String convertDate(LocalDate date) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
         return date.format(formatter);
     }
 
-    String convertDateTime (LocalDateTime date) {
+    String convertDateTime(LocalDateTime date) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy kk:mm");
         return date.format(formatter);
     }
@@ -119,14 +119,14 @@ public class GoalApi {
         for (String item : tagList) {
             Tag tag;
             tag = goalStore.addTag(item);
-            if (tag!=null) {
-              tagSet.add(tag);
+            if (tag != null) {
+                tagSet.add(tag);
             }
         }
         return tagSet;
     }
 
-    private String[] patternList = new String[] {
+    private String[] patternList = new String[]{
             "change|become|i|language|field|apply|app|application|start|end|more|this|that",
             "maybe|year|years|one|two|three|four|five|six|seven|eight|nine|ten|from|i|a|and",
             "are|if|of|off|on|by|next|last|use|using|used|do|doing|what|determined|am|want",
@@ -134,14 +134,13 @@ public class GoalApi {
             "get|got|going|to|for|have|has|the|can|will|be|about"
     };
 
-    List<String> generateTagsList(String goal){
+    List<String> generateTagsList(String goal) {
         String noSymbols = goal.replaceAll("[$,.:;#@!?&*()1234567890]", "");
-        for( String s:patternList){
-            Pattern stopWords = Pattern.compile("\\b(?:"+s+")\\b\\s*", Pattern.CASE_INSENSITIVE);
+        for (String s : patternList) {
+            Pattern stopWords = Pattern.compile("\\b(?:" + s + ")\\b\\s*", Pattern.CASE_INSENSITIVE);
             Matcher matcher = stopWords.matcher(noSymbols);
             noSymbols = matcher.replaceAll("");
         }
         return Arrays.asList(noSymbols.split(" "));
     }
-
 }
