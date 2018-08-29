@@ -72,9 +72,9 @@ public class GoalApi {
     public void createNewGoal(GoalFormDto goalDto) {
         User user = userStore.getCurrentUser();
         Goal goal = new Goal();
-        if (!goalDto.getGoal().isEmpty() && !goalDto.getDeadline().isEmpty()) {
-            goal.setGoalMessage(goalDto.getGoal());
-            goal.setTags(parseStringToTags(goalDto.getGoal()));
+        if (!goalDto.getGoalMessage().isEmpty() && !goalDto.getDeadline().isEmpty()) {
+            goal.setGoalMessage(goalDto.getGoalMessage());
+            goal.setTags(parseStringToTags(goalDto.getGoalMessage()));
 
             DateTimeFormatter formatterD = DateTimeFormatter.ofPattern("dd.MM.yyyy");
             LocalDate localDate = LocalDate.parse(goalDto.getDeadline(), formatterD);
