@@ -40,11 +40,10 @@ public class UserStore {
         return user.isEmpty() ? Optional.empty() : Optional.of(user.get(0));
     }
 
-    public Optional<User> findUserById(Long id) {
-        List<User> user = em.createQuery("select u from User u where u.id = :id", User.class)
+    public User findUserById(Long id) {
+        return em.createQuery("select u from User u where u.id = :id", User.class)
                 .setParameter("id", id)
-                .getResultList();
-        return user.isEmpty() ? Optional.empty() : Optional.of(user.get(0));
+                .getSingleResult();
     }
 
     public List<User> getUserByUsername(String user){
