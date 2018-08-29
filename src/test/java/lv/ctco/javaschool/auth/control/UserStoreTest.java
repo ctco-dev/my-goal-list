@@ -58,17 +58,4 @@ class UserStoreTest {
             fail(throwable.getMessage() + " was thrown");
         }
     }
-
-    @Test
-    void testUserConverterToDto() {
-        UserStore uc = new UserStore();
-        User user = new User();
-        user.setUsername("aa");
-        user.setPhone("1234567");
-        user.setEmail("a@b.com");
-        UserLoginDto dto = uc.convertToDto(user);
-        assertEquals(user.getUsername(), dto.getUsername());
-        assertEquals(user.getEmail(), dto.getEmail());
-        assertEquals(user.getPhone(), dto.getPhone());
-    }
 }

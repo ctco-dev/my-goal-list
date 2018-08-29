@@ -1,13 +1,9 @@
 package lv.ctco.javaschool.goal.entity;
 
-import lv.ctco.javaschool.goal.entity.GoalDto;
-import org.junit.jupiter.api.DisplayName;
+import lv.ctco.javaschool.goal.boundary.GoalApi;
 import org.junit.jupiter.api.Test;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.Month;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,18 +30,17 @@ class GoalDtoTest {
     void testGetAndSetDeadlineDate() {
         LocalDate newDt = LocalDate.now();
         GoalDto dto = new GoalDto();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-        dto.setDeadlineDate(newDt.format(formatter));
-        assertEquals(newDt.format(formatter), dto.getDeadlineDate());
+
+        dto.setDeadlineDate(newDt.format(GoalApi.formatterDate));
+        assertEquals(newDt.format(GoalApi.formatterDate), dto.getDeadlineDate());
     }
 
     @Test
     void testGetAndSetRegisteredDate() {
         LocalDateTime newDt = LocalDateTime.now();
         GoalDto dto = new GoalDto();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy kk:mm");
-        dto.setRegisteredDate(newDt.format(formatter));
-        assertEquals(newDt.format(formatter), dto.getRegisteredDate());
+        dto.setRegisteredDate(newDt.format(GoalApi.formatterDateTime));
+        assertEquals(newDt.format(GoalApi.formatterDateTime), dto.getRegisteredDate());
     }
 
     @Test

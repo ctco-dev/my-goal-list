@@ -19,7 +19,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -38,19 +37,18 @@ public class GoalApi {
     @Inject
     private GoalStore goalStore;
 
+    public static DateTimeFormatter formatterDate = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+    public static DateTimeFormatter formatterDateTime = DateTimeFormatter.ofPattern("dd.MM.yyyy kk:mm");
+
     @GET
     @RolesAllowed({"ADMIN", "USER"})
     @Path("/mygoals")
     public List<GoalDto> getMyGoals() {
         User currentUser = userStore.getCurrentUser();
         List<Goal> goalsList = goalStore.getGoalsListFor(currentUser);
-        if (goalsList.size() != 0) {
-            return goalsList.stream()
-                    .map(this::convertToDto)
-                    .collect(Collectors.toList());
-        } else {
-            return Collections.emptyList();
-        }
+        return goalsList.stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
     }
 
     @GET
@@ -76,8 +74,7 @@ public class GoalApi {
             goal.setGoalMessage(goalDto.getGoalMessage());
             goal.setTags(parseStringToTags(goalDto.getGoalMessage()));
 
-            DateTimeFormatter formatterD = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-            LocalDate localDate = LocalDate.parse(goalDto.getDeadline(), formatterD);
+            LocalDate localDate = LocalDate.parse(goalDto.getDeadline(), GoalApi.formatterDate);
             goal.setDeadlineDate(localDate);
 
             goal.setUser(user);
@@ -103,13 +100,11 @@ public class GoalApi {
     }
 
     String convertDate(LocalDate date) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-        return date.format(formatter);
+        return date.format(GoalApi.formatterDate);
     }
 
     String convertDateTime(LocalDateTime date) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy kk:mm");
-        return date.format(formatter);
+        return date.format(GoalApi.formatterDateTime);
     }
 
     Set<Tag> parseStringToTags(String value) {
