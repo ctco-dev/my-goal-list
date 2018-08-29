@@ -157,6 +157,16 @@ class GoalApiTest {
         assertEquals(null, goalApi.getGoalById((long) 1).getGoalMessage());
         assertEquals(0, goalApi.getGoalById((long) 1).getId());
     }
+//    @Test
+//    @DisplayName("Test getGoalsByUserId(): returns list of goals by user id")
+//    void getGoalsByUserId() {
+//        when(userStore.findUserById((long) 1))
+//                .thenReturn(user1);
+//
+//        assertEquals(GoalDto.class, goalApi.getGoalById((long) 1).getClass());
+//        assertEquals(null, goalApi.getGoalById((long) 1).getGoalMessage());
+//        assertEquals(0, goalApi.getGoalById((long) 1).getId());
+//    }
 
     @Test
     @DisplayName("Test getCommentsForGoalById(): returns Comments dto of goal by id")
