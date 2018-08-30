@@ -131,40 +131,4 @@ public class GoalApi {
             throw new IllegalArgumentException();
         }
     }
-
-    @GET
-    @RolesAllowed({"ADMIN", "USER"})
-    @Path("/search-user")
-    public List<UserLoginDto> getSearchedUser(String searchedUserName) {
-        List<User> userList = userStore.getUserByUsername(searchedUserName);
-        return userList.stream()
-                .map(DtoConventer::convertUserToUserLoginDto)
-                .collect(Collectors.toList());
-
-    }
-
-    @POST
-    @RolesAllowed({"ADMIN", "USER"})
-    @Path("/search-user")
-    public List<UserLoginDto> getSearchParameters(JsonObject searchDto) {
-        List<UserLoginDto> userDtoList = new ArrayList<>();
-        for (Map.Entry<String, JsonValue> pair : searchDto.entrySet()) {
-            String adr = pair.getKey();
-            String value = ((JsonString) pair.getValue()).getString();
-            if (adr.equals("usersearch")) {
-                List<User> userList = userStore.getUserByUsername(value);
-                userDtoList = userList.stream()
-                        .map(DtoConventer::convertUserToUserLoginDto)
-                        .collect(Collectors.toList());
-            }
-        }
-        return userDtoList;
-    }
-
-    @GET
-    @RolesAllowed({"ADMIN", "USER"})
-    @Path("/taglist")
-    public List<TagDto> returnAllTags() {
-        return goalStore.getAllTagList();
-    }
 }

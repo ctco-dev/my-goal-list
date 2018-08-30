@@ -275,35 +275,4 @@ class GoalApiTest {
         assertThrows(IllegalArgumentException.class, () -> goalApi.setCommentForGoalById(1L, msg));
     }
 
-    @Test
-    @DisplayName("SearchParameters: User has correct input search parameter")
-    void getSearchParameters1() {
-        userList.add(user1);
-        UserLoginDto dto = new UserLoginDto();
-        dto.setUsername(user1.getUsername());
-        dto.setPhone(user1.getPhone());
-        dto.setEmail(user1.getEmail());
-        userDtoList.add(dto);
-        JsonObject searchDto = Json.createObjectBuilder()
-                .add("usersearch", "us")
-                .build();
-        when(userStore.getUserByUsername("us"))
-                .thenReturn(userList);
-        assertEquals(userDtoList.get(0).getUsername(), goalApi.getSearchParameters(searchDto).get(0).getUsername());
-        assertEquals(userDtoList.get(0).getEmail(), goalApi.getSearchParameters(searchDto).get(0).getEmail());
-        assertEquals(userDtoList.get(0).getPhone(), goalApi.getSearchParameters(searchDto).get(0).getPhone());
-    }
-
-    @Test
-    @DisplayName("SearchParameters: User has no search results for parameter")
-    void getSearchParameters2() {
-        JsonObject searchDto = Json.createObjectBuilder()
-                .add("usersearch", "")
-                .build();
-        when(userStore.getUserByUsername(""))
-                .thenReturn(userList);
-        assertTrue(goalApi.getSearchParameters(searchDto).isEmpty());
-    }
-
-
 }
