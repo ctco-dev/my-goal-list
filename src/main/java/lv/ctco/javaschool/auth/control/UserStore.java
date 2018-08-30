@@ -33,7 +33,9 @@ public class UserStore {
 
     public Optional<User> findUserByUsername(String username) {
         username = username.trim();
-        List<User> user = em.createQuery("select u from User u where upper(u.username) = :username", User.class)
+        List<User> user = em.createQuery(
+                "select u from User u " +
+                        "where upper(u.username) = :username", User.class)
                 .setParameter("username", username.toUpperCase())
                 .getResultList();
         return user.isEmpty() ? Optional.empty() : Optional.of(user.get(0));

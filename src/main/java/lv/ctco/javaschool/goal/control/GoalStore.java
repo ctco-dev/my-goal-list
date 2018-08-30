@@ -1,15 +1,16 @@
 package lv.ctco.javaschool.goal.control;
 
 import lv.ctco.javaschool.auth.entity.domain.User;
-import lv.ctco.javaschool.goal.entity.Comment;
-import lv.ctco.javaschool.goal.entity.Goal;
-import lv.ctco.javaschool.goal.entity.Tag;
-import lv.ctco.javaschool.goal.entity.TagDto;
-
+import lv.ctco.javaschool.goal.entity.domain.Goal;
+import lv.ctco.javaschool.goal.entity.domain.Tag;
+import lv.ctco.javaschool.goal.entity.dto.TagDto;
+import lv.ctco.javaschool.goal.entity.domain.Comment;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import java.util.*;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Optional;
 
 @Stateless
 public class GoalStore {
@@ -32,7 +33,7 @@ public class GoalStore {
 
     public List<TagDto> getAllTagList() {
         return new ArrayList<>( em.createQuery(
-                "SELECT new lv.ctco.javaschool.goal.entity.TagDto(t.tagMessage, COUNT(t)) " +
+                "SELECT new lv.ctco.javaschool.goal.entity.dto.TagDto(t.tagMessage, COUNT(t)) " +
                         "FROM Tag t, Goal g " +
                         "WHERE t MEMBER OF g.tags " +
                         "GROUP BY t.id"
@@ -40,6 +41,7 @@ public class GoalStore {
     }
 
     public Tag addTag( String tagMsg ){
+        if (tagMsg.equals("")) return null;
         Optional<Tag> tagFromDB= em.createQuery("select t from Tag t " +
                 "where upper(t.tagMessage) = :tagMsg ", Tag.class)
                 .setParameter("tagMsg", tagMsg.toUpperCase() )
@@ -54,7 +56,7 @@ public class GoalStore {
         }
     }
 
-    public Optional<Goal> getGoalById(long goalId) {
+    public Optional<Goal> getGoalById(Long goalId) {
         return em.createQuery("select g from Goal g " +
                 "where g.id = :id ", Goal.class)
                 .setParameter("id", goalId)

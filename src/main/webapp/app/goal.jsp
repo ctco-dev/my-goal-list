@@ -55,69 +55,69 @@
     </div>
 </div>
 
-    <script>
-        var id = getQueryVariable("id");
+<script>
+    var id = getQueryVariable("id");
 
-        function getComments() {
-            fetch("<c:url value='/api/goal/'/>" + id + "/comments", {
-                "method": "GET",
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                }
-            }).then(function (response) {
-                return response.json();
-            }).then(function (coments) {
-                console.log(coments);
-                if (coments.length > 0) {
-                    var tabledata = {'comments': coments};
-                    document.getElementById("sortable").classList.remove("w3-hide");
-                    w3DisplayData("sortable", tabledata);
-                }
-
-            });
-        }
-
-        function onLoad() {
-            fetch("<c:url value='/api/goal/mygoals/'/>" + id, {
-                "method": "GET",
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                }
-            }).then(function (response) {
-                return response.json();
-            }).then(function (goal) {
-                w3.displayObject("title", goal);
-                w3.displayObject("goal-fields", goal);
-                getComments();
-            });
-        }
-
-        function getQueryVariable(variable) {
-            var query = window.location.search.substring(1);
-            var vars = query.split("&");
-            for (var i = 0; i < vars.length; i++) {
-                var pair = vars[i].split("=");
-                if (pair[0] === variable) {
-                    return pair[1];
-                }
+    function getComments() {
+        fetch("<c:url value='/api/goal/'/>" + id + "/comments", {
+            "method": "GET",
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
             }
-            return (false);
-        }
+        }).then(function (response) {
+            return response.json();
+        }).then(function (coments) {
+            console.log(coments);
+            if (coments.length > 0) {
+                var tabledata = {'comments': coments};
+                document.getElementById("sortable").classList.remove("w3-hide");
+                w3DisplayData("sortable", tabledata);
+            }
 
-        function addComment() {
-            var data = {'message': document.getElementById("userComment").value};
-            fetch("<c:url value='/api/goal/'/>" + id + "/comments", {
-                "method": "POST",
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                }, body: JSON.stringify(data)
-            }).then(function (response) {
-                onLoad();
-            });
+        });
+    }
+
+    function onLoad() {
+        fetch("<c:url value='/api/goal/mygoals/'/>" + id, {
+            "method": "GET",
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
+        }).then(function (response) {
+            return response.json();
+        }).then(function (goal) {
+            w3.displayObject("title", goal);
+            w3.displayObject("goal-fields", goal);
+            getComments();
+        });
+    }
+
+    function getQueryVariable(variable) {
+        var query = window.location.search.substring(1);
+        var vars = query.split("&");
+        for (var i = 0; i < vars.length; i++) {
+            var pair = vars[i].split("=");
+            if (pair[0] === variable) {
+                return pair[1];
+            }
         }
-    </script>
+        return (false);
+    }
+
+    function addComment() {
+        var data = {'message': document.getElementById("userComment").value};
+        fetch("<c:url value='/api/goal/'/>" + id + "/comments", {
+            "method": "POST",
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }, body: JSON.stringify(data)
+        }).then(function (response) {
+            onLoad();
+        });
+    }
+</script>
 </body>
 </html>

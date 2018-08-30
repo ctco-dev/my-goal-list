@@ -1,3 +1,4 @@
 language: java
+install: true
 sudo: false
 script: mvn clean test

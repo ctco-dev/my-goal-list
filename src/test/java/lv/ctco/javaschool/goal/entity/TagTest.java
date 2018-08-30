@@ -1,32 +1,25 @@
 package lv.ctco.javaschool.goal.entity;
 
-import lv.ctco.javaschool.auth.entity.domain.User;
-import lv.ctco.javaschool.goal.entity.Tag;
-import org.junit.jupiter.api.DisplayName;
+import lv.ctco.javaschool.goal.entity.domain.Tag;
 import org.junit.jupiter.api.Test;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-
-import static org.junit.jupiter.api.Assertions.*;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 
 class TagTest {
     @Test
-    @DisplayName("Ids should be equal")
-    void getAndSetId() {
-        Long l=123456789L;
+    void testGetAndSetId() {
+        Long newId = 123456789L;
         Tag tag = new Tag();
-        tag.setId(l);
-        assertEquals(l, tag.getId());
+        tag.setId(newId);
+        assertThat(tag.getId(), is(newId));
     }
 
     @Test
-    @DisplayName("TagMessages should be equal")
-    void getAndSetTagMessage() {
-        String newMsg="test tag";
+    void testGetAndSetTagMessage() {
+        String newMsg = "test tag";
         Tag tag = new Tag();
         tag.setTagMessage(newMsg);
-        assertEquals(newMsg, tag.getTagMessage());
+        assertThat(tag.getTagMessage(), is(newMsg));
     }
-
 }
