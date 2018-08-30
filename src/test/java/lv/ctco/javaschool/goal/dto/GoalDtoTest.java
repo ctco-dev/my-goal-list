@@ -1,14 +1,17 @@
 package lv.ctco.javaschool.goal.dto;
 
+import lv.ctco.javaschool.goal.control.TagParser;
 import lv.ctco.javaschool.goal.control.TypeConverter;
 import lv.ctco.javaschool.goal.entity.dto.GoalDto;
 import org.junit.jupiter.api.Test;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 
 class GoalDtoTest {
     @Test
@@ -16,7 +19,7 @@ class GoalDtoTest {
         String userName = "test";
         GoalDto dto = new GoalDto();
         dto.setUsername(userName);
-        assertEquals(userName, dto.getUsername());
+        assertThat(dto.getUsername(), is(userName));
     }
 
     @Test
@@ -24,16 +27,15 @@ class GoalDtoTest {
         String goalMsg = "test";
         GoalDto dto = new GoalDto();
         dto.setGoalMessage(goalMsg);
-        assertEquals(goalMsg, dto.getGoalMessage());
+        assertThat(dto.getGoalMessage(), is(goalMsg));
     }
 
     @Test
     void testGetAndSetDeadlineDate() {
         LocalDate newDt = LocalDate.now();
         GoalDto dto = new GoalDto();
-
         dto.setDeadlineDate(newDt.format(TypeConverter.formatterDate));
-        assertEquals(newDt.format(TypeConverter.formatterDate), dto.getDeadlineDate());
+        assertThat(dto.getDeadlineDate(), is(newDt.format(TypeConverter.formatterDate)));
     }
 
     @Test
@@ -41,7 +43,7 @@ class GoalDtoTest {
         LocalDateTime newDt = LocalDateTime.now();
         GoalDto dto = new GoalDto();
         dto.setRegisteredDate(newDt.format(TypeConverter.formatterDateTime));
-        assertEquals(newDt.format(TypeConverter.formatterDateTime), dto.getRegisteredDate());
+        assertThat(dto.getRegisteredDate(), is(newDt.format(TypeConverter.formatterDateTime)));
     }
 
     @Test
@@ -49,15 +51,15 @@ class GoalDtoTest {
         int daysCnt = 35;
         GoalDto dto = new GoalDto();
         dto.setDaysLeft(daysCnt);
-        assertEquals(daysCnt, dto.getDaysLeft());
+        assertThat(dto.getDaysLeft(), is(daysCnt));
     }
 
     @Test
     void testGetAndSetId() {
-        Long l = 123456789L;
+        Long newId = 123456789L;
         GoalDto dto = new GoalDto();
-        dto.setId(l);
-        assertEquals(l, dto.getId());
+        dto.setId(newId);
+        assertThat( dto.getId(), is(newId));
     }
 
     @Test
@@ -68,6 +70,6 @@ class GoalDtoTest {
         newList.add("tag3");
         GoalDto dto = new GoalDto();
         dto.setTagList(newList);
-        assertEquals(newList, dto.getTagList());
+        assertThat(TagParser.isEqualLists( dto.getTagList(), newList), is(true));
     }
 }

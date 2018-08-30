@@ -37,4 +37,18 @@ public class TagParser {
         }
         return set1.containsAll(set2);
     }
+
+    public static boolean isEqualLists(List<?> list1, List<?> list2) {
+        if (list1 == null && list2 == null) {
+            return true;
+        }
+        if (list1 == null || list2 == null) {
+            return false;
+        }
+        if (list1.size() != list2.size()) {
+            return false;
+        }
+        return list1.containsAll(list2);
+    }
+
 }

@@ -3,7 +3,8 @@ package lv.ctco.javaschool.goal.dto;
 import lv.ctco.javaschool.goal.entity.dto.GoalFormDto;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 
 
 class GoalFormDtoTest {
@@ -12,7 +13,7 @@ class GoalFormDtoTest {
         String newGoalMsg = "goal message";
         GoalFormDto dto = new GoalFormDto();
         dto.setGoalMessage(newGoalMsg);
-        assertEquals(newGoalMsg, dto.getGoalMessage());
+        assertThat( dto.getGoalMessage(), is(newGoalMsg));
     }
 
     @Test
@@ -20,7 +21,7 @@ class GoalFormDtoTest {
         String newDeadline = "20.05.2019";
         GoalFormDto dto = new GoalFormDto();
         dto.setDeadline(newDeadline);
-        assertEquals(newDeadline, dto.getDeadline());
+        assertThat( dto.getDeadline(), is(newDeadline));
     }
 
 }

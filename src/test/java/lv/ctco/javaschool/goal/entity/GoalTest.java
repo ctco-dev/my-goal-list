@@ -1,6 +1,7 @@
 package lv.ctco.javaschool.goal.entity;
 
 import lv.ctco.javaschool.auth.entity.domain.User;
+import lv.ctco.javaschool.goal.control.TagParser;
 import lv.ctco.javaschool.goal.entity.domain.Goal;
 import lv.ctco.javaschool.goal.entity.domain.Tag;
 import org.junit.jupiter.api.Test;
@@ -10,16 +11,17 @@ import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 
 public class GoalTest {
 
     @Test
     void testGetAndSetId() {
-        Long l=123456789L;
+        Long newId=123456789L;
         Goal goal = new Goal();
-        goal.setId(l);
-        assertEquals(l,goal.getId());
+        goal.setId(newId);
+        assertThat(goal.getId(), is(newId));
     }
 
     @Test
@@ -31,7 +33,7 @@ public class GoalTest {
         user.setPhone("+37123456789");
         Goal goal = new Goal();
         goal.setUser(user);
-        assertEquals(user, goal.getUser());
+        assertThat(goal.getUser(), is(user));
     }
 
     @Test
@@ -39,7 +41,7 @@ public class GoalTest {
         String newGoalMsg = "goal message";
         Goal goal = new Goal();
         goal.setGoalMessage(newGoalMsg);
-        assertEquals(newGoalMsg, goal.getGoalMessage());
+        assertThat(goal.getGoalMessage(), is(newGoalMsg));
     }
 
     @Test
@@ -47,7 +49,7 @@ public class GoalTest {
         LocalDate newDt = LocalDate.now();
         Goal goal = new Goal();
         goal.setDeadlineDate(newDt);
-        assertEquals(newDt, goal.getDeadlineDate() );
+        assertThat(goal.getDeadlineDate(), is(newDt) );
     }
 
     @Test
@@ -55,7 +57,7 @@ public class GoalTest {
         LocalDateTime newDt = LocalDateTime.now();
         Goal goal = new Goal();
         goal.setRegisteredDate(newDt);
-        assertEquals(newDt, goal.getRegisteredDate() );
+        assertThat(goal.getRegisteredDate(), is(newDt) );
     }
 
     @Test
@@ -67,6 +69,6 @@ public class GoalTest {
         tagSet.add( new Tag("tag1")  );
         Goal goal = new Goal();
         goal.setTags(tagSet);
-        assertEquals(tagSet, goal.getTags() );
+        assertThat(TagParser.isEqualSets(goal.getTags(), tagSet), is(true) );
     }
 }

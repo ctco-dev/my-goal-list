@@ -3,15 +3,16 @@ package lv.ctco.javaschool.goal.entity;
 import lv.ctco.javaschool.goal.entity.domain.Tag;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 
 class TagTest {
     @Test
     void testGetAndSetId() {
-        Long l = 123456789L;
+        Long newId = 123456789L;
         Tag tag = new Tag();
-        tag.setId(l);
-        assertEquals(l, tag.getId());
+        tag.setId(newId);
+        assertThat(tag.getId(), is(newId));
     }
 
     @Test
@@ -19,6 +20,6 @@ class TagTest {
         String newMsg = "test tag";
         Tag tag = new Tag();
         tag.setTagMessage(newMsg);
-        assertEquals(newMsg, tag.getTagMessage());
+        assertThat(tag.getTagMessage(), is(newMsg));
     }
 }

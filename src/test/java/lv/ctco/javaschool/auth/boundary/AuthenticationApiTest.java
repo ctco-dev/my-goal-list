@@ -11,7 +11,8 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 
 class AuthenticationApiTest {
     @Mock
@@ -34,22 +35,21 @@ class AuthenticationApiTest {
         Mockito.when(userStore.getCurrentUser()).thenReturn(user);
 
         UserLoginDto resultDto = authenticationApi.returnUserDto();
-        assertEquals(user.getUsername(), resultDto.getUsername());
-        assertEquals(user.getEmail(), resultDto.getEmail());
-        assertEquals(user.getPhone(), resultDto.getPhone());
+        assertThat( resultDto.getUsername(), is(user.getUsername()));
+        assertThat( resultDto.getEmail(), is(user.getEmail()));
+        assertThat( resultDto.getPhone(), is(user.getPhone()));
     }
 
     @Test
     void testUserConverterToDto() {
-        UserStore uc = new UserStore();
         User user = new User();
         user.setUsername("aa");
         user.setPhone("1234567");
         user.setEmail("a@b.com");
         UserLoginDto dto = authenticationApi.convertToDto(user);
-        assertEquals(user.getUsername(), dto.getUsername());
-        assertEquals(user.getEmail(), dto.getEmail());
-        assertEquals(user.getPhone(), dto.getPhone());
+        assertThat( dto.getUsername(), is(user.getUsername()));
+        assertThat( dto.getEmail(), is(user.getEmail()));
+        assertThat( dto.getPhone(), is(user.getPhone()));
     }
 
 }

@@ -3,7 +3,8 @@ package lv.ctco.javaschool.goal.dto;
 import lv.ctco.javaschool.goal.entity.dto.TagDto;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 
 class TagDtoTest {
     @Test
@@ -11,7 +12,7 @@ class TagDtoTest {
         String newMsg = "test tag";
         TagDto dto = new TagDto();
         dto.setTagMessage(newMsg);
-        assertEquals(newMsg, dto.getTagMessage());
+        assertThat(dto.getTagMessage(), is(newMsg));
     }
 
     @Test
@@ -19,6 +20,6 @@ class TagDtoTest {
         int newCnt = 345;
         TagDto dto = new TagDto();
         dto.setCnt(newCnt);
-        assertEquals(newCnt, dto.getCnt());
+        assertThat(dto.getCnt(), is(newCnt));
     }
 }
