@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.nullValue;
 
 
 class TypeConverterTest {
@@ -72,6 +73,6 @@ class TypeConverterTest {
         assertThat( dto.getRegisteredDate(), is(TypeConverter.convertDateTime(goal.getRegisteredDate())));
         assertThat( dto.getRegisteredDate(), is(TypeConverter.convertDateTime(goal.getRegisteredDate())));
         assertThat( dto.getRegisteredDate(), is(TypeConverter.convertDateTime(goal.getRegisteredDate())));
-        assertThat(dto.getTagList()==null, is(true));
+        assertThat(dto.getTagList(), nullValue());
     }
 }

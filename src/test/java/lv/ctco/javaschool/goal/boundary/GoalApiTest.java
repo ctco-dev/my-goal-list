@@ -21,14 +21,17 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import static org.mockito.ArgumentMatchers.any;
+
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.nullValue;
+import static org.mockito.ArgumentMatchers.any;
 
 @ExtendWith(MockitoExtension.class)
 class GoalApiTest {
@@ -107,9 +110,8 @@ class GoalApiTest {
     void testGetGoalById2() {
         when(goalStore.getGoalById( 1L))
                 .thenReturn(java.util.Optional.empty());
-        assertThat( goalApi.getGoalDtoByGoalId( 1L ).getClass() == GoalDto.class, is(true));
-        assertThat( goalApi.getGoalDtoByGoalId(1L).getGoalMessage()==null, is(true));
-        assertThat( goalApi.getGoalDtoByGoalId(1L).getId()==null, is(true));
+        assertThat( goalApi.getGoalDtoByGoalId(1L).getGoalMessage(), nullValue());
+        assertThat( goalApi.getGoalDtoByGoalId(1L).getId(), nullValue());
     }
 
     @Test
@@ -146,7 +148,7 @@ class GoalApiTest {
         assertThat(TagParser.isEqualSets(tagset1, goalApi.parseStringToTags(testLine1)), is(true));
         assertThat(TagParser.isEqualSets(tagset4, goalApi.parseStringToTags(testLine4)), is(true));
         assertThat(TagParser.isEqualSets(tagset1, goalApi.parseStringToTags(testLine4)), is(false));
-        assertThat( goalApi.parseStringToTags("some_text")!=null, is(true));
+        assertThat( goalApi.parseStringToTags("some_text"), notNullValue());
         assertThat(TagParser.isEqualSets(emptySet, goalApi.parseStringToTags("")), is(true));
     }
 
