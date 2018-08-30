@@ -40,16 +40,4 @@ class AuthenticationApiTest {
         assertThat( resultDto.getPhone(), is(user.getPhone()));
     }
 
-    @Test
-    void testUserConverterToDto() {
-        User user = new User();
-        user.setUsername("aa");
-        user.setPhone("1234567");
-        user.setEmail("a@b.com");
-        UserLoginDto dto = authenticationApi.convertToDto(user);
-        assertThat( dto.getUsername(), is(user.getUsername()));
-        assertThat( dto.getEmail(), is(user.getEmail()));
-        assertThat( dto.getPhone(), is(user.getPhone()));
-    }
-
 }

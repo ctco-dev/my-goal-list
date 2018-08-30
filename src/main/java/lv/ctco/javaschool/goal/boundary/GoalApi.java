@@ -2,9 +2,10 @@ package lv.ctco.javaschool.goal.boundary;
 
 import lv.ctco.javaschool.auth.control.UserStore;
 import lv.ctco.javaschool.auth.entity.domain.User;
+import lv.ctco.javaschool.goal.control.DtoConventer;
 import lv.ctco.javaschool.goal.control.GoalStore;
 import lv.ctco.javaschool.goal.control.TagParser;
-import lv.ctco.javaschool.goal.control.TypeConverter;
+import lv.ctco.javaschool.goal.control.DateTimeConverter;
 import lv.ctco.javaschool.goal.entity.domain.Goal;
 import lv.ctco.javaschool.goal.entity.domain.Tag;
 import lv.ctco.javaschool.goal.entity.dto.GoalDto;
@@ -40,7 +41,7 @@ public class GoalApi {
         User currentUser = userStore.getCurrentUser();
         List<Goal> goalsList = goalStore.getGoalsListFor(currentUser);
         return goalsList.stream()
-                .map(TypeConverter::convertGoalToGoalDto)
+                .map(DtoConventer::convertGoalToGoalDto)
                 .collect(Collectors.toList());
     }
 
@@ -51,7 +52,7 @@ public class GoalApi {
         Optional<Goal> goal = goalStore.getGoalById(goalId);
         if (goal.isPresent()) {
             Goal g = goal.get();
-            return TypeConverter.convertGoalToGoalDto(g);
+            return DtoConventer.convertGoalToGoalDto(g);
         } else {
             return new GoalDto();
         }
@@ -67,7 +68,7 @@ public class GoalApi {
             goal.setGoalMessage(goalDto.getGoalMessage());
             goal.setTags(parseStringToTags(goalDto.getGoalMessage()));
 
-            LocalDate localDate = LocalDate.parse(goalDto.getDeadline(), TypeConverter.formatterDate);
+            LocalDate localDate = LocalDate.parse(goalDto.getDeadline(), DateTimeConverter.formatterDate);
             goal.setDeadlineDate(localDate);
 
             goal.setUser(user);
@@ -89,6 +90,5 @@ public class GoalApi {
         }
         return tagSet;
     }
-
 
 }

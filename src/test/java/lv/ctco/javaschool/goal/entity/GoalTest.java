@@ -1,7 +1,6 @@
 package lv.ctco.javaschool.goal.entity;
 
 import lv.ctco.javaschool.auth.entity.domain.User;
-import lv.ctco.javaschool.goal.control.TagParser;
 import lv.ctco.javaschool.goal.entity.domain.Goal;
 import lv.ctco.javaschool.goal.entity.domain.Tag;
 import org.junit.jupiter.api.Test;
@@ -9,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -69,6 +69,6 @@ public class GoalTest {
         tagSet.add( new Tag("tag1")  );
         Goal goal = new Goal();
         goal.setTags(tagSet);
-        assertThat(TagParser.isEqualSets(goal.getTags(), tagSet), is(true) );
+        assertThat(Objects.equals(goal.getTags(), tagSet), is(true) );
     }
 }

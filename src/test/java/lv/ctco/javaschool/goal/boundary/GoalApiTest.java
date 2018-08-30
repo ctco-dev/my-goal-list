@@ -3,7 +3,6 @@ package lv.ctco.javaschool.goal.boundary;
 import lv.ctco.javaschool.auth.control.UserStore;
 import lv.ctco.javaschool.auth.entity.domain.User;
 import lv.ctco.javaschool.goal.control.GoalStore;
-import lv.ctco.javaschool.goal.control.TagParser;
 import lv.ctco.javaschool.goal.entity.domain.Goal;
 import lv.ctco.javaschool.goal.entity.domain.Tag;
 import lv.ctco.javaschool.goal.entity.dto.GoalDto;
@@ -20,6 +19,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 import static org.mockito.Mockito.doAnswer;
@@ -40,7 +40,6 @@ class GoalApiTest {
     User user1 = new User();
     User user2 = new User();
     List<Goal> goalList1 = new ArrayList<>();
-    List<Goal> goalList2 = new ArrayList<>();
     List<GoalDto> goalDtoList = new ArrayList<>();
     String testLine1, expResult1, testLine4, expResult4;
 
@@ -89,7 +88,7 @@ class GoalApiTest {
                 .thenReturn(user1);
         when(goalStore.getGoalsListFor(user1))
                 .thenReturn(goalList1);
-        assertThat( TagParser.isEqualLists( goalApi.getMyGoals(),goalDtoList), is(true));
+        assertThat( Objects.equals( goalApi.getMyGoals(), goalDtoList), is(true));
     }
 
     @Test
@@ -145,11 +144,11 @@ class GoalApiTest {
             if (txt.equals(arr[1])) return tag4b;
             return new Tag(txt);
         }).when(goalStore).addTag(any(String.class));
-        assertThat(TagParser.isEqualSets(tagset1, goalApi.parseStringToTags(testLine1)), is(true));
-        assertThat(TagParser.isEqualSets(tagset4, goalApi.parseStringToTags(testLine4)), is(true));
-        assertThat(TagParser.isEqualSets(tagset1, goalApi.parseStringToTags(testLine4)), is(false));
+        assertThat(Objects.equals(tagset1, goalApi.parseStringToTags(testLine1)), is(true));
+        assertThat(Objects.equals(tagset4, goalApi.parseStringToTags(testLine4)), is(true));
+        assertThat(Objects.equals(tagset1, goalApi.parseStringToTags(testLine4)), is(false));
         assertThat( goalApi.parseStringToTags("some_text"), notNullValue());
-        assertThat(TagParser.isEqualSets(emptySet, goalApi.parseStringToTags("")), is(true));
+        assertThat(Objects.equals(emptySet, goalApi.parseStringToTags("")), is(true));
     }
 
     @Test

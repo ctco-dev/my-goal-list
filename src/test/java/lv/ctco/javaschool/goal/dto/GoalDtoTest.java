@@ -1,7 +1,6 @@
 package lv.ctco.javaschool.goal.dto;
 
-import lv.ctco.javaschool.goal.control.TagParser;
-import lv.ctco.javaschool.goal.control.TypeConverter;
+import lv.ctco.javaschool.goal.control.DateTimeConverter;
 import lv.ctco.javaschool.goal.entity.dto.GoalDto;
 import org.junit.jupiter.api.Test;
 
@@ -9,6 +8,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -34,16 +34,16 @@ class GoalDtoTest {
     void testGetAndSetDeadlineDate() {
         LocalDate newDt = LocalDate.now();
         GoalDto dto = new GoalDto();
-        dto.setDeadlineDate(newDt.format(TypeConverter.formatterDate));
-        assertThat(dto.getDeadlineDate(), is(newDt.format(TypeConverter.formatterDate)));
+        dto.setDeadlineDate(newDt.format(DateTimeConverter.formatterDate));
+        assertThat(dto.getDeadlineDate(), is(newDt.format(DateTimeConverter.formatterDate)));
     }
 
     @Test
     void testGetAndSetRegisteredDate() {
         LocalDateTime newDt = LocalDateTime.now();
         GoalDto dto = new GoalDto();
-        dto.setRegisteredDate(newDt.format(TypeConverter.formatterDateTime));
-        assertThat(dto.getRegisteredDate(), is(newDt.format(TypeConverter.formatterDateTime)));
+        dto.setRegisteredDate(newDt.format(DateTimeConverter.formatterDateTime));
+        assertThat(dto.getRegisteredDate(), is(newDt.format(DateTimeConverter.formatterDateTime)));
     }
 
     @Test
@@ -70,6 +70,6 @@ class GoalDtoTest {
         newList.add("tag3");
         GoalDto dto = new GoalDto();
         dto.setTagList(newList);
-        assertThat(TagParser.isEqualLists( dto.getTagList(), newList), is(true));
+        assertThat(Objects.equals( dto.getTagList(), newList), is(true));
     }
 }

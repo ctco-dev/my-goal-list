@@ -2,36 +2,10 @@ package lv.ctco.javaschool.goal.control;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class TagParser {
-    public static boolean isEqualSets(Set<?> set1, Set<?> set2) {
-        if (set1 == null && set2 == null) {
-            return true;
-        }
-        if (set1 == null || set2 == null) {
-            return false;
-        }
-        if (set1.size() != set2.size()) {
-            return false;
-        }
-        return set1.containsAll(set2);
-    }
-
-    public static boolean isEqualLists(List<?> list1, List<?> list2) {
-        if (list1 == null && list2 == null) {
-            return true;
-        }
-        if (list1 == null || list2 == null) {
-            return false;
-        }
-        if (list1.size() != list2.size()) {
-            return false;
-        }
-        return list1.containsAll(list2);
-    }
 
     public static List<String> generateTagsList(String goal) {
         String noSymbols = goal.replaceAll("[$,.:;#@!?&*()1234567890]", "");
