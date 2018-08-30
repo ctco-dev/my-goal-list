@@ -42,20 +42,6 @@ public class GoalApi {
             "get|got|going|to|for|have|has|the|can|will|be|about"
     };
 
-    @GET
-    @RolesAllowed({"ADMIN", "USER"})
-    @Path("/search-user")
-    public List<UserLoginDto> getSearchedUser(String searchedUserName) {
-        List<User> userList = userStore.getUserByUsername(searchedUserName);
-        if (userList.size() != 0) {
-            return userList.stream()
-                    .map(userStore::convertToDto)
-                    .collect(Collectors.toList());
-        } else {
-            return Collections.emptyList();
-        }
-    }
-
     @POST
     @RolesAllowed({"ADMIN", "USER"})
     @Path("/search-user")
@@ -75,6 +61,26 @@ public class GoalApi {
                 }
             }
         }
+        return userDtoList;
+    }
+
+    //TODO Find out if method works as far as it has been made
+    @GET
+    @RolesAllowed({"ADMIN", "USER"})
+    @Path("/users-by-tags")
+    public List<UserSearchDto> getSimilarUserList() {
+        User currentUser = userStore.getCurrentUser();
+        List<UserSearchDto> userDtoList = new ArrayList<>();
+        List<Goal> goalsList = goalStore.getGoalsListFor(currentUser);
+        List<Tag> userTagListTemp = new ArrayList<>();
+        for (Goal item : goalsList) {
+            for (int i = 0; i < item.getTags().size(); i++) {
+                userTagListTemp.add(goalStore.getAllTagsForGoal(item).get(i));
+            }
+        }
+        //List of all current users goal tags.
+        List<Tag> userTagList = new ArrayList<>(new HashSet<>(userTagListTemp));
+
         return userDtoList;
     }
 

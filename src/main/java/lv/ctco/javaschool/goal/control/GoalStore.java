@@ -39,6 +39,25 @@ public class GoalStore {
         ).getResultList());
     }
 
+    //TODO Find out if query returns correct data
+    public List<Tag> getAllTagsForGoal(Goal goal) {
+        return em.createQuery(
+                "select t " +
+                        "from Tag t, Goal g " +
+                        "where g = :goal and t member of g.tags", Tag.class)
+                .setParameter("goal", goal)
+                .getResultList();
+    }
+//TODO Return list of most similar goals comparing by users Tag list
+//    public List<Goal> getSimularGoals(List<Tag> userTags) {
+//        return em.createQuery(
+//                "select g " +
+//                        "from Goal g " +
+//                        "where g.tags like :tags", Goal.class)
+//                .setParameter("tags", userTags)
+//                .getResultList();
+//    }
+
     public Tag addTag( String tagMsg ){
         Optional<Tag> tagFromDB= em.createQuery("select t from Tag t " +
                 "where upper(t.tagMessage) = :tagMsg ", Tag.class)
@@ -54,7 +73,7 @@ public class GoalStore {
         }
     }
 
-    public Optional<Goal> getGoalById(long goalId) {
+    public Optional<Goal> getGoalById(Long goalId) {
         return em.createQuery("select g from Goal g " +
                 "where g.id = :id ", Goal.class)
                 .setParameter("id", goalId)

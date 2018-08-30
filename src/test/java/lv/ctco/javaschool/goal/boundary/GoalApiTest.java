@@ -2,7 +2,6 @@ package lv.ctco.javaschool.goal.boundary;
 
 import lv.ctco.javaschool.auth.control.UserStore;
 import lv.ctco.javaschool.auth.entity.domain.User;
-import lv.ctco.javaschool.auth.entity.dto.UserLoginDto;
 import lv.ctco.javaschool.auth.entity.dto.UserSearchDto;
 import lv.ctco.javaschool.goal.control.GoalStore;
 import lv.ctco.javaschool.goal.entity.*;
@@ -22,6 +21,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
@@ -115,6 +116,7 @@ class GoalApiTest {
         assertEquals("abc", goalApi.getGoalById((long) 1).getGoalMessage());
     }
 
+
     @Test
     @DisplayName("SearchParameters: User has correct input search parameter")
     void getSearchParameters1() {
@@ -160,12 +162,29 @@ class GoalApiTest {
 //    @Test
 //    @DisplayName("Test getGoalsByUserId(): returns list of goals by user id")
 //    void getGoalsByUserId() {
-//        when(userStore.findUserById((long) 1))
-//                .thenReturn(user1);
+//        goalList1.add(goal);
+//        goalList1.add(goal2);
 //
-//        assertEquals(GoalDto.class, goalApi.getGoalById((long) 1).getClass());
-//        assertEquals(null, goalApi.getGoalById((long) 1).getGoalMessage());
-//        assertEquals(0, goalApi.getGoalById((long) 1).getId());
+//        when(userStore.findUserById(1L))
+//                .thenReturn(user1);
+//        when(goalStore.getGoalsListFor(user1))
+//                .thenReturn(goalList1);
+//        assertThat(goalApi.getGoalsByUserId(1L).get(0), is(goal));
+////        assertEquals(GoalDto.class, goalApi.getGoalById((long) 1).getClass());
+////        assertEquals(null, goalApi.getGoalById((long) 1).getGoalMessage());
+////        assertEquals(0, goalApi.getGoalById((long) 1).getId());
+//    }
+
+//    @Test
+//    @DisplayName("Test getGoalsByUserId(): returns list of goals by user id")
+//    void getGoalsByUserId2() {
+//        List<GoalDto> dtoList = new ArrayList<>();
+//        when(userStore.findUserById(1L))
+//                .thenReturn(user1);
+//        when(goalStore.getGoalsListFor(user1))
+//                .thenReturn(goalList1);
+//
+//        assertThat(goalApi.getGoalsByUserId(1L), is(dtoList));
 //    }
 
     @Test
