@@ -45,7 +45,7 @@ public class GoalStore {
         }
     }
 
-    public Optional<Goal> getGoalById(long goalId) {
+    public Optional<Goal> getGoalById(Long goalId) {
         return em.createQuery("select g from Goal g " +
                 "where g.id = :id ", Goal.class)
                 .setParameter("id", goalId)

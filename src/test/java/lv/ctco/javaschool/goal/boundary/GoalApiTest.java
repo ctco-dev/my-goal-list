@@ -15,16 +15,12 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.times;
@@ -32,6 +28,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
 
 @ExtendWith(MockitoExtension.class)
 class GoalApiTest {
@@ -75,6 +72,7 @@ class GoalApiTest {
         goal2.setUser(user2);
         goal2.setGoalMessage("cde");
 
+
         testLine1 = "I will become a programmer this year!";
         expResult1 = "programmer";
         testLine4 = "I will start to learn Java!";
@@ -88,7 +86,7 @@ class GoalApiTest {
                 .thenReturn(user1);
         when(goalStore.getGoalsListFor(user1))
                 .thenReturn(goalList1);
-        assertEquals(goalDtoList, goalApi.getMyGoals());
+        assertThat( TagParser.isEqualLists( goalApi.getMyGoals(),goalDtoList), is(true));
     }
 
     @Test
@@ -99,19 +97,19 @@ class GoalApiTest {
                 .thenReturn(user1);
         when(goalStore.getGoalsListFor(user1))
                 .thenReturn(goalList1);
-        assertEquals(goal.getUser().getUsername(), goalApi.getMyGoals().get(0).getUsername());
-        assertEquals(goal.getGoalMessage(), goalApi.getMyGoals().get(0).getGoalMessage());
-        assertEquals(goal.getId(), (Long) goalApi.getMyGoals().get(0).getId());
+        assertThat(goalApi.getMyGoals().get(0).getUsername(), is(goal.getUser().getUsername()));
+        assertThat(goalApi.getMyGoals().get(0).getGoalMessage(), is(goal.getGoalMessage()));
+        assertThat(goalApi.getMyGoals().get(0).getId(), is(goal.getId()));
     }
 
     @Test
     @DisplayName("Test getGoalById(): returns dto of goal by id")
     void testGetGoalById2() {
-        when(goalStore.getGoalById((long) 1))
+        when(goalStore.getGoalById( 1L))
                 .thenReturn(java.util.Optional.empty());
-        assertEquals(GoalDto.class, goalApi.getGoalDtoByGoalId((long) 1).getClass());
-        assertEquals(null, goalApi.getGoalDtoByGoalId((long) 1).getGoalMessage());
-        assertEquals(null, goalApi.getGoalDtoByGoalId((long) 1).getId());
+        assertThat( goalApi.getGoalDtoByGoalId( 1L ).getClass() == GoalDto.class, is(true));
+        assertThat( goalApi.getGoalDtoByGoalId(1L).getGoalMessage()==null, is(true));
+        assertThat( goalApi.getGoalDtoByGoalId(1L).getId()==null, is(true));
     }
 
     @Test
@@ -119,11 +117,10 @@ class GoalApiTest {
     void testGetGoalById() {
         when(goalStore.getGoalById(1L))
                 .thenReturn(java.util.Optional.ofNullable(goal));
-        assertEquals(new Long(1), goalApi.getGoalDtoByGoalId((long) 1).getId());
-        assertEquals(user1.getUsername(), goalApi.getGoalDtoByGoalId((long) 1).getUsername());
-        assertEquals("abc", goalApi.getGoalDtoByGoalId((long) 1).getGoalMessage());
+        assertThat( goalApi.getGoalDtoByGoalId(1L).getId(), is(1L));
+        assertThat( goalApi.getGoalDtoByGoalId(1L).getUsername(), is(user1.getUsername()));
+        assertThat( goalApi.getGoalDtoByGoalId(1L).getGoalMessage(), is("abc"));
     }
-
 
     @Test
     @DisplayName("Test parseStringToTags(String value): Checks work of tag list generation from goal message")
@@ -149,7 +146,7 @@ class GoalApiTest {
         assertThat(TagParser.isEqualSets(tagset1, goalApi.parseStringToTags(testLine1)), is(true));
         assertThat(TagParser.isEqualSets(tagset4, goalApi.parseStringToTags(testLine4)), is(true));
         assertThat(TagParser.isEqualSets(tagset1, goalApi.parseStringToTags(testLine4)), is(false));
-        assertNotNull(goalApi.parseStringToTags("some_text"));
+        assertThat( goalApi.parseStringToTags("some_text")!=null, is(true));
         assertThat(TagParser.isEqualSets(emptySet, goalApi.parseStringToTags("")), is(true));
     }
 

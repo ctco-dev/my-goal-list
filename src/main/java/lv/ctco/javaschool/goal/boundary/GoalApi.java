@@ -47,7 +47,7 @@ public class GoalApi {
     @GET
     @RolesAllowed({"ADMIN", "USER"})
     @Path("/mygoals/{id}")
-    public GoalDto getGoalDtoByGoalId(@PathParam("id") long goalId) {
+    public GoalDto getGoalDtoByGoalId(@PathParam("id") Long goalId) {
         Optional<Goal> goal = goalStore.getGoalById(goalId);
         if (goal.isPresent()) {
             Goal g = goal.get();
