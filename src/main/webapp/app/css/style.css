@@ -1,0 +1,45 @@
+/*Overall CSS */
+body {
+    text-align: right;
+    background-color: #e6e6e6;
+    margin: 3px;
+}
+
+h1 {
+    color: black;
+    display: block;
+    font-family: Cursive;
+    text-align: center;
+}
+
+#menu {
+    display: inline-block;
+}
+
+.button-div {
+    float: right;
+}
+
+.menu-button {
+    background-color: deepskyblue;
+    border-radius: 4px;
+    color: white;
+    display: inline-block;
+    font-size: 100%;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+}
+
+#personal {
+    display: inline-block;
+    float: left;
+}
+
+#form {
+    text-align: center;
+}
+
+form {
+    display: inline-block;
+}
