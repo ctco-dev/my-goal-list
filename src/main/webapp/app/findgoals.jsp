@@ -87,22 +87,23 @@
    }
 
    function findGoalByTags() {
-       var username = document.getElementById("username");
-       var arr=[];
-       var dto = {
-//           "tagMessage": tagMsg.value
-       };
-       arr.add(dto);
-       console.log(JSON.stringify(dto));
+//       var username = document.getElementById("username");
+//       var arr=[];
+//       var dto = {
+////           "tagMessage": tagMsg.value
+//       };
+//       arr.add(dto);
+//       console.log(JSON.stringify(dto));
        fetch("<c:url value='/api/goal/findgoals'/>", {
-           "method": "POST",
+           "method": "GET",
            headers: {
                'Accept': 'application/json',
                'Content-Type': 'application/json'
-           },
-           body: JSON.stringify(arr)
+           }
        }).then(function (response) {
-
+           return response.json();
+       }).then(function (similargoals) {
+           console.log(JSON.stringify(similargoals));
        });
    }
 

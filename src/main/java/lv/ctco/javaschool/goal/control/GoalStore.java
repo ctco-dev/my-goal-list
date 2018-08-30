@@ -35,11 +35,9 @@ public class GoalStore {
                 "SELECT new lv.ctco.javaschool.goal.entity.TagDto(t.tagMessage, COUNT(t)) " +
                         "FROM Tag t, Goal g " +
                         "WHERE t MEMBER OF g.tags " +
-                        "GROUP BY t.id"
-        ).getResultList());
+                        "GROUP BY t.id").getResultList());
     }
 
-    //TODO Find out if query returns correct data
     public List<Tag> getAllTagsForGoal(Goal goal) {
         return em.createQuery(
                 "select t " +

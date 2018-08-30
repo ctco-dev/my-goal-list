@@ -39,7 +39,7 @@ public class GoalApi {
             "maybe|year|years|one|two|three|four|five|six|seven|eight|nine|ten|from|i|a|and",
             "are|if|of|off|on|by|next|last|use|using|used|do|doing|what|determined|am|want",
             "an|wanted|goal|goals|achieve|me|my|in|out|above|wish|will|was|is|not|new|old",
-            "get|got|going|to|for|have|has|the|can|will|be|about"
+            "get|got|going|to|for|have|has|the|can|will|be|about|or"
     };
 
     @POST
@@ -64,10 +64,9 @@ public class GoalApi {
         return userDtoList;
     }
 
-    //TODO Find out if method works as far as it has been made
     @GET
     @RolesAllowed({"ADMIN", "USER"})
-    @Path("/users-by-tags")
+    @Path("/findgoals")
     public List<UserSearchDto> getSimilarUserList() {
         User currentUser = userStore.getCurrentUser();
         List<UserSearchDto> userDtoList = new ArrayList<>();
@@ -78,7 +77,7 @@ public class GoalApi {
                 userTagListTemp.add(goalStore.getAllTagsForGoal(item).get(i));
             }
         }
-        //List of all current users goal tags.
+        //List of all current users goal tags without duplicates.
         List<Tag> userTagList = new ArrayList<>(new HashSet<>(userTagListTemp));
 
         return userDtoList;
