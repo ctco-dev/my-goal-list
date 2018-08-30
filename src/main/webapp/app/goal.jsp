@@ -11,17 +11,21 @@
 </head>
 <body onload="onLoad()">
 
-<table id="goal-fields">
-    <tr>
-        <th>Author: {{username}}</th>
+<table id="goals-list" class="w3-table-all w3-hoverable">
+    <tr class="w3-blue">
+        <th>My goals</th>
+        <th>Deadline</th>
+        <th>Days left</th>
+
     </tr>
-    <tr>
-        <th>To be completed till: {{deadlineDate}} (days left: {{daysLeft}})</th>
-    </tr>
-    <tr>
-        <th>
-            <h2>{{goalMessage}}</h2>
-        </th>
+    <tr w3-repeat="goals" id="{{id}}" onclick="redirectToGoalsAndComments(id)">
+
+        <td>{{goalMessage}}</td>
+
+        <td>{{deadlineDate}}</td>
+
+        <td>{{daysLeft}}</td>
+
     </tr>
 </table>
 
