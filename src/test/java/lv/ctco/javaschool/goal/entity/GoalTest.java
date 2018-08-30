@@ -12,6 +12,7 @@ import java.util.Objects;
 import java.util.Set;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 
 public class GoalTest {
@@ -69,6 +70,6 @@ public class GoalTest {
         tagSet.add( new Tag("tag1")  );
         Goal goal = new Goal();
         goal.setTags(tagSet);
-        assertThat(Objects.equals(goal.getTags(), tagSet), is(true) );
+        assertThat(goal.getTags(), equalTo(tagSet));
     }
 }

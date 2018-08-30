@@ -2,14 +2,19 @@ package lv.ctco.javaschool.goal.boundary;
 
 import lv.ctco.javaschool.auth.control.UserStore;
 import lv.ctco.javaschool.auth.entity.domain.User;
+import lv.ctco.javaschool.auth.entity.dto.UserLoginDto;
 import lv.ctco.javaschool.goal.control.DtoConventer;
 import lv.ctco.javaschool.goal.control.GoalStore;
 import lv.ctco.javaschool.goal.control.TagParser;
 import lv.ctco.javaschool.goal.control.DateTimeConverter;
+import lv.ctco.javaschool.goal.entity.domain.Comment;
 import lv.ctco.javaschool.goal.entity.domain.Goal;
 import lv.ctco.javaschool.goal.entity.domain.Tag;
+import lv.ctco.javaschool.goal.entity.dto.CommentDto;
 import lv.ctco.javaschool.goal.entity.dto.GoalDto;
 import lv.ctco.javaschool.goal.entity.dto.GoalFormDto;
+import lv.ctco.javaschool.goal.entity.dto.MessageDto;
+import lv.ctco.javaschool.goal.entity.dto.TagDto;
 
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
@@ -20,8 +25,11 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -29,10 +37,7 @@ import javax.json.JsonObject;
 import javax.json.JsonString;
 import javax.json.JsonValue;
 import java.time.format.DateTimeFormatter;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
-import static java.time.temporal.ChronoUnit.DAYS;
 
 @Path("/goal")
 @Stateless
@@ -137,20 +142,17 @@ public class GoalApi {
     @Path("/search-user")
     public List<UserLoginDto> getSearchedUser(String searchedUserName) {
         List<User> userList = userStore.getUserByUsername(searchedUserName);
-        if (userList.size() != 0) {
-            return userList.stream()
-                    .map(userStore::convertToDto)
-                    .collect(Collectors.toList());
-        } else {
-            return Collections.emptyList();
-        }
+        return userList.stream()
+                .map(userStore::convertToDto)
+                .collect(Collectors.toList());
+
     }
 
     @POST
     @RolesAllowed({"ADMIN", "USER"})
     @Path("/search-user")
     public List<UserLoginDto> getSearchParameters(JsonObject searchDto) {
-        List<UserLoginDto> userDtoList= new ArrayList<>();
+        List<UserLoginDto> userDtoList = new ArrayList<>();
         for (Map.Entry<String, JsonValue> pair : searchDto.entrySet()) {
             String adr = pair.getKey();
             String value = ((JsonString) pair.getValue()).getString();

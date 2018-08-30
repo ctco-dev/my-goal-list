@@ -1,6 +1,6 @@
 package lv.ctco.javaschool.goal.entity;
 
-import lv.ctco.javaschool.goal.entity.GoalDto;
+import lv.ctco.javaschool.goal.entity.dto.GoalDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

@@ -1,5 +1,6 @@
 package lv.ctco.javaschool.goal.entity;
 
+import lv.ctco.javaschool.goal.entity.dto.CommentDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

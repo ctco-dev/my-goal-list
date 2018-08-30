@@ -1,14 +1,18 @@
 package lv.ctco.javaschool.goal.boundary;
 
 import lv.ctco.javaschool.goal.control.GoalStore;
+import lv.ctco.javaschool.goal.control.TagParser;
+import lv.ctco.javaschool.goal.entity.domain.Comment;
 import lv.ctco.javaschool.goal.entity.domain.Goal;
 import lv.ctco.javaschool.goal.entity.domain.Tag;
+import lv.ctco.javaschool.goal.entity.dto.CommentDto;
 import lv.ctco.javaschool.goal.entity.dto.GoalDto;
 import lv.ctco.javaschool.goal.entity.dto.GoalFormDto;
 import lv.ctco.javaschool.auth.control.UserStore;
 import lv.ctco.javaschool.auth.entity.domain.User;
 import lv.ctco.javaschool.auth.entity.dto.UserLoginDto;
 
+import lv.ctco.javaschool.goal.entity.dto.MessageDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -29,9 +33,15 @@ import java.util.Optional;
 import java.util.Set;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.times;
@@ -104,7 +114,7 @@ class GoalApiTest {
                 .thenReturn(user1);
         when(goalStore.getGoalsListFor(user1))
                 .thenReturn(goalList1);
-        assertThat( Objects.equals( goalApi.getMyGoals(), goalDtoList), is(true));
+        assertThat(goalApi.getMyGoals(), equalTo(goalDtoList));
     }
 
     @Test
@@ -135,39 +145,39 @@ class GoalApiTest {
     void testGetGoalById2() {
         when(goalStore.getGoalById( 1L))
                 .thenReturn(java.util.Optional.empty());
-        assertEquals(GoalDto.class, goalApi.getGoalById((long) 1).getClass());
+        assertThat( goalApi.getGoalDtoByGoalId(1L).getClass(), equalTo(GoalDto.class));
         assertThat( goalApi.getGoalDtoByGoalId(1L).getGoalMessage(), nullValue());
         assertThat( goalApi.getGoalDtoByGoalId(1L).getId(), nullValue());
     }
 
 
-//    @Test
-//    @DisplayName("Test parseStringToTags(String value): Checks work of tag list generation from goal message")
-//    void testParsingGoalStringToTags() {
-//        Tag tag1 = new Tag(expResult1);
-//        Set<Tag> tagset1 = new HashSet<>();
-//        tagset1.add(tag1);
-//        String[] arr = expResult4.split(" ");
-//        Tag tag4a = new Tag(arr[0]);
-//        Tag tag4b = new Tag(arr[1]);
-//        Set<Tag> tagset4 = new HashSet<>();
-//        tagset4.add(tag4a);
-//        tagset4.add(tag4b);
-//        Set<Tag> emptySet = new HashSet<>();
-//        doAnswer(invocation -> {
-//            String txt = invocation.getArgument(0).toString();
-//            if (txt.equals("")) return null;
-//            if (txt.equals(expResult1)) return tag1;
-//            if (txt.equals(arr[0])) return tag4a;
-//            if (txt.equals(arr[1])) return tag4b;
-//            return new Tag(txt);
-//        }).when(goalStore).addTag(any(String.class));
-//        assertThat(Objects.equals(tagset1, goalApi.parseStringToTags(testLine1)), is(true));
-//        assertThat(Objects.equals(tagset4, goalApi.parseStringToTags(testLine4)), is(true));
-//        assertThat(Objects.equals(tagset1, goalApi.parseStringToTags(testLine4)), is(false));
-//        assertThat( goalApi.parseStringToTags("some_text"), notNullValue());
-//        assertThat(Objects.equals(emptySet, goalApi.parseStringToTags("")), is(true));
-//    }
+    @Test
+    @DisplayName("Test parseStringToTags(String value): Checks work of tag list generation from goal message")
+    void testParsingGoalStringToTags() {
+        Tag tag1 = new Tag(expResult1);
+        Set<Tag> tagset1 = new HashSet<>();
+        tagset1.add(tag1);
+        String[] arr = expResult4.split(" ");
+        Tag tag4a = new Tag(arr[0]);
+        Tag tag4b = new Tag(arr[1]);
+        Set<Tag> tagset4 = new HashSet<>();
+        tagset4.add(tag4a);
+        tagset4.add(tag4b);
+        Set<Tag> emptySet = new HashSet<>();
+        doAnswer(invocation -> {
+            String txt = invocation.getArgument(0).toString();
+            if (txt.equals("")) return null;
+            if (txt.equals(expResult1)) return tag1;
+            if (txt.equals(arr[0])) return tag4a;
+            if (txt.equals(arr[1])) return tag4b;
+            return new Tag(txt);
+        }).when(goalStore).addTag(any(String.class));
+        assertThat(goalApi.parseStringToTags(testLine1), equalTo(tagset1));
+        assertThat(goalApi.parseStringToTags(testLine4), equalTo(tagset4));
+        assertThat(goalApi.parseStringToTags(testLine4), not(equalTo(tagset1)));
+        assertThat(goalApi.parseStringToTags("some_text"), notNullValue());
+        assertThat(goalApi.parseStringToTags(""), equalTo(emptySet));
+    }
 
     @Test
     @DisplayName("Test createNewGoal() : check if persists new Goal")
@@ -220,12 +230,12 @@ class GoalApiTest {
         String testLine4 = "I will start to learn Java!";
         String expResult4 = "learn Java";
 
-        assertEquals(expResult1, String.join(" ", goalApi.generateTagsList(testLine1)));
-        assertEquals(expResult2, String.join(" ", goalApi.generateTagsList(testLine2)));
-        assertEquals(expResult3, String.join(" ", goalApi.generateTagsList(testLine3)));
-        assertEquals(expResult4, String.join(" ", goalApi.generateTagsList(testLine4)));
-        assertFalse(expResult2.equals(String.join(" ", goalApi.generateTagsList(testLine1))));
-        assertFalse(expResult1.equals(String.join(" ", goalApi.generateTagsList(testLine2))));
+        assertEquals(expResult1, String.join(" ", TagParser.generateTagsList(testLine1)));
+        assertEquals(expResult2, String.join(" ", TagParser.generateTagsList(testLine2)));
+        assertEquals(expResult3, String.join(" ", TagParser.generateTagsList(testLine3)));
+        assertEquals(expResult4, String.join(" ", TagParser.generateTagsList(testLine4)));
+        assertFalse(expResult2.equals(String.join(" ", TagParser.generateTagsList(testLine1))));
+        assertFalse(expResult1.equals(String.join(" ", TagParser.generateTagsList(testLine2))));
     }
 
     @Test

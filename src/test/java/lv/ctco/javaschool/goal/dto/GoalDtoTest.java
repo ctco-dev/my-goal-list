@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Objects;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 
 class GoalDtoTest {
@@ -70,6 +71,6 @@ class GoalDtoTest {
         newList.add("tag3");
         GoalDto dto = new GoalDto();
         dto.setTagList(newList);
-        assertThat(Objects.equals( dto.getTagList(), newList), is(true));
+        assertThat(dto.getTagList(), equalTo(newList));
     }
 }
