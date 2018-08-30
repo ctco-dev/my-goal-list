@@ -3,10 +3,12 @@ package lv.ctco.javaschool.goal.boundary;
 import lv.ctco.javaschool.auth.control.UserStore;
 import lv.ctco.javaschool.auth.entity.domain.User;
 import lv.ctco.javaschool.goal.control.GoalStore;
-import lv.ctco.javaschool.goal.entity.Goal;
-import lv.ctco.javaschool.goal.entity.GoalDto;
-import lv.ctco.javaschool.goal.entity.GoalFormDto;
-import lv.ctco.javaschool.goal.entity.Tag;
+import lv.ctco.javaschool.goal.control.TagParser;
+import lv.ctco.javaschool.goal.control.TypeConverter;
+import lv.ctco.javaschool.goal.entity.domain.Goal;
+import lv.ctco.javaschool.goal.entity.domain.Tag;
+import lv.ctco.javaschool.goal.entity.dto.GoalDto;
+import lv.ctco.javaschool.goal.entity.dto.GoalFormDto;
 
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
@@ -17,17 +19,11 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-
-import static java.time.temporal.ChronoUnit.DAYS;
 
 @Path("/goal")
 @Stateless
@@ -37,9 +33,6 @@ public class GoalApi {
     @Inject
     private GoalStore goalStore;
 
-    public static DateTimeFormatter formatterDate = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-    public static DateTimeFormatter formatterDateTime = DateTimeFormatter.ofPattern("dd.MM.yyyy kk:mm");
-
     @GET
     @RolesAllowed({"ADMIN", "USER"})
     @Path("/mygoals")
@@ -47,7 +40,7 @@ public class GoalApi {
         User currentUser = userStore.getCurrentUser();
         List<Goal> goalsList = goalStore.getGoalsListFor(currentUser);
         return goalsList.stream()
-                .map(this::convertToDto)
+                .map(TypeConverter::convertGoalToGoalDto)
                 .collect(Collectors.toList());
     }
 
@@ -58,7 +51,7 @@ public class GoalApi {
         Optional<Goal> goal = goalStore.getGoalById(goalId);
         if (goal.isPresent()) {
             Goal g = goal.get();
-            return convertToDto(g);
+            return TypeConverter.convertGoalToGoalDto(g);
         } else {
             return new GoalDto();
         }
@@ -74,7 +67,7 @@ public class GoalApi {
             goal.setGoalMessage(goalDto.getGoalMessage());
             goal.setTags(parseStringToTags(goalDto.getGoalMessage()));
 
-            LocalDate localDate = LocalDate.parse(goalDto.getDeadline(), GoalApi.formatterDate);
+            LocalDate localDate = LocalDate.parse(goalDto.getDeadline(), TypeConverter.formatterDate);
             goal.setDeadlineDate(localDate);
 
             goal.setUser(user);
@@ -83,32 +76,8 @@ public class GoalApi {
         }
     }
 
-    GoalDto convertToDto(Goal goal) {
-        GoalDto dto = new GoalDto();
-        dto.setUsername(goal.getUser().getUsername());
-        dto.setGoalMessage(goal.getGoalMessage());
-        dto.setDeadlineDate(convertDate(goal.getDeadlineDate()));
-        dto.setRegisteredDate(convertDateTime(goal.getRegisteredDate()));
-        dto.setDaysLeft(countDaysLeft(goal.getDeadlineDate()));
-        dto.setId(goal.getId());
-        return dto;
-    }
-
-    long countDaysLeft(LocalDate deadlineDate) {
-        LocalDate localDate = LocalDate.now();
-        return DAYS.between(localDate, deadlineDate);
-    }
-
-    String convertDate(LocalDate date) {
-        return date.format(GoalApi.formatterDate);
-    }
-
-    String convertDateTime(LocalDateTime date) {
-        return date.format(GoalApi.formatterDateTime);
-    }
-
     Set<Tag> parseStringToTags(String value) {
-        List<String> tagList = generateTagsList(value);
+        List<String> tagList = TagParser.generateTagsList(value);
         Set<Tag> tagSet = new HashSet<>();
 
         for (String item : tagList) {
@@ -121,21 +90,5 @@ public class GoalApi {
         return tagSet;
     }
 
-    private String[] patternList = new String[]{
-            "change|become|i|language|field|apply|app|application|start|end|more|this|that",
-            "maybe|year|years|one|two|three|four|five|six|seven|eight|nine|ten|from|i|a|and",
-            "are|if|of|off|on|by|next|last|use|using|used|do|doing|what|determined|am|want",
-            "an|wanted|goal|goals|achieve|me|my|in|out|above|wish|will|was|is|not|new|old",
-            "get|got|going|to|for|have|has|the|can|will|be|about"
-    };
 
-    List<String> generateTagsList(String goal) {
-        String noSymbols = goal.replaceAll("[$,.:;#@!?&*()1234567890]", "");
-        for (String s : patternList) {
-            Pattern stopWords = Pattern.compile("\\b(?:" + s + ")\\b\\s*", Pattern.CASE_INSENSITIVE);
-            Matcher matcher = stopWords.matcher(noSymbols);
-            noSymbols = matcher.replaceAll("");
-        }
-        return Arrays.asList(noSymbols.split(" "));
-    }
 }

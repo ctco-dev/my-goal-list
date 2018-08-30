@@ -1,13 +1,12 @@
 package lv.ctco.javaschool.goal.entity;
 
 import lv.ctco.javaschool.auth.entity.domain.User;
-import lv.ctco.javaschool.goal.entity.Goal;
-import org.junit.jupiter.api.DisplayName;
+import lv.ctco.javaschool.goal.entity.domain.Goal;
+import lv.ctco.javaschool.goal.entity.domain.Tag;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.Month;
 import java.util.HashSet;
 import java.util.Set;
 
