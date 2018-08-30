@@ -14,9 +14,9 @@ public class TypeConverter {
     public static DateTimeFormatter formatterDate = DateTimeFormatter.ofPattern("dd.MM.yyyy");
     public static DateTimeFormatter formatterDateTime = DateTimeFormatter.ofPattern("dd.MM.yyyy kk:mm");
 
-    public static long countDaysLeft(LocalDate deadlineDate) {
+    public static int countDaysLeft(LocalDate deadlineDate) {
         LocalDate localDate = LocalDate.now();
-        return DAYS.between(localDate, deadlineDate);
+        return ((int) DAYS.between(localDate, deadlineDate));
     }
 
     public static String convertDate(LocalDate date) {

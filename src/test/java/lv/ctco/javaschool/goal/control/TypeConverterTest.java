@@ -41,10 +41,10 @@ class TypeConverterTest {
     @DisplayName("Test countDaysLeft(LocalDate deadlineDate): Checks that input date corresponds output string")
     void testCountDaysLeft() {
         LocalDate today = LocalDate.now();
-        long fewDays = 4L;
+        int fewDays = 4;
         LocalDate nextFewDays = LocalDate.now().plusDays(fewDays);
         assertThat(TypeConverter.countDaysLeft(nextFewDays), is(fewDays));
-        assertThat(TypeConverter.countDaysLeft(nextFewDays), not(fewDays + 1L));
+        assertThat(TypeConverter.countDaysLeft(nextFewDays), not(fewDays +1));
     }
 
     @Test
