@@ -86,12 +86,5 @@ public class UserStore {
             throw new InvalidPasswordException();
         }
     }
-    public UserLoginDto convertToDto(User user) {
-        UserLoginDto dto = new UserLoginDto();
-        dto.setUsername(user.getUsername());
-        dto.setPhone(user.getPhone());
-        dto.setEmail(user.getEmail());
-        return dto;
-    }
 
 }

@@ -36,8 +36,6 @@ import java.util.stream.Collectors;
 import javax.json.JsonObject;
 import javax.json.JsonString;
 import javax.json.JsonValue;
-import java.time.format.DateTimeFormatter;
-
 
 @Path("/goal")
 @Stateless
@@ -106,24 +104,21 @@ public class GoalApi {
     @GET
     @RolesAllowed({"ADMIN", "USER"})
     @Path("{id}/comments")
-    public List<CommentDto> getCommentsForGoalById(@PathParam("id") long goalId) {
+    public List<CommentDto> getCommentsForGoalById(@PathParam("id") Long goalId) {
         Optional<Goal> goal = goalStore.getGoalById(goalId);
-        List<CommentDto> commentDtos = new ArrayList<>();
         if (goal.isPresent()) {
             List<Comment> comments = goalStore.getCommentsForGoal(goal.get());
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy kk:mm");
-            for (Comment c : comments) {
-                CommentDto commentDto = new CommentDto(c.getUser().getUsername(), c.getRegisteredDate().format(formatter), c.getCommentMessage());
-                commentDtos.add(commentDto);
-            }
+            return comments.stream()
+                    .map(DtoConventer::convertCommentToCommentDto)
+                    .collect(Collectors.toList());
         }
-        return commentDtos;
+        return new ArrayList<CommentDto>();
     }
 
     @POST
     @RolesAllowed({"ADMIN", "USER"})
     @Path("{id}/comments")
-    public void setCommentForGoalById(@PathParam("id") long goalId, MessageDto msg) {
+    public void setCommentForGoalById(@PathParam("id") Long goalId, MessageDto msg) {
         Optional<Goal> goal = goalStore.getGoalById(goalId);
         if (goal.isPresent()) {
             Comment comment = new Comment();
@@ -143,7 +138,7 @@ public class GoalApi {
     public List<UserLoginDto> getSearchedUser(String searchedUserName) {
         List<User> userList = userStore.getUserByUsername(searchedUserName);
         return userList.stream()
-                .map(userStore::convertToDto)
+                .map(DtoConventer::convertUserToUserLoginDto)
                 .collect(Collectors.toList());
 
     }
@@ -158,13 +153,9 @@ public class GoalApi {
             String value = ((JsonString) pair.getValue()).getString();
             if (adr.equals("usersearch")) {
                 List<User> userList = userStore.getUserByUsername(value);
-                if (userList.size() != 0) {
-                    userDtoList = userList.stream()
-                            .map(userStore::convertToDto)
-                            .collect(Collectors.toList());
-                } else {
-                    userDtoList = Collections.emptyList();
-                }
+                userDtoList = userList.stream()
+                        .map(DtoConventer::convertUserToUserLoginDto)
+                        .collect(Collectors.toList());
             }
         }
         return userDtoList;

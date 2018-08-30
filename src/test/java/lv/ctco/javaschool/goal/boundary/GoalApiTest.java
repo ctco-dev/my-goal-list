@@ -1,5 +1,6 @@
 package lv.ctco.javaschool.goal.boundary;
 
+import lv.ctco.javaschool.goal.control.DtoConventer;
 import lv.ctco.javaschool.goal.control.GoalStore;
 import lv.ctco.javaschool.goal.control.TagParser;
 import lv.ctco.javaschool.goal.entity.domain.Comment;
@@ -28,7 +29,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 
@@ -95,7 +95,7 @@ class GoalApiTest {
         goal.setGoalMessage("abc");
         goal.setRegisteredDate(LocalDateTime.now());
         goal.setDeadlineDate(LocalDate.now().plusDays(1));
-        goal.setId((long) 1);
+        goal.setId(1L);
         goal.setTags(null);
 
         goal2.setUser(user2);
@@ -208,14 +208,14 @@ class GoalApiTest {
     @DisplayName("Test getCommentsForGoalById(): returns Comments dto of goal by id")
     void getCommentsForGoalById() {
         comments.add(comment1);
-        when(goalStore.getGoalById((long) 1))
+        when(goalStore.getGoalById(1l))
                 .thenReturn(java.util.Optional.ofNullable(goal));
         when(goalStore.getCommentsForGoal(goal))
                 .thenReturn(comments);
 
-        assertEquals(CommentDto.class, goalApi.getCommentsForGoalById(1).get(0).getClass());
-        assertEquals("hi", goalApi.getCommentsForGoalById(1).get(0).getCommentMessage());
-        assertEquals("user", goalApi.getCommentsForGoalById(1).get(0).getUsername());
+        assertEquals(CommentDto.class, goalApi.getCommentsForGoalById(1L).get(0).getClass());
+        assertEquals("hi", goalApi.getCommentsForGoalById(1L).get(0).getCommentMessage());
+        assertEquals("user", goalApi.getCommentsForGoalById(1L).get(0).getUsername());
     }
 
     @Test
@@ -241,13 +241,13 @@ class GoalApiTest {
     @Test
     @DisplayName("getCommentsForGoalById(): returns empty Comments dto of goal")
     void getCommentsForGoalById2() {
-        when(goalStore.getGoalById((long) 1))
+        when(goalStore.getGoalById(1L))
                 .thenReturn(java.util.Optional.ofNullable(goal));
         when(goalStore.getCommentsForGoal(goal))
                 .thenReturn(comments);
 
-        assertEquals(0, goalApi.getCommentsForGoalById(1).size());
-        assertEquals(commentDtos.getClass(), goalApi.getCommentsForGoalById(1).getClass());
+        assertEquals(0, goalApi.getCommentsForGoalById(1L).size());
+        assertEquals(commentDtos.getClass(), goalApi.getCommentsForGoalById(1L).getClass());
     }
 
     @Test
@@ -257,10 +257,10 @@ class GoalApiTest {
         msg.setMessage("hi");
         when(userStore.getCurrentUser())
                 .thenReturn(user1);
-        when(goalStore.getGoalById((long) 1))
+        when(goalStore.getGoalById(1L))
                 .thenReturn(Optional.ofNullable(goal));
 
-        goalApi.setCommentForGoalById(1, msg);
+        goalApi.setCommentForGoalById(1L, msg);
 
         verify(goalStore, times(1)).addComment(any(Comment.class));
     }
@@ -270,9 +270,9 @@ class GoalApiTest {
     void setCommentForGoalById2() {
         MessageDto msg = new MessageDto();
         msg.setMessage("hi");
-        when(goalStore.getGoalById((long) 1))
+        when(goalStore.getGoalById(1L))
                 .thenReturn(Optional.empty());
-        assertThrows(IllegalArgumentException.class, () -> goalApi.setCommentForGoalById(1, msg));
+        assertThrows(IllegalArgumentException.class, () -> goalApi.setCommentForGoalById(1L, msg));
     }
 
     @Test
@@ -289,8 +289,6 @@ class GoalApiTest {
                 .build();
         when(userStore.getUserByUsername("us"))
                 .thenReturn(userList);
-        when(userStore.convertToDto(userList.get(0)))
-                .thenReturn(dto);
         assertEquals(userDtoList.get(0).getUsername(), goalApi.getSearchParameters(searchDto).get(0).getUsername());
         assertEquals(userDtoList.get(0).getEmail(), goalApi.getSearchParameters(searchDto).get(0).getEmail());
         assertEquals(userDtoList.get(0).getPhone(), goalApi.getSearchParameters(searchDto).get(0).getPhone());

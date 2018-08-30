@@ -2,7 +2,6 @@ package lv.ctco.javaschool.goal.entity.domain;
 
 import lv.ctco.javaschool.auth.entity.domain.User;
 
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;

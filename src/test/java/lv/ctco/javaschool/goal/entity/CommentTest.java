@@ -13,10 +13,10 @@ class CommentTest {
     @Test
     @DisplayName("Ids should be equal")
     void getAndSetId() {
-        Long l=123456789L;
+        Long newId=123456789L;
         Comment comment = new Comment();
-        comment.setId(l);
-        assertEquals(l, comment.getId());
+        comment.setId(newId);
+        assertEquals(newId, comment.getId());
     }
 
     @Test

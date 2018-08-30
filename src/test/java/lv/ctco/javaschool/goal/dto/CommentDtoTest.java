@@ -1,4 +1,4 @@
-package lv.ctco.javaschool.goal.entity;
+package lv.ctco.javaschool.goal.dto;
 
 import lv.ctco.javaschool.goal.entity.dto.CommentDto;
 import org.junit.jupiter.api.DisplayName;

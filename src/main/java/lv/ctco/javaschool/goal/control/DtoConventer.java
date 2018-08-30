@@ -2,7 +2,9 @@ package lv.ctco.javaschool.goal.control;
 
 import lv.ctco.javaschool.auth.entity.domain.User;
 import lv.ctco.javaschool.auth.entity.dto.UserLoginDto;
+import lv.ctco.javaschool.goal.entity.domain.Comment;
 import lv.ctco.javaschool.goal.entity.domain.Goal;
+import lv.ctco.javaschool.goal.entity.dto.CommentDto;
 import lv.ctco.javaschool.goal.entity.dto.GoalDto;
 
 public class DtoConventer {
@@ -24,5 +26,14 @@ public class DtoConventer {
         dto.setEmail(user.getEmail());
         return dto;
     }
+
+    public static CommentDto convertCommentToCommentDto(Comment comment) {
+        CommentDto dto = new CommentDto();
+        dto.setUsername(comment.getUser().getUsername());
+        dto.setRegisteredDate(comment.getRegisteredDate().format(DateTimeConverter.formatterDateTime));
+        dto.setCommentMessage(comment.getCommentMessage());
+        return dto;
+    }
+
 
 }
