@@ -104,7 +104,7 @@ public class GoalApi {
     @GET
     @RolesAllowed({"ADMIN", "USER"})
     @Path("{id}/comments")
-    public List<CommentDto> getCommentsForGoalById(@PathParam("id") Long goalId) {
+    public List<CommentDto> returnAllCommentsForGoalById(@PathParam("id") Long goalId) {
         Optional<Goal> goal = goalStore.getGoalById(goalId);
         if (goal.isPresent()) {
             List<Comment> comments = goalStore.getCommentsForGoal(goal.get());
@@ -118,7 +118,7 @@ public class GoalApi {
     @POST
     @RolesAllowed({"ADMIN", "USER"})
     @Path("{id}/comments")
-    public void setCommentForGoalById(@PathParam("id") Long goalId, MessageDto msg) {
+    public void saveNewCommentsForGoalById(@PathParam("id") Long goalId, MessageDto msg) {
         Optional<Goal> goal = goalStore.getGoalById(goalId);
         if (goal.isPresent()) {
             Comment comment = new Comment();

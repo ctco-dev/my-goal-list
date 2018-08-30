@@ -7,7 +7,8 @@ import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 
 class CommentTest {
     @Test
@@ -16,7 +17,7 @@ class CommentTest {
         Long newId=123456789L;
         Comment comment = new Comment();
         comment.setId(newId);
-        assertEquals(newId, comment.getId());
+        assertThat(comment.getId(), is(newId));
     }
 
     @Test
@@ -29,9 +30,8 @@ class CommentTest {
         user.setPhone("+37123456789");
         Comment comment = new Comment();
         comment.setUser(user);
-        assertEquals(user, comment.getUser());
+        assertThat(comment.getUser(), is(user));
     }
-
 
     @Test
     @DisplayName("RegisteredDate should be equal")
@@ -39,7 +39,7 @@ class CommentTest {
         LocalDateTime newDt = LocalDateTime.now();
         Comment comment = new Comment();
         comment.setRegisteredDate(newDt);
-        assertEquals(newDt, comment.getRegisteredDate() );
+        assertThat(comment.getRegisteredDate(), is(newDt));
     }
 
     @Test
@@ -48,7 +48,6 @@ class CommentTest {
         String newMsg="test comment";
         Comment comment = new Comment();
         comment.setCommentMessage(newMsg);
-        assertEquals(newMsg, comment.getCommentMessage());
+        assertThat(comment.getCommentMessage(), is(newMsg));
     }
-
 }

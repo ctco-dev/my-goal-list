@@ -30,16 +30,6 @@ public class GoalStore {
         em.persist(goal);
     }
 
-
-    public List<TagDto> getAllTagList() {
-        return new ArrayList<>( em.createQuery(
-                "SELECT new lv.ctco.javaschool.goal.entity.dto.TagDto(t.tagMessage, COUNT(t)) " +
-                        "FROM Tag t, Goal g " +
-                        "WHERE t MEMBER OF g.tags " +
-                        "GROUP BY t.id"
-        ).getResultList());
-    }
-
     public Tag addTag( String tagMsg ){
         if (tagMsg.equals("")) return null;
         Optional<Tag> tagFromDB= em.createQuery("select t from Tag t " +
