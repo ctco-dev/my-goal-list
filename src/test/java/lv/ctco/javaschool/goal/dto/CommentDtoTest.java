@@ -34,7 +34,7 @@ class CommentDtoTest {
     void getAndSetCommentMessage() {
         LocalDateTime newDt = LocalDateTime.now();
         CommentDto dto = new CommentDto();
-        dto.setRegisteredDate(newDt.format(DateTimeConverter.formatterDateTime));
-        assertThat(dto.getRegisteredDate(), is(newDt.format(DateTimeConverter.formatterDateTime)));
+        dto.setRegisteredDate(newDt.format(DateTimeConverter.FORMATTER_DATE_TIME));
+        assertThat(dto.getRegisteredDate(), is(newDt.format(DateTimeConverter.FORMATTER_DATE_TIME)));
     }
 }

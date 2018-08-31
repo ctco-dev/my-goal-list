@@ -33,7 +33,7 @@ public class DtoConvener {
     public static CommentDto convertCommentToCommentDto(Comment comment) {
         CommentDto dto = new CommentDto();
         dto.setUsername(comment.getUser().getUsername());
-        dto.setRegisteredDate(comment.getRegisteredDate().format(DateTimeConverter.formatterDateTime));
+        dto.setRegisteredDate(comment.getRegisteredDate().format(DateTimeConverter.FORMATTER_DATE_TIME));
         dto.setCommentMessage(comment.getCommentMessage());
         return dto;
     }

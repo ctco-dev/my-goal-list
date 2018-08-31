@@ -14,6 +14,7 @@ import lv.ctco.javaschool.goal.entity.dto.GoalDto;
 import lv.ctco.javaschool.goal.entity.dto.GoalFormDto;
 import lv.ctco.javaschool.goal.entity.dto.MessageDto;
 import lv.ctco.javaschool.goal.entity.dto.TagDto;
+import lv.ctco.javaschool.goal.entity.exception.InvalidGoalException;
 
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
@@ -59,7 +60,7 @@ public class GoalApi {
             Goal g = goal.get();
             return DtoConvener.convertGoalToGoalDto(g);
         } else {
-            return new GoalDto();
+            throw new InvalidGoalException();
         }
     }
 
@@ -76,12 +77,14 @@ public class GoalApi {
             goal.setGoalMessage(goalDto.getGoalMessage());
             goal.setTags(goalDto.getTags());
 
-            LocalDate localDate = LocalDate.parse(goalDto.getDeadline(), DateTimeConverter.formatterDate);
+            LocalDate localDate = LocalDate.parse(goalDto.getDeadline(), DateTimeConverter.FORMATTER_DATE);
             goal.setDeadlineDate(localDate);
 
             goal.setUser(user);
             goal.setRegisteredDate(LocalDateTime.now());
             goalStore.addGoal(goal);
+        } else {
+            throw new InvalidGoalException();
         }
     }
 
@@ -126,7 +129,7 @@ public class GoalApi {
             comment.setCommentMessage(msg.getMessage());
             goalStore.addComment(comment);
         } else {
-            throw new IllegalArgumentException();
+            throw new InvalidGoalException();
         }
     }
 

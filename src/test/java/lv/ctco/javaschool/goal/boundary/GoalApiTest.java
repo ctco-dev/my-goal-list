@@ -13,6 +13,7 @@ import lv.ctco.javaschool.auth.entity.domain.User;
 import lv.ctco.javaschool.auth.entity.dto.UserLoginDto;
 
 import lv.ctco.javaschool.goal.entity.dto.MessageDto;
+import lv.ctco.javaschool.goal.entity.exception.InvalidGoalException;
 import lv.ctco.javaschool.goal.entity.dto.TagDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -139,19 +140,17 @@ class GoalApiTest {
     void testGetGoalById() {
         when(goalStore.getGoalById(1L))
                 .thenReturn(java.util.Optional.ofNullable(goal));
-        assertThat(goalApi.getGoalDtoByGoalId(1L).getId(), is(1L));
-        assertThat(goalApi.getGoalDtoByGoalId(1L).getUsername(), is(user1.getUsername()));
-        assertThat(goalApi.getGoalDtoByGoalId(1L).getGoalMessage(), is("abc"));
+        assertThat( goalApi.getGoalDtoByGoalId(1L).getId(), is(1L));
+        assertThat( goalApi.getGoalDtoByGoalId(1L).getUsername(), is(user1.getUsername()));
+        assertThat( goalApi.getGoalDtoByGoalId(1L).getGoalMessage(), is("abc"));
     }
 
     @Test
-    @DisplayName("Test getGoalById(): returns dto of goal by id")
+    @DisplayName("Test getGoalById(): throws InvalidGoalException")
     void testGetGoalById2() {
-        when(goalStore.getGoalById(1L))
+        when(goalStore.getGoalById( 1L))
                 .thenReturn(java.util.Optional.empty());
-        assertThat(goalApi.getGoalDtoByGoalId(1L).getClass(), equalTo(GoalDto.class));
-        assertThat(goalApi.getGoalDtoByGoalId(1L).getGoalMessage(), nullValue());
-        assertThat(goalApi.getGoalDtoByGoalId(1L).getId(), nullValue());
+        assertThrows(InvalidGoalException.class, () -> goalApi.getGoalDtoByGoalId(1L));
     }
 
 
@@ -207,16 +206,12 @@ class GoalApiTest {
     }
 
     @Test
-    @DisplayName("Test createNewGoal() : check if does not persists new Goal if empty or partial GoalFormDto")
+    @DisplayName("Test createNewGoal() : check if throws exception if empty fields of dto object")
     void testCreateNewGoal2() {
         GoalFormDto goalFormDto = new GoalFormDto();
         when(userStore.getCurrentUser())
                 .thenReturn(user1);
-        goalApi.createNewGoal(goalFormDto);
-        verify(goalStore, times(0)).addGoal(any(Goal.class));
-        goalFormDto.setGoalMessage("hi");
-        goalApi.createNewGoal(goalFormDto);
-        verify(goalStore, times(0)).addGoal(any(Goal.class));
+        assertThrows(InvalidGoalException.class, () -> goalApi.createNewGoal(goalFormDto));
     }
 
     @Test
@@ -263,7 +258,7 @@ class GoalApiTest {
         msg.setMessage("hi");
         when(goalStore.getGoalById(1L))
                 .thenReturn(Optional.empty());
-        assertThrows(IllegalArgumentException.class, () -> goalApi.saveNewCommentsForGoalById(1L, msg));
+        assertThrows(InvalidGoalException.class, () -> goalApi.saveNewCommentsForGoalById(1L, msg));
     }
 
     @Test
