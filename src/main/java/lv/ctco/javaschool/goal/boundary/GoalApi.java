@@ -2,7 +2,7 @@ package lv.ctco.javaschool.goal.boundary;
 
 import lv.ctco.javaschool.auth.control.UserStore;
 import lv.ctco.javaschool.auth.entity.domain.User;
-import lv.ctco.javaschool.goal.control.DotConvener;
+import lv.ctco.javaschool.goal.control.DtoConvener;
 import lv.ctco.javaschool.goal.control.GoalStore;
 import lv.ctco.javaschool.goal.control.TagParser;
 import lv.ctco.javaschool.goal.control.DateTimeConverter;
@@ -14,6 +14,7 @@ import lv.ctco.javaschool.goal.entity.dto.GoalDto;
 import lv.ctco.javaschool.goal.entity.dto.GoalFormDto;
 import lv.ctco.javaschool.goal.entity.dto.MessageDto;
 import lv.ctco.javaschool.goal.entity.dto.TagDto;
+import lv.ctco.javaschool.goal.entity.exception.InvalidGoalException;
 
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
@@ -46,7 +47,7 @@ public class GoalApi {
         User currentUser = userStore.getCurrentUser();
         List<Goal> goalsList = goalStore.getGoalsListFor(currentUser);
         return goalsList.stream()
-                .map(DotConvener::convertGoalToGoalDto)
+                .map(DtoConvener::convertGoalToGoalDto)
                 .collect(Collectors.toList());
     }
 
@@ -57,9 +58,9 @@ public class GoalApi {
         Optional<Goal> goal = goalStore.getGoalById(goalId);
         if (goal.isPresent()) {
             Goal g = goal.get();
-            return DotConvener.convertGoalToGoalDto(g);
+            return DtoConvener.convertGoalToGoalDto(g);
         } else {
-            return new GoalDto();
+            throw new InvalidGoalException();
         }
     }
 
@@ -76,12 +77,14 @@ public class GoalApi {
             goal.setGoalMessage(goalDto.getGoalMessage());
             goal.setTags(goalDto.getTags());
 
-            LocalDate localDate = LocalDate.parse(goalDto.getDeadline(), DateTimeConverter.formatterDate);
+            LocalDate localDate = LocalDate.parse(goalDto.getDeadline(), DateTimeConverter.FORMATTER_DATE);
             goal.setDeadlineDate(localDate);
 
             goal.setUser(user);
             goal.setRegisteredDate(LocalDateTime.now());
             goalStore.addGoal(goal);
+        } else {
+            throw new InvalidGoalException();
         }
     }
 
@@ -107,7 +110,7 @@ public class GoalApi {
         if (goal.isPresent()) {
             List<Comment> comments = goalStore.getCommentsForGoal(goal.get());
             return comments.stream()
-                    .map(DotConvener::convertCommentToCommentDto)
+                    .map(DtoConvener::convertCommentToCommentDto)
                     .collect(Collectors.toList());
         }
         return new ArrayList<CommentDto>();
@@ -126,7 +129,7 @@ public class GoalApi {
             comment.setCommentMessage(msg.getMessage());
             goalStore.addComment(comment);
         } else {
-            throw new IllegalArgumentException();
+            throw new InvalidGoalException();
         }
     }
 
@@ -136,7 +139,7 @@ public class GoalApi {
     public List<TagDto> returnAllTags() {
         List<Tag> tagList = goalStore.getAllTagList();
         return tagList.stream()
-                .map(DotConvener::convertTagToTagDtoWithoutCnt)
+                .map(DtoConvener::convertTagToTagDtoWithoutCnt)
                 .collect(Collectors.toList());
     }
 

@@ -27,7 +27,12 @@ function onLoad() {
             'Content-Type': 'application/json'
         }
     }).then(function (response) {
-        return response.json();
+        if (response.status === 200) {
+            return response.json();
+        } else {
+            alert("Something went wrong! error:404");
+            return false;
+        }
     }).then(function (goal) {
         w3.displayObject("title", goal);
         w3.displayObject("goal-fields", goal);
@@ -57,8 +62,13 @@ function addComment() {
                 'Content-Type': 'application/json'
             }, body: JSON.stringify(data)
         }).then(function (response) {
-            document.getElementById("userComment").value = "";
-            getComments();
+            if (response.status === 204) {
+                document.getElementById("userComment").value = "";
+                onLoad();
+            } else {
+                alert("Sompthing went wrong! error:404");
+                return false;
+            }
         });
     }
 }

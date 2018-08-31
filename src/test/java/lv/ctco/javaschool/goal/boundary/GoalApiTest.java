@@ -13,6 +13,8 @@ import lv.ctco.javaschool.auth.entity.domain.User;
 import lv.ctco.javaschool.auth.entity.dto.UserLoginDto;
 
 import lv.ctco.javaschool.goal.entity.dto.MessageDto;
+import lv.ctco.javaschool.goal.entity.exception.InvalidGoalException;
+import lv.ctco.javaschool.goal.entity.dto.TagDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -55,6 +57,7 @@ class GoalApiTest {
     List<CommentDto> commentDtos = new ArrayList<>();
     List<User> userList = new ArrayList<>();
     List<UserLoginDto> userDtoList = new ArrayList<>();
+    List<Tag> tagList = new ArrayList<>();
     String testLine1, expResult1, testLine2, expResult2, testLine3, expResult3, testLine4, expResult4;
 
     @Mock
@@ -102,6 +105,11 @@ class GoalApiTest {
         expResult3 = "";
         testLine4 = "I will start to learn Java!";
         expResult4 = "learn Java";
+
+        tagList.add(new Tag("tag1"));
+        tagList.add(new Tag("tag2"));
+        tagList.add(new Tag("tag3"));
+        tagList.add(new Tag("tag4"));
     }
 
     @Test
@@ -132,19 +140,17 @@ class GoalApiTest {
     void testGetGoalById() {
         when(goalStore.getGoalById(1L))
                 .thenReturn(java.util.Optional.ofNullable(goal));
-        assertThat( goalApi.getGoalDtoByGoalId(1L).getId(), is(1L));
-        assertThat( goalApi.getGoalDtoByGoalId(1L).getUsername(), is(user1.getUsername()));
-        assertThat( goalApi.getGoalDtoByGoalId(1L).getGoalMessage(), is("abc"));
+        assertThat(goalApi.getGoalDtoByGoalId(1L).getId(), is(1L));
+        assertThat(goalApi.getGoalDtoByGoalId(1L).getUsername(), is(user1.getUsername()));
+        assertThat(goalApi.getGoalDtoByGoalId(1L).getGoalMessage(), is("abc"));
     }
 
     @Test
-    @DisplayName("Test getGoalById(): returns dto of goal by id")
+    @DisplayName("Test getGoalById(): throws InvalidGoalException")
     void testGetGoalById2() {
-        when(goalStore.getGoalById( 1L))
+        when(goalStore.getGoalById(1L))
                 .thenReturn(java.util.Optional.empty());
-        assertThat( goalApi.getGoalDtoByGoalId(1L).getClass(), equalTo(GoalDto.class));
-        assertThat( goalApi.getGoalDtoByGoalId(1L).getGoalMessage(), nullValue());
-        assertThat( goalApi.getGoalDtoByGoalId(1L).getId(), nullValue());
+        assertThrows(InvalidGoalException.class, () -> goalApi.getGoalDtoByGoalId(1L));
     }
 
 
@@ -200,21 +206,17 @@ class GoalApiTest {
     }
 
     @Test
-    @DisplayName("Test createNewGoal() : check if does not persists new Goal if empty or partial GoalFormDto")
+    @DisplayName("Test createNewGoal() : check if throws exception if empty fields of dto object")
     void testCreateNewGoal2() {
         GoalFormDto goalFormDto = new GoalFormDto();
         when(userStore.getCurrentUser())
                 .thenReturn(user1);
-        goalApi.createNewGoal(goalFormDto);
-        verify(goalStore, times(0)).addGoal(any(Goal.class));
-        goalFormDto.setGoalMessage("hi");
-        goalApi.createNewGoal(goalFormDto);
-        verify(goalStore, times(0)).addGoal(any(Goal.class));
+        assertThrows(InvalidGoalException.class, () -> goalApi.createNewGoal(goalFormDto));
     }
 
     @Test
     @DisplayName("Test returnAllCommentsForGoalById(): returns Comments dto of goal by id")
-    void returnAllCommentsForGoalById() {
+    void testReturnAllCommentsForGoalById() {
         comments.add(comment1);
         when(goalStore.getGoalById(1l))
                 .thenReturn(java.util.Optional.ofNullable(goal));
@@ -227,7 +229,7 @@ class GoalApiTest {
 
     @Test
     @DisplayName("Test receiveCommentsForGoalById(): returns empty Comments dto of goal")
-    void returnAllCommentsForGoalById2() {
+    void testReturnAllCommentsForGoalById2() {
         when(goalStore.getGoalById(1L))
                 .thenReturn(java.util.Optional.ofNullable(goal));
         when(goalStore.getCommentsForGoal(goal))
@@ -238,7 +240,7 @@ class GoalApiTest {
 
     @Test
     @DisplayName("Test saveNewCommentsForGoalById(): verify if persists Comments")
-    void saveNewCommentsForGoalById() {
+    void testSaveNewCommentsForGoalById() {
         MessageDto msg = new MessageDto();
         msg.setMessage("hi");
         when(userStore.getCurrentUser())
@@ -251,12 +253,23 @@ class GoalApiTest {
 
     @Test
     @DisplayName("Test saveNewCommentsForGoalById(): verify if throws exception if optional<goal> isEmpty")
-    void saveNewCommentsForGoalById2() {
+    void testSaveNewCommentsForGoalById2() {
         MessageDto msg = new MessageDto();
         msg.setMessage("hi");
         when(goalStore.getGoalById(1L))
                 .thenReturn(Optional.empty());
-        assertThrows(IllegalArgumentException.class, () -> goalApi.saveNewCommentsForGoalById(1L, msg));
+        assertThrows(InvalidGoalException.class, () -> goalApi.saveNewCommentsForGoalById(1L, msg));
     }
 
+    @Test
+    @DisplayName("Test returnAllTags(): verify if throws exception if optional<goal> isEmpty")
+    void testReturnAllTags() {
+        when(goalStore.getAllTagList()).thenReturn(tagList);
+        List<TagDto> dtoList = goalApi.returnAllTags();
+        assertThat(dtoList.size(), is(tagList.size()));
+        for (int i = 0; i < dtoList.size(); i++) {
+            assertThat(dtoList.get(i).getTagMessage(), is(tagList.get(i).getTagMessage()));
+        }
+        assertThat(dtoList.get(0).getTagMessage(), is(not(tagList.get(2).getTagMessage())));
+    }
 }

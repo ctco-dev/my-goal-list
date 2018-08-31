@@ -5,8 +5,10 @@ import lv.ctco.javaschool.auth.entity.domain.User;
 import lv.ctco.javaschool.auth.entity.dto.UserLoginDto;
 import lv.ctco.javaschool.goal.entity.domain.Comment;
 import lv.ctco.javaschool.goal.entity.domain.Goal;
+import lv.ctco.javaschool.goal.entity.domain.Tag;
 import lv.ctco.javaschool.goal.entity.dto.CommentDto;
 import lv.ctco.javaschool.goal.entity.dto.GoalDto;
+import lv.ctco.javaschool.goal.entity.dto.TagDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -22,6 +24,7 @@ class DotConvenerTest {
     Goal goal = new Goal();
     User user = new User();
     Comment comment = new Comment();
+    Tag tag;
 
     @BeforeEach
     void init() {
@@ -43,12 +46,14 @@ class DotConvenerTest {
         comment.setUser(user);
         comment.setCommentMessage("hi");
         comment.setRegisteredDate(LocalDateTime.now());
+
+        tag = new Tag("new tag");
     }
 
     @Test
-    @DisplayName("Test testConvertUserToUserLoginDto(User user): Checks that User and UserDto contains same data")
+    @DisplayName("Test ConvertUserToUserLoginDto(User user): Checks that User and UserDto contains same data")
     void testConvertUserToUserLoginDto() {
-        UserLoginDto dto = DotConvener.convertUserToUserLoginDto(user);
+        UserLoginDto dto = DtoConvener.convertUserToUserLoginDto(user);
         assertThat( dto.getUsername(), is(user.getUsername()));
         assertThat( dto.getEmail(), is(user.getEmail()));
         assertThat( dto.getPhone(), is(user.getPhone()));
@@ -58,7 +63,7 @@ class DotConvenerTest {
     @Test
     @DisplayName("Test convertGoalToGoalDto(Goal goal): Checks that goal and goalDto contains same data (List<Tag> excluded)")
     void testConvertGoalToGoalDto() {
-        GoalDto dto = DotConvener.convertGoalToGoalDto(goal);
+        GoalDto dto = DtoConvener.convertGoalToGoalDto(goal);
         assertThat( dto.getUsername(), is(goal.getUser().getUsername()));
         assertThat( dto.getGoalMessage(), is(goal.getGoalMessage()));
         assertThat( dto.getDeadlineDate(), is(DateTimeConverter.convertDate(goal.getDeadlineDate())));
@@ -71,14 +76,21 @@ class DotConvenerTest {
 
 
     @Test
-    @DisplayName("Test testConvertCommentToCommentDto(Comment comment): Checks that Comment and CommentDto contains same data")
+    @DisplayName("Test ConvertCommentToCommentDto(Comment comment): Checks that Comment and CommentDto contains same data")
     void testConvertCommentToCommentDto() {
-        CommentDto dto = DotConvener.convertCommentToCommentDto(comment);
+        CommentDto dto = DtoConvener.convertCommentToCommentDto(comment);
 
         assertThat( dto.getUsername(), is(comment.getUser().getUsername()));
         assertThat( dto.getCommentMessage(), is(comment.getCommentMessage()));
         assertThat( dto.getRegisteredDate(), is(DateTimeConverter.convertDateTime(comment.getRegisteredDate())));
     }
 
+    @Test
+    @DisplayName("Test convertTagToTagDtoWithoutCnt(Tag tag): Checks that Tag and Tag contains same data (except count)")
+    void testConvertTagToTagDtoWithoutCnt() {
+        TagDto dto = DtoConvener.convertTagToTagDtoWithoutCnt(tag);
+        assertThat(dto.getTagMessage(), is(tag.getTagMessage()));
+        assertThat(dto.getCnt(), is(0));
+    }
 
 }

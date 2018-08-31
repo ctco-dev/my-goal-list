@@ -8,8 +8,8 @@ import static java.time.temporal.ChronoUnit.DAYS;
 
 public class DateTimeConverter {
 
-    public static DateTimeFormatter formatterDate = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-    public static DateTimeFormatter formatterDateTime = DateTimeFormatter.ofPattern("dd.MM.yyyy kk:mm");
+    public static final DateTimeFormatter FORMATTER_DATE = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+    public static final DateTimeFormatter FORMATTER_DATE_TIME = DateTimeFormatter.ofPattern("dd.MM.yyyy kk:mm");
 
     public static int countDaysLeft(LocalDate deadlineDate) {
         LocalDate localDate = LocalDate.now();
@@ -17,11 +17,11 @@ public class DateTimeConverter {
     }
 
     public static String convertDate(LocalDate date) {
-        return date.format(DateTimeConverter.formatterDate);
+        return date.format(DateTimeConverter.FORMATTER_DATE);
     }
 
     public static String convertDateTime(LocalDateTime date) {
-        return date.format(DateTimeConverter.formatterDateTime);
+        return date.format(DateTimeConverter.FORMATTER_DATE_TIME);
     }
 
 

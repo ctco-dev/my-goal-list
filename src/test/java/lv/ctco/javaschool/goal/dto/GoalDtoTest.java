@@ -34,16 +34,16 @@ class GoalDtoTest {
     void testGetAndSetDeadlineDate() {
         LocalDate newDt = LocalDate.now();
         GoalDto dto = new GoalDto();
-        dto.setDeadlineDate(newDt.format(DateTimeConverter.formatterDate));
-        assertThat(dto.getDeadlineDate(), is(newDt.format(DateTimeConverter.formatterDate)));
+        dto.setDeadlineDate(newDt.format(DateTimeConverter.FORMATTER_DATE));
+        assertThat(dto.getDeadlineDate(), is(newDt.format(DateTimeConverter.FORMATTER_DATE)));
     }
 
     @Test
     void testGetAndSetRegisteredDate() {
         LocalDateTime newDt = LocalDateTime.now();
         GoalDto dto = new GoalDto();
-        dto.setRegisteredDate(newDt.format(DateTimeConverter.formatterDateTime));
-        assertThat(dto.getRegisteredDate(), is(newDt.format(DateTimeConverter.formatterDateTime)));
+        dto.setRegisteredDate(newDt.format(DateTimeConverter.FORMATTER_DATE_TIME));
+        assertThat(dto.getRegisteredDate(), is(newDt.format(DateTimeConverter.FORMATTER_DATE_TIME)));
     }
 
     @Test
