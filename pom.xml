@@ -15,15 +15,6 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
     
-    <mirrors>
-        <mirror>
-            <id>jcenter</id>
-            <name>JCenter</name>
-            <url>http://jcenter.bintray.com/</url>
-            <mirrorOf>central</mirrorOf>
-        </mirror>
-    </mirrors>
-         
     <dependencies>
         <dependency>
             <groupId>org.glassfish</groupId>
