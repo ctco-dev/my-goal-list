@@ -3,13 +3,14 @@ package lv.ctco.javaschool.goal.control;
 import lv.ctco.javaschool.auth.entity.domain.User;
 import lv.ctco.javaschool.goal.entity.domain.Goal;
 import lv.ctco.javaschool.goal.entity.domain.Tag;
-
+import lv.ctco.javaschool.goal.entity.dto.TagDto;
+import lv.ctco.javaschool.goal.entity.domain.Comment;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.List;
+import java.util.ArrayList;
 import java.util.Optional;
-
 
 @Stateless
 public class GoalStore {
@@ -53,4 +54,14 @@ public class GoalStore {
                 .findFirst();
     }
 
+    public List<Comment> getCommentsForGoal(Goal goal) {
+        return em.createQuery("select c from Comment c " +
+                "where c.goal = :goal", Comment.class)
+                .setParameter("goal", goal)
+                .getResultList();
+    }
+
+    public void addComment(Comment comment) {
+        em.persist(comment);
+    }
 }

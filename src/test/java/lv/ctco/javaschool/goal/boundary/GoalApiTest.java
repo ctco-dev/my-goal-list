@@ -1,12 +1,19 @@
 package lv.ctco.javaschool.goal.boundary;
 
-import lv.ctco.javaschool.auth.control.UserStore;
-import lv.ctco.javaschool.auth.entity.domain.User;
 import lv.ctco.javaschool.goal.control.GoalStore;
+import lv.ctco.javaschool.goal.control.TagParser;
+import lv.ctco.javaschool.goal.entity.domain.Comment;
 import lv.ctco.javaschool.goal.entity.domain.Goal;
 import lv.ctco.javaschool.goal.entity.domain.Tag;
+import lv.ctco.javaschool.goal.entity.dto.CommentDto;
 import lv.ctco.javaschool.goal.entity.dto.GoalDto;
 import lv.ctco.javaschool.goal.entity.dto.GoalFormDto;
+import lv.ctco.javaschool.auth.control.UserStore;
+import lv.ctco.javaschool.auth.entity.domain.User;
+import lv.ctco.javaschool.auth.entity.dto.UserLoginDto;
+
+import lv.ctco.javaschool.goal.entity.dto.MessageDto;
+import lv.ctco.javaschool.goal.entity.exception.InvalidGoalException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -14,24 +21,27 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.nullValue;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.hamcrest.Matchers.nullValue;
-import static org.mockito.ArgumentMatchers.any;
 
 @ExtendWith(MockitoExtension.class)
 class GoalApiTest {
@@ -39,9 +49,14 @@ class GoalApiTest {
     Goal goal2 = new Goal();
     User user1 = new User();
     User user2 = new User();
+    Comment comment1 = new Comment();
     List<Goal> goalList1 = new ArrayList<>();
     List<GoalDto> goalDtoList = new ArrayList<>();
-    String testLine1, expResult1, testLine4, expResult4;
+    List<Comment> comments = new ArrayList<>();
+    List<CommentDto> commentDtos = new ArrayList<>();
+    List<User> userList = new ArrayList<>();
+    List<UserLoginDto> userDtoList = new ArrayList<>();
+    String testLine1, expResult1, testLine2, expResult2, testLine3, expResult3, testLine4, expResult4;
 
     @Mock
     private UserStore userStore;
@@ -64,6 +79,12 @@ class GoalApiTest {
         user2.setPassword("12345");
         user2.setPhone("87654321");
 
+        comment1.setGoal(goal);
+        comment1.setUser(user1);
+        comment1.setCommentMessage("hi");
+        comment1.setRegisteredDate(LocalDateTime.now());
+        comment1.setId(1L);
+
         goal.setUser(user1);
         goal.setGoalMessage("abc");
         goal.setRegisteredDate(LocalDateTime.now());
@@ -74,9 +95,12 @@ class GoalApiTest {
         goal2.setUser(user2);
         goal2.setGoalMessage("cde");
 
-
         testLine1 = "I will become a programmer this year!";
         expResult1 = "programmer";
+        testLine2 = "I WILL BECOME A PROGRAMMER THIS YEAR!";
+        expResult2 = "PROGRAMMER";
+        testLine3 = "I WILL be two years old!";
+        expResult3 = "";
         testLine4 = "I will start to learn Java!";
         expResult4 = "learn Java";
     }
@@ -88,7 +112,7 @@ class GoalApiTest {
                 .thenReturn(user1);
         when(goalStore.getGoalsListFor(user1))
                 .thenReturn(goalList1);
-        assertThat( Objects.equals( goalApi.getMyGoals(), goalDtoList), is(true));
+        assertThat(goalApi.getMyGoals(), equalTo(goalDtoList));
     }
 
     @Test
@@ -106,15 +130,6 @@ class GoalApiTest {
 
     @Test
     @DisplayName("Test getGoalById(): returns dto of goal by id")
-    void testGetGoalById2() {
-        when(goalStore.getGoalById( 1L))
-                .thenReturn(java.util.Optional.empty());
-        assertThat( goalApi.getGoalDtoByGoalId(1L).getGoalMessage(), nullValue());
-        assertThat( goalApi.getGoalDtoByGoalId(1L).getId(), nullValue());
-    }
-
-    @Test
-    @DisplayName("Test getGoalById(): returns dto of goal by id")
     void testGetGoalById() {
         when(goalStore.getGoalById(1L))
                 .thenReturn(java.util.Optional.ofNullable(goal));
@@ -122,6 +137,15 @@ class GoalApiTest {
         assertThat( goalApi.getGoalDtoByGoalId(1L).getUsername(), is(user1.getUsername()));
         assertThat( goalApi.getGoalDtoByGoalId(1L).getGoalMessage(), is("abc"));
     }
+
+    @Test
+    @DisplayName("Test getGoalById(): throws InvalidGoalException")
+    void testGetGoalById2() {
+        when(goalStore.getGoalById( 1L))
+                .thenReturn(java.util.Optional.empty());
+        assertThrows(InvalidGoalException.class, () -> goalApi.getGoalDtoByGoalId(1L));
+    }
+
 
     @Test
     @DisplayName("Test parseStringToTags(String value): Checks work of tag list generation from goal message")
@@ -144,11 +168,22 @@ class GoalApiTest {
             if (txt.equals(arr[1])) return tag4b;
             return new Tag(txt);
         }).when(goalStore).addTag(any(String.class));
-        assertThat(Objects.equals(tagset1, goalApi.parseStringToTags(testLine1)), is(true));
-        assertThat(Objects.equals(tagset4, goalApi.parseStringToTags(testLine4)), is(true));
-        assertThat(Objects.equals(tagset1, goalApi.parseStringToTags(testLine4)), is(false));
-        assertThat( goalApi.parseStringToTags("some_text"), notNullValue());
-        assertThat(Objects.equals(emptySet, goalApi.parseStringToTags("")), is(true));
+        assertThat(goalApi.parseStringToTags(testLine1), equalTo(tagset1));
+        assertThat(goalApi.parseStringToTags(testLine4), equalTo(tagset4));
+        assertThat(goalApi.parseStringToTags(testLine4), not(equalTo(tagset1)));
+        assertThat(goalApi.parseStringToTags("some_text"), notNullValue());
+        assertThat(goalApi.parseStringToTags(""), equalTo(emptySet));
+    }
+
+    @Test
+    @DisplayName("generateTagsList: Checks work of tag list generation from goal message")
+    void testGenerationOfTagsList() {
+        assertThat(String.join(" ", TagParser.generateTagsList(testLine1)), is(expResult1));
+        assertThat(String.join(" ", TagParser.generateTagsList(testLine2)), is(expResult2));
+        assertThat(String.join(" ", TagParser.generateTagsList(testLine3)), is(expResult3));
+        assertThat(String.join(" ", TagParser.generateTagsList(testLine4)), is(expResult4));
+        assertThat(String.join(" ", TagParser.generateTagsList(testLine1)), not(expResult2));
+        assertThat(String.join(" ", TagParser.generateTagsList(testLine2)), not(expResult1));
     }
 
     @Test
@@ -164,15 +199,59 @@ class GoalApiTest {
     }
 
     @Test
-    @DisplayName("Test createNewGoal() : check if does not persists new Goal if empty or partial GoalFormDto")
+    @DisplayName("Test createNewGoal() : check if throws exception if empty fields of dto object")
     void testCreateNewGoal2() {
         GoalFormDto goalFormDto = new GoalFormDto();
         when(userStore.getCurrentUser())
                 .thenReturn(user1);
-        goalApi.createNewGoal(goalFormDto);
-        verify(goalStore, times(0)).addGoal(any(Goal.class));
-        goalFormDto.setGoalMessage("hi");
-        goalApi.createNewGoal(goalFormDto);
-        verify(goalStore, times(0)).addGoal(any(Goal.class));
+        assertThrows(InvalidGoalException.class, () -> goalApi.createNewGoal(goalFormDto));
     }
+
+    @Test
+    @DisplayName("Test returnAllCommentsForGoalById(): returns Comments dto of goal by id")
+    void returnAllCommentsForGoalById() {
+        comments.add(comment1);
+        when(goalStore.getGoalById(1l))
+                .thenReturn(java.util.Optional.ofNullable(goal));
+        when(goalStore.getCommentsForGoal(goal))
+                .thenReturn(comments);
+        assertThat(goalApi.returnAllCommentsForGoalById(1L).get(0).getClass(), equalTo(CommentDto.class));
+        assertThat(goalApi.returnAllCommentsForGoalById(1L).get(0).getCommentMessage(), is("hi"));
+        assertThat(goalApi.returnAllCommentsForGoalById(1L).get(0).getUsername(), is("user"));
+    }
+
+    @Test
+    @DisplayName("Test receiveCommentsForGoalById(): returns empty Comments dto of goal")
+    void returnAllCommentsForGoalById2() {
+        when(goalStore.getGoalById(1L))
+                .thenReturn(java.util.Optional.ofNullable(goal));
+        when(goalStore.getCommentsForGoal(goal))
+                .thenReturn(comments);
+        assertThat(goalApi.returnAllCommentsForGoalById(1L).size(), is(0));
+        assertThat(goalApi.returnAllCommentsForGoalById(1L).getClass(), equalTo(commentDtos.getClass()));
+    }
+
+    @Test
+    @DisplayName("Test saveNewCommentsForGoalById(): verify if persists Comments")
+    void saveNewCommentsForGoalById() {
+        MessageDto msg = new MessageDto();
+        msg.setMessage("hi");
+        when(userStore.getCurrentUser())
+                .thenReturn(user1);
+        when(goalStore.getGoalById(1L))
+                .thenReturn(Optional.ofNullable(goal));
+        goalApi.saveNewCommentsForGoalById(1L, msg);
+        verify(goalStore, times(1)).addComment(any(Comment.class));
+    }
+
+    @Test
+    @DisplayName("Test saveNewCommentsForGoalById(): verify if throws exception if optional<goal> isEmpty")
+    void saveNewCommentsForGoalById2() {
+        MessageDto msg = new MessageDto();
+        msg.setMessage("hi");
+        when(goalStore.getGoalById(1L))
+                .thenReturn(Optional.empty());
+        assertThrows(InvalidGoalException.class, () -> goalApi.saveNewCommentsForGoalById(1L, msg));
+    }
+
 }

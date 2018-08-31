@@ -3,8 +3,11 @@ package lv.ctco.javaschool.goal.control;
 
 import lv.ctco.javaschool.auth.entity.domain.User;
 import lv.ctco.javaschool.auth.entity.dto.UserLoginDto;
+import lv.ctco.javaschool.goal.entity.domain.Comment;
 import lv.ctco.javaschool.goal.entity.domain.Goal;
+import lv.ctco.javaschool.goal.entity.dto.CommentDto;
 import lv.ctco.javaschool.goal.entity.dto.GoalDto;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -16,24 +19,46 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 
 class DtoConventerTest {
-    @Test
-    @DisplayName("Test convertGoalToGoalDto(Goal goal): Checks that goal and goalDto contains same data (List<Tag> excluded)")
-    void testconvertGoalToGoalDto() {
-        User user1 = new User();
-        user1.setUsername("user");
-        user1.setEmail("user@user.com");
-        user1.setId(1L);
-        user1.setPassword("12345");
-        user1.setPhone("12345678");
-        Goal goal = new Goal();
-        goal.setUser(user1);
+    Goal goal = new Goal();
+    User user = new User();
+    Comment comment = new Comment();
+
+    @BeforeEach
+    void init() {
+        user.setUsername("user");
+        user.setEmail("user@user.com");
+        user.setId(1L);
+        user.setPassword("12345");
+        user.setPhone("12345678");
+
+        goal.setUser(user);
         goal.setGoalMessage("abc");
         goal.setRegisteredDate(LocalDateTime.now());
         goal.setDeadlineDate(LocalDate.now().plusDays(1));
         goal.setId(1L);
         goal.setTags(null);
-        GoalDto dto = DtoConventer.convertGoalToGoalDto(goal);
 
+        comment.setId(1L);
+        comment.setGoal(goal);
+        comment.setUser(user);
+        comment.setCommentMessage("hi");
+        comment.setRegisteredDate(LocalDateTime.now());
+    }
+
+    @Test
+    @DisplayName("Test testConvertUserToUserLoginDto(User user): Checks that User and UserDto contains same data")
+    void testConvertUserToUserLoginDto() {
+        UserLoginDto dto = DtoConventer.convertUserToUserLoginDto(user);
+        assertThat( dto.getUsername(), is(user.getUsername()));
+        assertThat( dto.getEmail(), is(user.getEmail()));
+        assertThat( dto.getPhone(), is(user.getPhone()));
+    }
+
+
+    @Test
+    @DisplayName("Test convertGoalToGoalDto(Goal goal): Checks that goal and goalDto contains same data (List<Tag> excluded)")
+    void testconvertGoalToGoalDto() {
+        GoalDto dto = DtoConventer.convertGoalToGoalDto(goal);
         assertThat( dto.getUsername(), is(goal.getUser().getUsername()));
         assertThat( dto.getGoalMessage(), is(goal.getGoalMessage()));
         assertThat( dto.getDeadlineDate(), is(DateTimeConverter.convertDate(goal.getDeadlineDate())));
@@ -44,15 +69,14 @@ class DtoConventerTest {
         assertThat(dto.getTagList(), nullValue());
     }
 
+
     @Test
-    void testConvertUserToUserLoginDto() {
-        User user = new User();
-        user.setUsername("aa");
-        user.setPhone("1234567");
-        user.setEmail("a@b.com");
-        UserLoginDto dto = DtoConventer.convertUserToUserLoginDto(user);
-        assertThat( dto.getUsername(), is(user.getUsername()));
-        assertThat( dto.getEmail(), is(user.getEmail()));
-        assertThat( dto.getPhone(), is(user.getPhone()));
+    @DisplayName("Test testconvertCommentToCommentDto(Comment comment): Checks that Comment and CommentDto contains same data")
+    void testconvertCommentToCommentDto() {
+        CommentDto dto = DtoConventer.convertCommentToCommentDto(comment);
+
+        assertThat( dto.getUsername(), is(comment.getUser().getUsername()));
+        assertThat( dto.getCommentMessage(), is(comment.getCommentMessage()));
+        assertThat( dto.getRegisteredDate(), is(DateTimeConverter.convertDateTime(comment.getRegisteredDate())));
     }
 }

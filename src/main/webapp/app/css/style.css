@@ -43,3 +43,28 @@ h1 {
 form {
     display: inline-block;
 }
+
+#goal-fields {
+    position: static;
+    text-align: left;
+}
+
+.container {
+    text-align: center;
+    float: none;
+    margin: 40px;
+    padding: 10px;
+    border: groove;
+    border-radius: 10px;
+    background-color: white;
+
+}
+
+ul {
+    list-style: none;
+}
+
+.repeatable {
+    border-radius: 10px;
+    background-color: lightgray;
+}

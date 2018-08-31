@@ -8,9 +8,9 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 
 class GoalDtoTest {
@@ -34,16 +34,16 @@ class GoalDtoTest {
     void testGetAndSetDeadlineDate() {
         LocalDate newDt = LocalDate.now();
         GoalDto dto = new GoalDto();
-        dto.setDeadlineDate(newDt.format(DateTimeConverter.formatterDate));
-        assertThat(dto.getDeadlineDate(), is(newDt.format(DateTimeConverter.formatterDate)));
+        dto.setDeadlineDate(newDt.format(DateTimeConverter.FORMATTER_DATE));
+        assertThat(dto.getDeadlineDate(), is(newDt.format(DateTimeConverter.FORMATTER_DATE)));
     }
 
     @Test
     void testGetAndSetRegisteredDate() {
         LocalDateTime newDt = LocalDateTime.now();
         GoalDto dto = new GoalDto();
-        dto.setRegisteredDate(newDt.format(DateTimeConverter.formatterDateTime));
-        assertThat(dto.getRegisteredDate(), is(newDt.format(DateTimeConverter.formatterDateTime)));
+        dto.setRegisteredDate(newDt.format(DateTimeConverter.FORMATTER_DATE_TIME));
+        assertThat(dto.getRegisteredDate(), is(newDt.format(DateTimeConverter.FORMATTER_DATE_TIME)));
     }
 
     @Test
@@ -70,6 +70,6 @@ class GoalDtoTest {
         newList.add("tag3");
         GoalDto dto = new GoalDto();
         dto.setTagList(newList);
-        assertThat(Objects.equals( dto.getTagList(), newList), is(true));
+        assertThat(dto.getTagList(), equalTo(newList));
     }
 }

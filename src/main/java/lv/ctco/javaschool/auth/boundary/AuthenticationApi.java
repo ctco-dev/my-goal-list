@@ -108,5 +108,4 @@ public class AuthenticationApi {
         User currentUser = userStore.getCurrentUser();
         return DtoConventer.convertUserToUserLoginDto(currentUser);
     }
-
 }

@@ -78,4 +78,5 @@ public class UserStore {
             throw new InvalidPasswordException();
         }
     }
+
 }

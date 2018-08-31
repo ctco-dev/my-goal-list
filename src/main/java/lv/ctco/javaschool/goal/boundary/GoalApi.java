@@ -2,14 +2,20 @@ package lv.ctco.javaschool.goal.boundary;
 
 import lv.ctco.javaschool.auth.control.UserStore;
 import lv.ctco.javaschool.auth.entity.domain.User;
+import lv.ctco.javaschool.auth.entity.dto.UserLoginDto;
 import lv.ctco.javaschool.goal.control.DtoConventer;
 import lv.ctco.javaschool.goal.control.GoalStore;
 import lv.ctco.javaschool.goal.control.TagParser;
 import lv.ctco.javaschool.goal.control.DateTimeConverter;
+import lv.ctco.javaschool.goal.entity.domain.Comment;
 import lv.ctco.javaschool.goal.entity.domain.Goal;
 import lv.ctco.javaschool.goal.entity.domain.Tag;
+import lv.ctco.javaschool.goal.entity.dto.CommentDto;
 import lv.ctco.javaschool.goal.entity.dto.GoalDto;
 import lv.ctco.javaschool.goal.entity.dto.GoalFormDto;
+import lv.ctco.javaschool.goal.entity.dto.MessageDto;
+import lv.ctco.javaschool.goal.entity.dto.TagDto;
+import lv.ctco.javaschool.goal.entity.exception.InvalidGoalException;
 
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
@@ -20,11 +26,17 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
+import javax.json.JsonObject;
+import javax.json.JsonString;
+import javax.json.JsonValue;
 
 @Path("/goal")
 @Stateless
@@ -54,7 +66,7 @@ public class GoalApi {
             Goal g = goal.get();
             return DtoConventer.convertGoalToGoalDto(g);
         } else {
-            return new GoalDto();
+            throw new InvalidGoalException();
         }
     }
 
@@ -68,19 +80,20 @@ public class GoalApi {
             goal.setGoalMessage(goalDto.getGoalMessage());
             goal.setTags(parseStringToTags(goalDto.getGoalMessage()));
 
-            LocalDate localDate = LocalDate.parse(goalDto.getDeadline(), DateTimeConverter.formatterDate);
+            LocalDate localDate = LocalDate.parse(goalDto.getDeadline(), DateTimeConverter.FORMATTER_DATE);
             goal.setDeadlineDate(localDate);
 
             goal.setUser(user);
             goal.setRegisteredDate(LocalDateTime.now());
             goalStore.addGoal(goal);
+        } else {
+            throw new InvalidGoalException();
         }
     }
 
     Set<Tag> parseStringToTags(String value) {
         List<String> tagList = TagParser.generateTagsList(value);
         Set<Tag> tagSet = new HashSet<>();
-
         for (String item : tagList) {
             Tag tag;
             tag = goalStore.addTag(item);
@@ -91,4 +104,34 @@ public class GoalApi {
         return tagSet;
     }
 
+    @GET
+    @RolesAllowed({"ADMIN", "USER"})
+    @Path("{id}/comments")
+    public List<CommentDto> returnAllCommentsForGoalById(@PathParam("id") Long goalId) {
+        Optional<Goal> goal = goalStore.getGoalById(goalId);
+        if (goal.isPresent()) {
+            List<Comment> comments = goalStore.getCommentsForGoal(goal.get());
+            return comments.stream()
+                    .map(DtoConventer::convertCommentToCommentDto)
+                    .collect(Collectors.toList());
+        }
+        return new ArrayList<CommentDto>();
+    }
+
+    @POST
+    @RolesAllowed({"ADMIN", "USER"})
+    @Path("{id}/comments")
+    public void saveNewCommentsForGoalById(@PathParam("id") Long goalId, MessageDto msg) {
+        Optional<Goal> goal = goalStore.getGoalById(goalId);
+        if (goal.isPresent()) {
+            Comment comment = new Comment();
+            comment.setUser(userStore.getCurrentUser());
+            comment.setGoal(goal.get());
+            comment.setRegisteredDate(LocalDateTime.now());
+            comment.setCommentMessage(msg.getMessage());
+            goalStore.addComment(comment);
+        } else {
+            throw new InvalidGoalException();
+        }
+    }
 }
