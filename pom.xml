@@ -17,9 +17,9 @@
     
     <mirrors>
         <mirror>
-            <id>google-maven-central</id>
-            <name>Google Maven Central</name>
-            <url>https://maven-central.storage.googleapis.com/repos/central/data/</url>
+            <id>jcenter</id>
+            <name>JCenter</name>
+            <url>http://jcenter.bintray.com/</url>
             <mirrorOf>central</mirrorOf>
         </mirror>
     </mirrors>
