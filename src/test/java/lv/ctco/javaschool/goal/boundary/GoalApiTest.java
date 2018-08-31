@@ -39,7 +39,6 @@ import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doAnswer;
-import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -277,6 +276,5 @@ class GoalApiTest {
             assertThat(dtoList.get(i).getTagMessage(), is(tagList.get(i).getTagMessage()));
         }
         assertThat(dtoList.get(0).getTagMessage(), is(not(tagList.get(2).getTagMessage())));
-
     }
 }
