@@ -46,15 +46,17 @@ public class GoalStore {
                 .setParameter("goal", goal)
                 .getResultList();
     }
-//TODO Return list of most similar goals comparing by users Tag list
-//    public List<Goal> getSimularGoals(List<Tag> userTags) {
-//        return em.createQuery(
-//                "select g " +
-//                        "from Goal g " +
-//                        "where g.tags like :tags", Goal.class)
-//                .setParameter("tags", userTags)
-//                .getResultList();
-//    }
+    public List<Goal> getSimilarGoals(Goal goal, User currentUser) {
+        return em.createQuery(
+                "SELECT g" +
+                        "FROM Goal g " +
+                        "JOIN goal_tags gt ON gt.goal_id = g.id AND gt.tag_id IN" +
+                        "(SELECT tag_id FROM goal_tags WHERE goal_id =:goalid)" +
+                        "WHERE g.id <> :goalid AND g.user <> :currentuser GROUP BY g.id order by COUNT(*) DESC\n LIMIT 3", Goal.class)
+                .setParameter("goalid", goal.getId())
+                .setParameter("user", currentUser)
+                .getResultList();
+    }
 
     public Tag addTag( String tagMsg ){
         Optional<Tag> tagFromDB= em.createQuery("select t from Tag t " +
