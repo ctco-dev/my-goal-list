@@ -14,6 +14,10 @@ public class TagDto {
         this.cnt = toIntExact(cnt);
     }
 
+    public TagDto(String tagMsg) {
+        this(tagMsg, 0);
+    }
+
     public TagDto(String tagMsg, int cnt ){
         this.tagMessage = tagMsg;
         this.cnt = cnt;

@@ -79,4 +79,6 @@ class DotConvenerTest {
         assertThat( dto.getCommentMessage(), is(comment.getCommentMessage()));
         assertThat( dto.getRegisteredDate(), is(DateTimeConverter.convertDateTime(comment.getRegisteredDate())));
     }
+
+
 }

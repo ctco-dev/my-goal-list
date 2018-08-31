@@ -69,4 +69,10 @@ public class GoalStore {
         em.persist(comment);
     }
 
+    public List<Tag> getAllTagList() {
+        return new ArrayList<>(em.createQuery(
+                "SELECT t FROM Tag t " +
+                        "order by t.tagMessage").getResultList());
+    }
+
 }
