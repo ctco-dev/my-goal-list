@@ -5,7 +5,7 @@
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <link rel="stylesheet" href="css/style.css"/>
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-
+    <script src="//rawgithub.com/indrimuska/jquery-editable-select/master/dist/jquery-editable-select.min.js"></script>
     <script src="https://www.w3schools.com/lib/w3.js"></script>
     <script type="text/javascript" src="js/redirects.js"></script>
     <script type="text/javascript" src="js/addgoal-page.js"></script>
@@ -15,6 +15,8 @@
         $(function () {
             $("#datepicker").datepicker({dateFormat: 'dd.mm.yy'});
         });
+
+        $('#basic').editableSelect({effects: 'fade'});
     </script>
 </head>
 <body>
@@ -40,8 +42,30 @@
                   placeholder="Write here your goal..." autofocus></textarea>
         <br>Deadline Date:<br>
         <input type="text" id="datepicker">
+
+        <br>Tags:
+        <button type="button" onclick="addTagField()" value="+"></button>
+        <button type="button" onclick="removeTagField()" value="-"></button>
+        (Max:3)
+        <br>
+        <div id="tag-list-holder">
+            <select id="field1">
+                <option w3-repeat="tegs" value="{{tagMessage}}">{{tagMessage}}
+                <option>
+            </select>
+            <select id="field2">
+                <option w3-repeat="tegs" value="{{tagMessage}}">{{tagMessage}}
+                <option>
+            </select>
+            <select id="field3">
+                <option w3-repeat="tegs" value="{{tagMessage}}">{{tagMessage}}
+                <option>
+            </select>
+        </div>
         <input type="button" value="Submit" onclick="submitData()">
     </form>
+
 </div>
 </body>
 </html>
+
