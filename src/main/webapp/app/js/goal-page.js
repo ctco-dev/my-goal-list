@@ -49,13 +49,16 @@ function getQueryVariable(variable) {
 
 function addComment() {
     var data = {'message': document.getElementById("userComment").value};
-    fetch(path + "/api/goal/" + id + "/comments", {
-        "method": "POST",
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-        }, body: JSON.stringify(data)
-    }).then(function (response) {
-        onLoad();
-    });
+    if (document.getElementById("userComment").value) {
+        fetch(path + "/api/goal/" + id + "/comments", {
+            "method": "POST",
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }, body: JSON.stringify(data)
+        }).then(function (response) {
+            document.getElementById("userComment").value = "";
+            onLoad();
+        });
+    }
 }
