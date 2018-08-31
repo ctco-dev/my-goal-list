@@ -79,7 +79,7 @@ public class GoalApi {
             goal.setGoalMessage(goalDto.getGoalMessage());
             goal.setTags(parseStringToTags(goalDto.getGoalMessage()));
 
-            LocalDate localDate = LocalDate.parse(goalDto.getDeadline(), DateTimeConverter.formatterDate);
+            LocalDate localDate = LocalDate.parse(goalDto.getDeadline(), DateTimeConverter.FORMATTER_DATE);
             goal.setDeadlineDate(localDate);
 
             goal.setUser(user);

@@ -41,14 +41,6 @@ public class UserStore {
         return user.isEmpty() ? Optional.empty() : Optional.of(user.get(0));
     }
 
-    public List<User> getUserByUsername(String user){
-        return em.createQuery(
-                "select u " +
-                        "from User u " +
-                        "where u.username like '%"+user+"%'", User.class)
-                .getResultList();
-    }
-
     public User createUser(String username, String password, String email, String phone, Role role) throws InvalidUsernameException, InvalidPasswordException, UsernameAlreadyExistsException {
         username = username == null ? null : username.trim();
         validateUsername(username);
