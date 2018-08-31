@@ -24,3 +24,5 @@ function findGoals() {
 function goToMain() {
     location.href = path + "/app/start.jsp";
 }
+
+
