@@ -154,33 +154,33 @@ class GoalApiTest {
     }
 
 
-    @Test
-    @DisplayName("Test parseStringToTags(String value): Checks work of tag list generation from goal message")
-    void testParsingGoalStringToTags() {
-        Tag tag1 = new Tag(expResult1);
-        Set<Tag> tagset1 = new HashSet<>();
-        tagset1.add(tag1);
-        String[] arr = expResult4.split(" ");
-        Tag tag4a = new Tag(arr[0]);
-        Tag tag4b = new Tag(arr[1]);
-        Set<Tag> tagset4 = new HashSet<>();
-        tagset4.add(tag4a);
-        tagset4.add(tag4b);
-        Set<Tag> emptySet = new HashSet<>();
-        doAnswer(invocation -> {
-            String txt = invocation.getArgument(0).toString();
-            if (txt.equals("")) return null;
-            if (txt.equals(expResult1)) return tag1;
-            if (txt.equals(arr[0])) return tag4a;
-            if (txt.equals(arr[1])) return tag4b;
-            return new Tag(txt);
-        }).when(goalStore).addTag(any(String.class));
-        assertThat(goalApi.parseStringToTags(testLine1), equalTo(tagset1));
-        assertThat(goalApi.parseStringToTags(testLine4), equalTo(tagset4));
-        assertThat(goalApi.parseStringToTags(testLine4), not(equalTo(tagset1)));
-        assertThat(goalApi.parseStringToTags("some_text"), notNullValue());
-        assertThat(goalApi.parseStringToTags(""), equalTo(emptySet));
-    }
+//    @Test
+//    @DisplayName("Test parseStringToTags(String value): Checks work of tag list generation from goal message")
+//    void testParsingGoalStringToTags() {
+//        Tag tag1 = new Tag(expResult1);
+//        Set<Tag> tagset1 = new HashSet<>();
+//        tagset1.add(tag1);
+//        String[] arr = expResult4.split(" ");
+//        Tag tag4a = new Tag(arr[0]);
+//        Tag tag4b = new Tag(arr[1]);
+//        Set<Tag> tagset4 = new HashSet<>();
+//        tagset4.add(tag4a);
+//        tagset4.add(tag4b);
+//        Set<Tag> emptySet = new HashSet<>();
+//        doAnswer(invocation -> {
+//            String txt = invocation.getArgument(0).toString();
+//            if (txt.equals("")) return null;
+//            if (txt.equals(expResult1)) return tag1;
+//            if (txt.equals(arr[0])) return tag4a;
+//            if (txt.equals(arr[1])) return tag4b;
+//            return new Tag(txt);
+//        }).when(goalStore).addTag(any(String.class));
+//        assertThat(goalApi.parseStringToTags(testLine1), equalTo(tagset1));
+//        assertThat(goalApi.parseStringToTags(testLine4), equalTo(tagset4));
+//        assertThat(goalApi.parseStringToTags(testLine4), not(equalTo(tagset1)));
+//        assertThat(goalApi.parseStringToTags("some_text"), notNullValue());
+//        assertThat(goalApi.parseStringToTags(""), equalTo(emptySet));
+//    }
 
     @Test
     @DisplayName("generateTagsList: Checks work of tag list generation from goal message")

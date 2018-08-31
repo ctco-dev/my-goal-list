@@ -7,9 +7,14 @@ function submitData() {
         alert("Not all fields filled out!");
         return false;
     }
+    var t1 = document.getElementById("field1").value;
+    var t2 = document.getElementById("field2").value;
+    var t3 = document.getElementById("field3").value;
+    var tags = t1 + "|" + t2 + "|" + "|" + t3;
     var dto = {
         "goalMessage": goalTxt.value,
         "deadline": deadlineTxt.value,
+        "tags": tags
     };
     fetch(path + "/api/goal/newgoal", {
         "method": "POST",

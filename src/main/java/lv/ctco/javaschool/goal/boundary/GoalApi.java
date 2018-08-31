@@ -71,11 +71,8 @@ public class GoalApi {
         User user = userStore.getCurrentUser();
         Goal goal = new Goal();
         if (!goalDto.getGoalMessage().isEmpty() && !goalDto.getDeadline().isEmpty()) {
-            for (Tag tag : parseStringToTags(goalDto.getTags())) {
-                goalStore.addTag(tag.getTagMessage());
-            }
             goal.setGoalMessage(goalDto.getGoalMessage());
-            goal.setTags(goalDto.getTags());
+            goal.setTags(parseStringToTags(goalDto.getTags()));
 
             LocalDate localDate = LocalDate.parse(goalDto.getDeadline(), DateTimeConverter.FORMATTER_DATE);
             goal.setDeadlineDate(localDate);
@@ -90,7 +87,7 @@ public class GoalApi {
 
 
     Set<Tag> parseStringToTags(String value) {
-        List<String> tagList = TagParser.generateTagsList(value);
+        String[] tagList = value.split("|");
         Set<Tag> tagSet = new HashSet<>();
         for (String item : tagList) {
             Tag tag;

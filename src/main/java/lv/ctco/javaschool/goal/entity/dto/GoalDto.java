@@ -1,12 +1,16 @@
 package lv.ctco.javaschool.goal.entity.dto;
 
+import lv.ctco.javaschool.goal.entity.domain.Tag;
+
+import java.util.Set;
+
 public class GoalDto {
     private Long id;
     private String username;
     private String goalMessage;
     private String deadlineDate;
     private String registeredDate;
-    private String tags;
+    private Set<Tag> tags;
     private int daysLeft;
 
     public Long getId() {
@@ -25,11 +29,11 @@ public class GoalDto {
         this.daysLeft = daysLeft;
     }
 
-    public String getTags() {
+    public Set<Tag> getTags() {
         return tags;
     }
 
-    public void setTags(String tags) {
+    public void setTags(Set<Tag> tags) {
         this.tags = tags;
     }
 

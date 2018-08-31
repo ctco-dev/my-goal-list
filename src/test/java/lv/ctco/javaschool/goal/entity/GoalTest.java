@@ -63,9 +63,13 @@ public class GoalTest {
 
     @Test
     void testGetAndSetTagsSet() {
-        String tags = "tag1";
+        Set<Tag> tagSet = new HashSet<>();
+        tagSet.add(new Tag("tag1"));
+        tagSet.add(new Tag("tag2"));
+        tagSet.add(new Tag("tag3"));
+        tagSet.add(new Tag("tag1"));
         Goal goal = new Goal();
-        goal.setTags(tags);
-        assertThat(goal.getTags(), equalTo(tags));
+        goal.setTags(tagSet);
+        assertThat(goal.getTags(), equalTo(tagSet));
     }
 }
