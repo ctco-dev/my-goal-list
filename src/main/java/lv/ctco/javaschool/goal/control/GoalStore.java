@@ -31,14 +31,18 @@ public class GoalStore {
     }
 
     public Tag addTag( String tagMsg ){
+
         if (tagMsg.equals("")) return null;
+
         Optional<Tag> tagFromDB= em.createQuery("select t from Tag t " +
                 "where upper(t.tagMessage) = :tagMsg ", Tag.class)
                 .setParameter("tagMsg", tagMsg.toUpperCase() )
                 .getResultStream()
                 .findFirst();
-        if (tagFromDB.isPresent()) return tagFromDB.get();
-        else {
+
+        if (tagFromDB.isPresent()) {
+            return tagFromDB.get();
+        } else {
             Tag tag = new Tag();
             tag.setTagMessage(tagMsg);
             em.persist(tag);
@@ -64,4 +68,5 @@ public class GoalStore {
     public void addComment(Comment comment) {
         em.persist(comment);
     }
+
 }

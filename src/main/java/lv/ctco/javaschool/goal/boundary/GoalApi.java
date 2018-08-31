@@ -2,8 +2,7 @@ package lv.ctco.javaschool.goal.boundary;
 
 import lv.ctco.javaschool.auth.control.UserStore;
 import lv.ctco.javaschool.auth.entity.domain.User;
-import lv.ctco.javaschool.auth.entity.dto.UserLoginDto;
-import lv.ctco.javaschool.goal.control.DtoConventer;
+import lv.ctco.javaschool.goal.control.DotConvener;
 import lv.ctco.javaschool.goal.control.GoalStore;
 import lv.ctco.javaschool.goal.control.TagParser;
 import lv.ctco.javaschool.goal.control.DateTimeConverter;
@@ -14,7 +13,6 @@ import lv.ctco.javaschool.goal.entity.dto.CommentDto;
 import lv.ctco.javaschool.goal.entity.dto.GoalDto;
 import lv.ctco.javaschool.goal.entity.dto.GoalFormDto;
 import lv.ctco.javaschool.goal.entity.dto.MessageDto;
-import lv.ctco.javaschool.goal.entity.dto.TagDto;
 
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
@@ -26,16 +24,11 @@ import javax.ws.rs.PathParam;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
-import javax.json.JsonObject;
-import javax.json.JsonString;
-import javax.json.JsonValue;
 
 @Path("/goal")
 @Stateless
@@ -52,7 +45,7 @@ public class GoalApi {
         User currentUser = userStore.getCurrentUser();
         List<Goal> goalsList = goalStore.getGoalsListFor(currentUser);
         return goalsList.stream()
-                .map(DtoConventer::convertGoalToGoalDto)
+                .map(DotConvener::convertGoalToGoalDto)
                 .collect(Collectors.toList());
     }
 
@@ -63,7 +56,7 @@ public class GoalApi {
         Optional<Goal> goal = goalStore.getGoalById(goalId);
         if (goal.isPresent()) {
             Goal g = goal.get();
-            return DtoConventer.convertGoalToGoalDto(g);
+            return DotConvener.convertGoalToGoalDto(g);
         } else {
             return new GoalDto();
         }
@@ -76,8 +69,11 @@ public class GoalApi {
         User user = userStore.getCurrentUser();
         Goal goal = new Goal();
         if (!goalDto.getGoalMessage().isEmpty() && !goalDto.getDeadline().isEmpty()) {
+            for (Tag tag : parseStringToTags(goalDto.getTags())) {
+                goalStore.addTag(tag.getTagMessage());
+            }
             goal.setGoalMessage(goalDto.getGoalMessage());
-            goal.setTags(parseStringToTags(goalDto.getGoalMessage()));
+            goal.setTags(goalDto.getTags());
 
             LocalDate localDate = LocalDate.parse(goalDto.getDeadline(), DateTimeConverter.formatterDate);
             goal.setDeadlineDate(localDate);
@@ -87,6 +83,7 @@ public class GoalApi {
             goalStore.addGoal(goal);
         }
     }
+
 
     Set<Tag> parseStringToTags(String value) {
         List<String> tagList = TagParser.generateTagsList(value);
@@ -109,7 +106,7 @@ public class GoalApi {
         if (goal.isPresent()) {
             List<Comment> comments = goalStore.getCommentsForGoal(goal.get());
             return comments.stream()
-                    .map(DtoConventer::convertCommentToCommentDto)
+                    .map(DotConvener::convertCommentToCommentDto)
                     .collect(Collectors.toList());
         }
         return new ArrayList<CommentDto>();

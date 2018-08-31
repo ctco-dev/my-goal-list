@@ -18,26 +18,18 @@ public class Goal {
     @Id
     @GeneratedValue
     private Long id;
-
     @ManyToOne
     private User user;
-
-    @OneToMany
-    @JoinTable(name = "goal_tags",
-            joinColumns = @JoinColumn(name = "goal_id"),
-            inverseJoinColumns = @JoinColumn(name = "tag_id"))
-    private Set<Tag> tags;
-
+    private String tags;
     private String goalMessage;
     private LocalDate deadlineDate;
     private LocalDateTime registeredDate;
 
-
-    public Set<Tag> getTags() {
+    public String getTags() {
         return tags;
     }
 
-    public void setTags(Set<Tag> tags) {
+    public void setTags(String tags) {
         this.tags = tags;
     }
 

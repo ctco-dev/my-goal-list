@@ -8,8 +8,7 @@ import lv.ctco.javaschool.auth.entity.domain.Role;
 import lv.ctco.javaschool.auth.entity.domain.User;
 import lv.ctco.javaschool.auth.entity.dto.UserLoginDto;
 import lv.ctco.javaschool.auth.entity.dto.ErrorDto;
-import lv.ctco.javaschool.goal.control.DateTimeConverter;
-import lv.ctco.javaschool.goal.control.DtoConventer;
+import lv.ctco.javaschool.goal.control.DotConvener;
 
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
@@ -106,6 +105,6 @@ public class AuthenticationApi {
     @Path("/myprofile")
     public UserLoginDto returnUserDto() {
         User currentUser = userStore.getCurrentUser();
-        return DtoConventer.convertUserToUserLoginDto(currentUser);
+        return DotConvener.convertUserToUserLoginDto(currentUser);
     }
 }

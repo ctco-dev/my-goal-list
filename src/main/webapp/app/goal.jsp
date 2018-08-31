@@ -28,6 +28,7 @@
     <h5>Author: {{username}}</h5>
     <h5>Deadline: {{deadlineDate}} (days left: {{daysLeft}})</h5>
     <h5>{{goalMessage}}</h5>
+    <h5>{{tags}}</h5>
 </div>
 
 <div class="container">

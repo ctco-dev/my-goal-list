@@ -69,7 +69,7 @@ class GoalDtoTest {
         newList.add("tag2");
         newList.add("tag3");
         GoalDto dto = new GoalDto();
-        dto.setTagList(newList);
-        assertThat(dto.getTagList(), equalTo(newList));
+        dto.setTags(newList.toString());
+        assertThat(dto.getTags(), equalTo(newList.toString()));
     }
 }

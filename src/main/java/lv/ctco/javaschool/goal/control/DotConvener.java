@@ -7,7 +7,7 @@ import lv.ctco.javaschool.goal.entity.domain.Goal;
 import lv.ctco.javaschool.goal.entity.dto.CommentDto;
 import lv.ctco.javaschool.goal.entity.dto.GoalDto;
 
-public class DtoConventer {
+public class DotConvener {
     public static GoalDto convertGoalToGoalDto(Goal goal) {
         GoalDto dto = new GoalDto();
         dto.setUsername(goal.getUser().getUsername());
@@ -16,6 +16,7 @@ public class DtoConventer {
         dto.setRegisteredDate(DateTimeConverter.convertDateTime(goal.getRegisteredDate()));
         dto.setDaysLeft(DateTimeConverter.countDaysLeft(goal.getDeadlineDate()));
         dto.setId(goal.getId());
+        dto.setTags(goal.getTags());
         return dto;
     }
 

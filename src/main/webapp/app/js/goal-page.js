@@ -58,7 +58,7 @@ function addComment() {
             }, body: JSON.stringify(data)
         }).then(function (response) {
             document.getElementById("userComment").value = "";
-            onLoad();
+            getComments();
         });
     }
 }

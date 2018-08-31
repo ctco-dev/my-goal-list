@@ -1,15 +1,12 @@
 package lv.ctco.javaschool.goal.entity.dto;
 
-
-import java.util.List;
-
 public class GoalDto {
     private Long id;
     private String username;
     private String goalMessage;
     private String deadlineDate;
     private String registeredDate;
-    private List <String> tagList;
+    private String tags;
     private int daysLeft;
 
     public Long getId() {
@@ -28,12 +25,12 @@ public class GoalDto {
         this.daysLeft = daysLeft;
     }
 
-    public List<String> getTagList() {
-        return tagList;
+    public String getTags() {
+        return tags;
     }
 
-    public void setTagList(List<String> tagList) {
-        this.tagList = tagList;
+    public void setTags(String tags) {
+        this.tags = tags;
     }
 
     public String getUsername() {
