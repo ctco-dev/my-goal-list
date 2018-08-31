@@ -2,7 +2,7 @@ package lv.ctco.javaschool.goal.boundary;
 
 import lv.ctco.javaschool.auth.control.UserStore;
 import lv.ctco.javaschool.auth.entity.domain.User;
-import lv.ctco.javaschool.goal.control.DotConvener;
+import lv.ctco.javaschool.goal.control.DtoConvener;
 import lv.ctco.javaschool.goal.control.GoalStore;
 import lv.ctco.javaschool.goal.control.TagParser;
 import lv.ctco.javaschool.goal.control.DateTimeConverter;
@@ -46,7 +46,7 @@ public class GoalApi {
         User currentUser = userStore.getCurrentUser();
         List<Goal> goalsList = goalStore.getGoalsListFor(currentUser);
         return goalsList.stream()
-                .map(DotConvener::convertGoalToGoalDto)
+                .map(DtoConvener::convertGoalToGoalDto)
                 .collect(Collectors.toList());
     }
 
@@ -57,7 +57,7 @@ public class GoalApi {
         Optional<Goal> goal = goalStore.getGoalById(goalId);
         if (goal.isPresent()) {
             Goal g = goal.get();
-            return DotConvener.convertGoalToGoalDto(g);
+            return DtoConvener.convertGoalToGoalDto(g);
         } else {
             return new GoalDto();
         }
@@ -107,7 +107,7 @@ public class GoalApi {
         if (goal.isPresent()) {
             List<Comment> comments = goalStore.getCommentsForGoal(goal.get());
             return comments.stream()
-                    .map(DotConvener::convertCommentToCommentDto)
+                    .map(DtoConvener::convertCommentToCommentDto)
                     .collect(Collectors.toList());
         }
         return new ArrayList<CommentDto>();
@@ -132,11 +132,11 @@ public class GoalApi {
 
     @GET
     @RolesAllowed({"ADMIN", "USER"})
-    @Path("/taglist")
+    @Path("/tags")
     public List<TagDto> returnAllTags() {
         List<Tag> tagList = goalStore.getAllTagList();
         return tagList.stream()
-                .map(DotConvener::convertTagToTagDtoWithoutCnt)
+                .map(DtoConvener::convertTagToTagDtoWithoutCnt)
                 .collect(Collectors.toList());
     }
 
