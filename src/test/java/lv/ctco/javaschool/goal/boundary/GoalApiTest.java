@@ -140,15 +140,15 @@ class GoalApiTest {
     void testGetGoalById() {
         when(goalStore.getGoalById(1L))
                 .thenReturn(java.util.Optional.ofNullable(goal));
-        assertThat( goalApi.getGoalDtoByGoalId(1L).getId(), is(1L));
-        assertThat( goalApi.getGoalDtoByGoalId(1L).getUsername(), is(user1.getUsername()));
-        assertThat( goalApi.getGoalDtoByGoalId(1L).getGoalMessage(), is("abc"));
+        assertThat(goalApi.getGoalDtoByGoalId(1L).getId(), is(1L));
+        assertThat(goalApi.getGoalDtoByGoalId(1L).getUsername(), is(user1.getUsername()));
+        assertThat(goalApi.getGoalDtoByGoalId(1L).getGoalMessage(), is("abc"));
     }
 
     @Test
     @DisplayName("Test getGoalById(): throws InvalidGoalException")
     void testGetGoalById2() {
-        when(goalStore.getGoalById( 1L))
+        when(goalStore.getGoalById(1L))
                 .thenReturn(java.util.Optional.empty());
         assertThrows(InvalidGoalException.class, () -> goalApi.getGoalDtoByGoalId(1L));
     }
