@@ -13,6 +13,7 @@ import lv.ctco.javaschool.goal.entity.dto.CommentDto;
 import lv.ctco.javaschool.goal.entity.dto.GoalDto;
 import lv.ctco.javaschool.goal.entity.dto.GoalFormDto;
 import lv.ctco.javaschool.goal.entity.dto.MessageDto;
+import lv.ctco.javaschool.goal.entity.dto.TagDto;
 
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
@@ -128,4 +129,15 @@ public class GoalApi {
             throw new IllegalArgumentException();
         }
     }
+
+    @GET
+    @RolesAllowed({"ADMIN", "USER"})
+    @Path("/taglist")
+    public List<TagDto> returnAllTags() {
+        List<Tag> tagList = goalStore.getAllTagList();
+        return tagList.stream()
+                .map(DotConvener::convertTagToTagDtoWithoutCnt)
+                .collect(Collectors.toList());
+    }
+
 }

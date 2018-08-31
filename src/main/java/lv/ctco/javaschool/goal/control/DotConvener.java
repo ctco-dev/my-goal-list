@@ -4,8 +4,10 @@ import lv.ctco.javaschool.auth.entity.domain.User;
 import lv.ctco.javaschool.auth.entity.dto.UserLoginDto;
 import lv.ctco.javaschool.goal.entity.domain.Comment;
 import lv.ctco.javaschool.goal.entity.domain.Goal;
+import lv.ctco.javaschool.goal.entity.domain.Tag;
 import lv.ctco.javaschool.goal.entity.dto.CommentDto;
 import lv.ctco.javaschool.goal.entity.dto.GoalDto;
+import lv.ctco.javaschool.goal.entity.dto.TagDto;
 
 public class DotConvener {
     public static GoalDto convertGoalToGoalDto(Goal goal) {
@@ -35,6 +37,11 @@ public class DotConvener {
         dto.setCommentMessage(comment.getCommentMessage());
         return dto;
     }
+
+    public static TagDto convertTagToTagDtoWithoutCnt(Tag tag) {
+        return new TagDto(tag.getTagMessage());
+    }
+
 
 
 }
