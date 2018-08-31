@@ -132,7 +132,7 @@ public class GoalApi {
 
     @GET
     @RolesAllowed({"ADMIN", "USER"})
-    @Path("/taglist")
+    @Path("/tags")
     public List<TagDto> returnAllTags() {
         List<Tag> tagList = goalStore.getAllTagList();
         return tagList.stream()

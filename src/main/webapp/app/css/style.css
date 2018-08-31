@@ -68,3 +68,7 @@ ul {
     border-radius: 10px;
     background-color: lightgray;
 }
+
+#field1, #field2, #field3 {
+    width: 50px;
+}
