@@ -15,11 +15,11 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 
-public class GoalTest {
+class GoalTest {
 
     @Test
     void testGetAndSetId() {
-        Long newId=123456789L;
+        Long newId = 123456789L;
         Goal goal = new Goal();
         goal.setId(newId);
         assertThat(goal.getId(), is(newId));
@@ -50,7 +50,7 @@ public class GoalTest {
         LocalDate newDt = LocalDate.now();
         Goal goal = new Goal();
         goal.setDeadlineDate(newDt);
-        assertThat(goal.getDeadlineDate(), is(newDt) );
+        assertThat(goal.getDeadlineDate(), is(newDt));
     }
 
     @Test
@@ -58,16 +58,16 @@ public class GoalTest {
         LocalDateTime newDt = LocalDateTime.now();
         Goal goal = new Goal();
         goal.setRegisteredDate(newDt);
-        assertThat(goal.getRegisteredDate(), is(newDt) );
+        assertThat(goal.getRegisteredDate(), is(newDt));
     }
 
     @Test
     void testGetAndSetTagsSet() {
         Set<Tag> tagSet = new HashSet<>();
-        tagSet.add( new Tag("tag1")  );
-        tagSet.add( new Tag("tag2")  );
-        tagSet.add( new Tag("tag3")  );
-        tagSet.add( new Tag("tag1")  );
+        tagSet.add(new Tag("tag1"));
+        tagSet.add(new Tag("tag2"));
+        tagSet.add(new Tag("tag3"));
+        tagSet.add(new Tag("tag1"));
         Goal goal = new Goal();
         goal.setTags(tagSet);
         assertThat(goal.getTags(), equalTo(tagSet));

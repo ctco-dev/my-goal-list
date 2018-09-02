@@ -2,14 +2,16 @@ package lv.ctco.javaschool.goal.boundary;
 
 import lv.ctco.javaschool.auth.control.UserStore;
 import lv.ctco.javaschool.auth.entity.domain.User;
-import lv.ctco.javaschool.auth.entity.dto.UserLoginDto;
+import lv.ctco.javaschool.auth.entity.dto.UserSearchDto;
+import lv.ctco.javaschool.goal.control.DtoConventer;
 import lv.ctco.javaschool.goal.control.GoalStore;
 import lv.ctco.javaschool.goal.control.TagParser;
-import lv.ctco.javaschool.goal.entity.*;
 import lv.ctco.javaschool.goal.entity.domain.Comment;
 import lv.ctco.javaschool.goal.entity.domain.Goal;
 import lv.ctco.javaschool.goal.entity.domain.Tag;
 import lv.ctco.javaschool.goal.entity.dto.CommentDto;
+import lv.ctco.javaschool.goal.entity.dto.GoalDto;
+import lv.ctco.javaschool.goal.entity.dto.GoalFormDto;
 import lv.ctco.javaschool.goal.entity.dto.MessageDto;
 import lv.ctco.javaschool.goal.entity.exception.InvalidGoalException;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,10 +26,22 @@ import javax.json.Json;
 import javax.json.JsonObject;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.*;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
+
+import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -35,19 +49,18 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class GoalApiTest {
-    Goal goal = new Goal();
-    Goal goal2 = new Goal();
-    User user1 = new User();
-    User user2 = new User();
-    Comment comment1 = new Comment();
-    List<Goal> goalList1 = new ArrayList<>();
-    List<GoalDto> goalDtoList = new ArrayList<>();
-    List<Comment> comments = new ArrayList<>();
-    List<CommentDto> commentDtos = new ArrayList<>();
-    List<User> userList = new ArrayList<>();
-    List<UserSearchDto> userDtoList = new ArrayList<>();
-    List<UserLoginDto> userDtoList = new ArrayList<>();
-    String testLine1, expResult1, testLine2, expResult2, testLine3, expResult3, testLine4, expResult4;
+    private Goal goal = new Goal();
+    private Goal goal2 = new Goal();
+    private User user1 = new User();
+    private User user2 = new User();
+    private Comment comment1 = new Comment();
+    private List<Goal> goalList1 = new ArrayList<>();
+    private List<GoalDto> goalDtoList = new ArrayList<>();
+    private List<Comment> comments = new ArrayList<>();
+    private List<CommentDto> commentDtos = new ArrayList<>();
+    private List<User> userList = new ArrayList<>();
+    private List<UserSearchDto> userDtoList = new ArrayList<>();
+    private String testLine1, expResult1, testLine2, expResult2, testLine3, expResult3, testLine4, expResult4;
 
     @Mock
     private UserStore userStore;
@@ -124,16 +137,16 @@ class GoalApiTest {
     void testGetGoalById() {
         when(goalStore.getGoalById(1L))
                 .thenReturn(java.util.Optional.ofNullable(goal));
-        assertThat( goalApi.getGoalDtoByGoalId(1L).getId(), is(1L));
-        assertThat( goalApi.getGoalDtoByGoalId(1L).getUsername(), is(user1.getUsername()));
-        assertThat( goalApi.getGoalDtoByGoalId(1L).getGoalMessage(), is("abc"));
+        assertThat(goalApi.getGoalDtoByGoalId(1L).getId(), is(1L));
+        assertThat(goalApi.getGoalDtoByGoalId(1L).getUsername(), is(user1.getUsername()));
+        assertThat(goalApi.getGoalDtoByGoalId(1L).getGoalMessage(), is("abc"));
     }
 
 
     @Test
     @DisplayName("Test getGoalById(): throws InvalidGoalException")
     void testGetGoalById2() {
-        when(goalStore.getGoalById( 1L))
+        when(goalStore.getGoalById(1L))
                 .thenReturn(java.util.Optional.empty());
         assertThrows(InvalidGoalException.class, () -> goalApi.getGoalDtoByGoalId(1L));
     }
@@ -202,7 +215,7 @@ class GoalApiTest {
     @DisplayName("Test returnAllCommentsForGoalById(): returns Comments dto of goal by id")
     void returnAllCommentsForGoalById() {
         comments.add(comment1);
-        when(goalStore.getGoalById(1l))
+        when(goalStore.getGoalById(1L))
                 .thenReturn(java.util.Optional.ofNullable(goal));
         when(goalStore.getCommentsForGoal(goal))
                 .thenReturn(comments);
@@ -249,7 +262,7 @@ class GoalApiTest {
     @DisplayName("SearchParameters: User has correct input search parameter")
     void getSearchParameters1() {
         userList.add(user1);
-        UserLoginDto dto = new UserLoginDto();
+        UserSearchDto dto = new UserSearchDto();
         dto.setUsername(user1.getUsername());
         dto.setPhone(user1.getPhone());
         dto.setEmail(user1.getEmail());
@@ -259,11 +272,9 @@ class GoalApiTest {
                 .build();
         when(userStore.getUserByUsername("us"))
                 .thenReturn(userList);
-        when(userStore.convertToDto(userList.get(0)))
-                .thenReturn(dto);
-        assertEquals(userDtoList.get(0).getUsername(), goalApi.getSearchParameters(searchDto).get(0).getUsername());
-        assertEquals(userDtoList.get(0).getEmail(), goalApi.getSearchParameters(searchDto).get(0).getEmail());
-        assertEquals(userDtoList.get(0).getPhone(), goalApi.getSearchParameters(searchDto).get(0).getPhone());
+        assertThat(goalApi.getSearchParameters(searchDto).get(0).getUsername(), is(userDtoList.get(0).getUsername()));
+        assertThat(goalApi.getSearchParameters(searchDto).get(0).getEmail(), is(userDtoList.get(0).getEmail()));
+        assertThat(goalApi.getSearchParameters(searchDto).get(0).getPhone(), is(userDtoList.get(0).getPhone()));
     }
 
     @Test
@@ -274,7 +285,7 @@ class GoalApiTest {
                 .build();
         when(userStore.getUserByUsername(""))
                 .thenReturn(userList);
-        assertTrue(goalApi.getSearchParameters(searchDto).isEmpty());
+        assertThat(goalApi.getSearchParameters(searchDto).isEmpty(), is(true));
     }
 
 

@@ -13,7 +13,7 @@ class GoalFormDtoTest {
         String newGoalMsg = "goal message";
         GoalFormDto dto = new GoalFormDto();
         dto.setGoalMessage(newGoalMsg);
-        assertThat( dto.getGoalMessage(), is(newGoalMsg));
+        assertThat(dto.getGoalMessage(), is(newGoalMsg));
     }
 
     @Test
@@ -21,7 +21,7 @@ class GoalFormDtoTest {
         String newDeadline = "20.05.2019";
         GoalFormDto dto = new GoalFormDto();
         dto.setDeadline(newDeadline);
-        assertThat( dto.getDeadline(), is(newDeadline));
+        assertThat(dto.getDeadline(), is(newDeadline));
     }
 
 }

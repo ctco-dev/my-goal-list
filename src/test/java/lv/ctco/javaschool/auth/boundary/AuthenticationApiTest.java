@@ -35,9 +35,9 @@ class AuthenticationApiTest {
         Mockito.when(userStore.getCurrentUser()).thenReturn(user);
 
         UserLoginDto resultDto = authenticationApi.returnUserDto();
-        assertThat( resultDto.getUsername(), is(user.getUsername()));
-        assertThat( resultDto.getEmail(), is(user.getEmail()));
-        assertThat( resultDto.getPhone(), is(user.getPhone()));
+        assertThat(resultDto.getUsername(), is(user.getUsername()));
+        assertThat(resultDto.getEmail(), is(user.getEmail()));
+        assertThat(resultDto.getPhone(), is(user.getPhone()));
     }
 
 }

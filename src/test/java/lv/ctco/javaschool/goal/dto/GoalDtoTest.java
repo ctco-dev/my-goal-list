@@ -59,7 +59,7 @@ class GoalDtoTest {
         Long newId = 123456789L;
         GoalDto dto = new GoalDto();
         dto.setId(newId);
-        assertThat( dto.getId(), is(newId));
+        assertThat(dto.getId(), is(newId));
     }
 
     @Test

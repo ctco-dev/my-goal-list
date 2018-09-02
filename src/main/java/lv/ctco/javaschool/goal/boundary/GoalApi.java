@@ -116,7 +116,7 @@ public class GoalApi {
                     .map(DtoConventer::convertCommentToCommentDto)
                     .collect(Collectors.toList());
         }
-        return new ArrayList<CommentDto>();
+        return new ArrayList<>();
     }
 
     @POST
@@ -146,30 +146,28 @@ public class GoalApi {
     @GET
     @RolesAllowed({"ADMIN", "USER"})
     @Path("/search-user")
-    public List<UserLoginDto> getSearchedUser(String searchedUserName) {
-        List<User> userList = userStore.getUserByUsername(searchedUserName);
-            return userList.stream()
-                    .map(userStore::convertToDto)
-                    .collect(Collectors.toList());
-
+    public List<UserSearchDto> getSearchedUser(String searchedUserName) {
+        return userStore.getUserByUsername(searchedUserName)
+                .stream()
+                .map(DtoConventer::convertUserToUserSearchDto)
+                .collect(Collectors.toList());
     }
 
     @POST
     @RolesAllowed({"ADMIN", "USER"})
     @Path("/search-user")
-    public List<UserLoginDto> getSearchParameters(JsonObject searchDto) {
-        List<UserLoginDto> userDtoList= new ArrayList<>();
+    public List<UserSearchDto> getSearchParameters(JsonObject searchDto) {
+        List<UserSearchDto> userDtoList = new ArrayList<>();
         for (Map.Entry<String, JsonValue> pair : searchDto.entrySet()) {
             String adr = pair.getKey();
             String value = ((JsonString) pair.getValue()).getString();
             if (adr.equals("usersearch")) {
-                List<User> userList = userStore.getUserByUsername(value);
-                userDtoList = userList.stream()
-                            .map(userStore::convertToDto)
-                            .collect(Collectors.toList());
+                userDtoList = userStore.getUserByUsername(value)
+                        .stream()
+                        .map(DtoConventer::convertUserToUserSearchDto)
+                        .collect(Collectors.toList());
             }
         }
         return userDtoList;
     }
-
 }

@@ -2,6 +2,7 @@ package lv.ctco.javaschool.goal.control;
 
 import lv.ctco.javaschool.auth.entity.domain.User;
 import lv.ctco.javaschool.auth.entity.dto.UserLoginDto;
+import lv.ctco.javaschool.auth.entity.dto.UserSearchDto;
 import lv.ctco.javaschool.goal.entity.domain.Comment;
 import lv.ctco.javaschool.goal.entity.domain.Goal;
 import lv.ctco.javaschool.goal.entity.dto.CommentDto;
@@ -35,5 +36,11 @@ public class DtoConventer {
         return dto;
     }
 
-
+    public static UserSearchDto convertUserToUserSearchDto(User user) {
+        UserSearchDto dto = new UserSearchDto();
+        dto.setUsername(user.getUsername());
+        dto.setPhone(user.getPhone());
+        dto.setEmail(user.getEmail());
+        return dto;
+    }
 }

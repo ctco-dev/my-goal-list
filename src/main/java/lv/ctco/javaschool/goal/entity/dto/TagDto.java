@@ -4,7 +4,7 @@ import static java.lang.Math.toIntExact;
 
 public class TagDto {
     private String tagMessage;
-    private int    cnt;
+    private int cnt;
 
     public TagDto(){
     }
@@ -14,7 +14,7 @@ public class TagDto {
         this.cnt = toIntExact(cnt);
     }
 
-    public TagDto(String tagMsg, int cnt ){
+    public TagDto(String tagMsg, int cnt) {
         this.tagMessage = tagMsg;
         this.cnt = cnt;
     }
