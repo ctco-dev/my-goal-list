@@ -1,4 +1,4 @@
-package lv.ctco.javaschool.goal.entity;
+package lv.ctco.javaschool.goal.entity.dto;
 
 public class CommentDto {
     private String username;

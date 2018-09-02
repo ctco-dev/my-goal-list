@@ -1,14 +1,20 @@
-package lv.ctco.javaschool.goal.entity;
+package lv.ctco.javaschool.goal.entity.dto;
 
+import static java.lang.Math.toIntExact;
 
 public class TagDto {
     private String tagMessage;
-    private Long    cnt;
+    private int    cnt;
 
     public TagDto(){
     }
 
     public TagDto(String tagMsg, Long cnt ){
+        this.tagMessage = tagMsg;
+        this.cnt = toIntExact(cnt);
+    }
+
+    public TagDto(String tagMsg, int cnt ){
         this.tagMessage = tagMsg;
         this.cnt = cnt;
     }
@@ -21,11 +27,11 @@ public class TagDto {
         this.tagMessage = tagMessage;
     }
 
-    public Long getCnt() {
+    public int getCnt() {
         return cnt;
     }
 
-    public void setCnt(Long cnt) {
+    public void setCnt(int cnt) {
         this.cnt = cnt;
     }
 }

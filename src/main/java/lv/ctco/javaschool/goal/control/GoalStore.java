@@ -1,15 +1,16 @@
 package lv.ctco.javaschool.goal.control;
 
 import lv.ctco.javaschool.auth.entity.domain.User;
-import lv.ctco.javaschool.goal.entity.Comment;
-import lv.ctco.javaschool.goal.entity.Goal;
-import lv.ctco.javaschool.goal.entity.Tag;
-import lv.ctco.javaschool.goal.entity.TagDto;
-
+import lv.ctco.javaschool.goal.entity.domain.Goal;
+import lv.ctco.javaschool.goal.entity.domain.Tag;
+import lv.ctco.javaschool.goal.entity.dto.TagDto;
+import lv.ctco.javaschool.goal.entity.domain.Comment;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import java.util.*;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Optional;
 
 @Stateless
 public class GoalStore {
@@ -35,27 +36,8 @@ public class GoalStore {
                 "SELECT new lv.ctco.javaschool.goal.entity.TagDto(t.tagMessage, COUNT(t)) " +
                         "FROM Tag t, Goal g " +
                         "WHERE t MEMBER OF g.tags " +
-                        "GROUP BY t.id").getResultList());
-    }
-
-    public List<Tag> getAllTagsForGoal(Goal goal) {
-        return em.createQuery(
-                "select t " +
-                        "from Tag t, Goal g " +
-                        "where g = :goal and t member of g.tags", Tag.class)
-                .setParameter("goal", goal)
-                .getResultList();
-    }
-    public List<Goal> getSimilarGoals(Goal goal, User currentUser) {
-        return em.createQuery(
-                "SELECT g" +
-                        "FROM Goal g " +
-                        "JOIN goal_tags gt ON gt.goal_id = g.id AND gt.tag_id IN" +
-                        "(SELECT tag_id FROM goal_tags WHERE goal_id =:goalid)" +
-                        "WHERE g.id <> :goalid AND g.user <> :currentuser GROUP BY g.id order by COUNT(*) DESC\n LIMIT 3", Goal.class)
-                .setParameter("goalid", goal.getId())
-                .setParameter("user", currentUser)
-                .getResultList();
+                        "GROUP BY t.id"
+        ).getResultList());
     }
 
     public Tag addTag( String tagMsg ){

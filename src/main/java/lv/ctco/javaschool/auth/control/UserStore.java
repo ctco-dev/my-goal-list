@@ -6,7 +6,6 @@ import lv.ctco.javaschool.auth.control.exceptions.UsernameAlreadyExistsException
 import lv.ctco.javaschool.auth.entity.domain.Role;
 import lv.ctco.javaschool.auth.entity.domain.User;
 import lv.ctco.javaschool.auth.entity.dto.UserLoginDto;
-import lv.ctco.javaschool.auth.entity.dto.UserSearchDto;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -34,16 +33,12 @@ public class UserStore {
 
     public Optional<User> findUserByUsername(String username) {
         username = username.trim();
-        List<User> user = em.createQuery("select u from User u where upper(u.username) = :username", User.class)
+        List<User> user = em.createQuery(
+                "select u from User u " +
+                        "where upper(u.username) = :username", User.class)
                 .setParameter("username", username.toUpperCase())
                 .getResultList();
         return user.isEmpty() ? Optional.empty() : Optional.of(user.get(0));
-    }
-
-    public User findUserById(Long id) {
-        return em.createQuery("select u from User u where u.id = :id", User.class)
-                .setParameter("id", id)
-                .getSingleResult();
     }
 
     public List<User> getUserByUsername(String user){
@@ -92,13 +87,6 @@ public class UserStore {
         }
     }
 
-    public UserLoginDto convertToDto(User user) {
-        UserLoginDto dto = new UserLoginDto();
-        dto.setUsername(user.getUsername());
-        dto.setPhone(user.getPhone());
-        dto.setEmail(user.getEmail());
-        return dto;
-    }
 
     public UserSearchDto convertToSearchDto(User user) {
         UserSearchDto dto = new UserSearchDto();

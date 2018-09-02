@@ -1,33 +1,32 @@
 package lv.ctco.javaschool.goal.entity;
 
 import lv.ctco.javaschool.auth.entity.domain.User;
-import lv.ctco.javaschool.goal.entity.Goal;
-import org.junit.jupiter.api.DisplayName;
+import lv.ctco.javaschool.goal.entity.domain.Goal;
+import lv.ctco.javaschool.goal.entity.domain.Tag;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.Month;
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
 
-
-import static org.junit.jupiter.api.Assertions.*;
-
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
 
 public class GoalTest {
 
-
     @Test
-    @DisplayName("Ids should be equal")
-    void getAndSetId() {
-        Long l=123456789L;
+    void testGetAndSetId() {
+        Long newId=123456789L;
         Goal goal = new Goal();
-        goal.setId(l);
-        assertEquals(l,goal.getId());
+        goal.setId(newId);
+        assertThat(goal.getId(), is(newId));
     }
 
     @Test
-    @DisplayName("Users should be equal")
-    void getAndSetUser() {
+    void testGetAndSetUser() {
         User user = new User();
         user.setId(123456789L);
         user.setPassword("12346");
@@ -35,33 +34,42 @@ public class GoalTest {
         user.setPhone("+37123456789");
         Goal goal = new Goal();
         goal.setUser(user);
-        assertEquals(user, goal.getUser());
+        assertThat(goal.getUser(), is(user));
     }
 
     @Test
-    @DisplayName("GoalMessages should be equal")
-    public void getAndSetGoalMessage() {
+    void testGetAndSetGoalMessage() {
         String newGoalMsg = "goal message";
         Goal goal = new Goal();
         goal.setGoalMessage(newGoalMsg);
-        assertEquals(newGoalMsg, goal.getGoalMessage());
+        assertThat(goal.getGoalMessage(), is(newGoalMsg));
     }
 
     @Test
-    @DisplayName("DeadlineDate should be equal")
-    void getAndSetDeadlineDate() {
+    void testGetAndSetDeadlineDate() {
         LocalDate newDt = LocalDate.now();
         Goal goal = new Goal();
         goal.setDeadlineDate(newDt);
-        assertEquals(newDt, goal.getDeadlineDate() );
+        assertThat(goal.getDeadlineDate(), is(newDt) );
     }
 
     @Test
-    @DisplayName("RegisteredDate should be equal")
-    void getAndSetRegisteredDate() {
+    void testGetAndSetRegisteredDate() {
         LocalDateTime newDt = LocalDateTime.now();
         Goal goal = new Goal();
         goal.setRegisteredDate(newDt);
-        assertEquals(newDt, goal.getRegisteredDate() );
+        assertThat(goal.getRegisteredDate(), is(newDt) );
+    }
+
+    @Test
+    void testGetAndSetTagsSet() {
+        Set<Tag> tagSet = new HashSet<>();
+        tagSet.add( new Tag("tag1")  );
+        tagSet.add( new Tag("tag2")  );
+        tagSet.add( new Tag("tag3")  );
+        tagSet.add( new Tag("tag1")  );
+        Goal goal = new Goal();
+        goal.setTags(tagSet);
+        assertThat(goal.getTags(), equalTo(tagSet));
     }
 }

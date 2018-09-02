@@ -1,8 +1,9 @@
-package lv.ctco.javaschool.goal.entity;
+package lv.ctco.javaschool.goal.entity.domain;
 
-
+import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.*;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 
 @Entity
 public class Tag {
@@ -12,6 +13,13 @@ public class Tag {
 
     @Column(unique = true)
     private String tagMessage;
+
+    public Tag() {
+    }
+
+    public Tag(String tagMsg) {
+        this.tagMessage = tagMsg;
+    }
 
     public void setId(Long id) {
         this.id = id;

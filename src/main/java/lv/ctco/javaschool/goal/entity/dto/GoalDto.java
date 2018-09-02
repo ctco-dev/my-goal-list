@@ -1,30 +1,30 @@
-package lv.ctco.javaschool.goal.entity;
+package lv.ctco.javaschool.goal.entity.dto;
 
 
 import java.util.List;
 
 public class GoalDto {
+    private Long id;
     private String username;
     private String goalMessage;
     private String deadlineDate;
     private String registeredDate;
     private List <String> tagList;
-    private long daysLeft;
-    private long id;
+    private int daysLeft;
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public long getDaysLeft() {
+    public int getDaysLeft() {
         return daysLeft;
     }
 
-    public void setDaysLeft(long daysLeft) {
+    public void setDaysLeft(int daysLeft) {
         this.daysLeft = daysLeft;
     }
 

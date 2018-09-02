@@ -1,21 +1,23 @@
 package lv.ctco.javaschool.goal.entity;
 
 import lv.ctco.javaschool.auth.entity.domain.User;
+import lv.ctco.javaschool.goal.entity.domain.Comment;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 
 class CommentTest {
     @Test
     @DisplayName("Ids should be equal")
     void getAndSetId() {
-        Long l=123456789L;
+        Long newId=123456789L;
         Comment comment = new Comment();
-        comment.setId(l);
-        assertEquals(l, comment.getId());
+        comment.setId(newId);
+        assertThat(comment.getId(), is(newId));
     }
 
     @Test
@@ -28,9 +30,8 @@ class CommentTest {
         user.setPhone("+37123456789");
         Comment comment = new Comment();
         comment.setUser(user);
-        assertEquals(user, comment.getUser());
+        assertThat(comment.getUser(), is(user));
     }
-
 
     @Test
     @DisplayName("RegisteredDate should be equal")
@@ -38,7 +39,7 @@ class CommentTest {
         LocalDateTime newDt = LocalDateTime.now();
         Comment comment = new Comment();
         comment.setRegisteredDate(newDt);
-        assertEquals(newDt, comment.getRegisteredDate() );
+        assertThat(comment.getRegisteredDate(), is(newDt));
     }
 
     @Test
@@ -47,7 +48,6 @@ class CommentTest {
         String newMsg="test comment";
         Comment comment = new Comment();
         comment.setCommentMessage(newMsg);
-        assertEquals(newMsg, comment.getCommentMessage());
+        assertThat(comment.getCommentMessage(), is(newMsg));
     }
-
 }
