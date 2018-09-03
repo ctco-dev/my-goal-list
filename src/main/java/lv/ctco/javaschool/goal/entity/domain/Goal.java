@@ -3,8 +3,8 @@ package lv.ctco.javaschool.goal.entity.domain;
 import lv.ctco.javaschool.auth.entity.domain.User;
 
 import javax.persistence.Entity;
-import javax.persistence.Id;
 import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;

@@ -3,7 +3,7 @@ package lv.ctco.javaschool.goal.entity.dto;
 public class TagDto {
     private String tagMessage;
 
-    public TagDto(){
+    public TagDto() {
     }
 
     public TagDto(String tagMsg) {

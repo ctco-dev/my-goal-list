@@ -54,9 +54,9 @@ class DotConvenerTest {
     @DisplayName("Test ConvertUserToUserLoginDto(User user): Checks that User and UserDto contains same data")
     void testConvertUserToUserLoginDto() {
         UserLoginDto dto = DtoConvener.convertUserToUserLoginDto(user);
-        assertThat( dto.getUsername(), is(user.getUsername()));
-        assertThat( dto.getEmail(), is(user.getEmail()));
-        assertThat( dto.getPhone(), is(user.getPhone()));
+        assertThat(dto.getUsername(), is(user.getUsername()));
+        assertThat(dto.getEmail(), is(user.getEmail()));
+        assertThat(dto.getPhone(), is(user.getPhone()));
     }
 
 
@@ -64,13 +64,13 @@ class DotConvenerTest {
     @DisplayName("Test convertGoalToGoalDto(Goal goal): Checks that goal and goalDto contains same data (List<Tag> excluded)")
     void testConvertGoalToGoalDto() {
         GoalDto dto = DtoConvener.convertGoalToGoalDto(goal);
-        assertThat( dto.getUsername(), is(goal.getUser().getUsername()));
-        assertThat( dto.getGoalMessage(), is(goal.getGoalMessage()));
-        assertThat( dto.getDeadlineDate(), is(DateTimeConverter.convertDate(goal.getDeadlineDate())));
-        assertThat( dto.getId(), is(goal.getId()));
-        assertThat( dto.getRegisteredDate(), is(DateTimeConverter.convertDateTime(goal.getRegisteredDate())));
-        assertThat( dto.getRegisteredDate(), is(DateTimeConverter.convertDateTime(goal.getRegisteredDate())));
-        assertThat( dto.getRegisteredDate(), is(DateTimeConverter.convertDateTime(goal.getRegisteredDate())));
+        assertThat(dto.getUsername(), is(goal.getUser().getUsername()));
+        assertThat(dto.getGoalMessage(), is(goal.getGoalMessage()));
+        assertThat(dto.getDeadlineDate(), is(DateTimeConverter.convertDate(goal.getDeadlineDate())));
+        assertThat(dto.getId(), is(goal.getId()));
+        assertThat(dto.getRegisteredDate(), is(DateTimeConverter.convertDateTime(goal.getRegisteredDate())));
+        assertThat(dto.getRegisteredDate(), is(DateTimeConverter.convertDateTime(goal.getRegisteredDate())));
+        assertThat(dto.getRegisteredDate(), is(DateTimeConverter.convertDateTime(goal.getRegisteredDate())));
         assertThat(dto.getTags(), nullValue());
     }
 
@@ -80,9 +80,9 @@ class DotConvenerTest {
     void testConvertCommentToCommentDto() {
         CommentDto dto = DtoConvener.convertCommentToCommentDto(comment);
 
-        assertThat( dto.getUsername(), is(comment.getUser().getUsername()));
-        assertThat( dto.getCommentMessage(), is(comment.getCommentMessage()));
-        assertThat( dto.getRegisteredDate(), is(DateTimeConverter.convertDateTime(comment.getRegisteredDate())));
+        assertThat(dto.getUsername(), is(comment.getUser().getUsername()));
+        assertThat(dto.getCommentMessage(), is(comment.getCommentMessage()));
+        assertThat(dto.getRegisteredDate(), is(DateTimeConverter.convertDateTime(comment.getRegisteredDate())));
     }
 
     @Test

@@ -5,7 +5,6 @@ import lv.ctco.javaschool.auth.control.exceptions.InvalidUsernameException;
 import lv.ctco.javaschool.auth.control.exceptions.UsernameAlreadyExistsException;
 import lv.ctco.javaschool.auth.entity.domain.Role;
 import lv.ctco.javaschool.auth.entity.domain.User;
-import lv.ctco.javaschool.auth.entity.dto.UserLoginDto;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;

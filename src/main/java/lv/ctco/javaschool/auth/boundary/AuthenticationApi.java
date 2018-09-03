@@ -1,13 +1,13 @@
 package lv.ctco.javaschool.auth.boundary;
 
+import lv.ctco.javaschool.auth.control.UserStore;
 import lv.ctco.javaschool.auth.control.exceptions.InvalidPasswordException;
 import lv.ctco.javaschool.auth.control.exceptions.InvalidUsernameException;
-import lv.ctco.javaschool.auth.control.UserStore;
 import lv.ctco.javaschool.auth.control.exceptions.UsernameAlreadyExistsException;
 import lv.ctco.javaschool.auth.entity.domain.Role;
 import lv.ctco.javaschool.auth.entity.domain.User;
-import lv.ctco.javaschool.auth.entity.dto.UserLoginDto;
 import lv.ctco.javaschool.auth.entity.dto.ErrorDto;
+import lv.ctco.javaschool.auth.entity.dto.UserLoginDto;
 import lv.ctco.javaschool.goal.control.DtoConvener;
 
 import javax.annotation.security.RolesAllowed;
