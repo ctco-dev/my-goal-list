@@ -20,6 +20,7 @@ function getComments() {
 }
 
 function onLoad() {
+    document.getElementById("edit-goal").classList.add("w3-hide");
     fetch(path + "/api/goal/mygoals/" + id, {
         "method": "GET",
         headers: {
@@ -71,4 +72,9 @@ function addComment() {
             }
         });
     }
+}
+
+function editGoal() {
+    document.getElementById("show-goal").classList.add("w3-hide");
+    document.getElementById("edit-goal").classList.remove("w3-hide");
 }
