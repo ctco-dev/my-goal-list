@@ -19,9 +19,6 @@
     <script>
         $(function () {
             $("#datepicker").datepicker({dateFormat: 'dd.mm.yy'});
-            $("#field1").editableSelect({effects: 'fade'});
-            $('#field2').editableSelect({effects: 'fade'});
-            $('#field3').editableSelect({effects: 'fade'});
         });
     </script>
 </head>
@@ -52,15 +49,11 @@
         <br>Tags:(Max:3)
         <br>
         <div id="tag-list-holder">
-            <select id="field1">
-                <option w3-repeat="tags">{{tagMessage}}</option>
-            </select>
-            <select id="field2">
-                <option w3-repeat="tags">{{tagMessage}}</option>
-            </select>
-            <select id="field3">
-                <option w3-repeat="tags">{{tagMessage}}</option>
-            </select>
+            <input id="field1" type="text" list="tags"/>
+            <input id="field2" type="text" list="tags"/>
+            <input id="field3" type="text" list="tags"/>
+            <datalist id="tags">
+            </datalist>
         </div>
         <input type="button" value="Submit" onclick="submitData()">
     </form>

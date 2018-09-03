@@ -5,6 +5,7 @@ import lv.ctco.javaschool.goal.entity.domain.Goal;
 import lv.ctco.javaschool.goal.entity.domain.Tag;
 import lv.ctco.javaschool.goal.entity.dto.TagDto;
 import lv.ctco.javaschool.goal.entity.domain.Comment;
+
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -30,13 +31,12 @@ public class GoalStore {
         em.persist(goal);
     }
 
-    public Tag addTag( String tagMsg ){
-
+    public Tag addTag(String tagMsg) {
         if (tagMsg.equals("")) return null;
 
-        Optional<Tag> tagFromDB= em.createQuery("select t from Tag t " +
+        Optional<Tag> tagFromDB = em.createQuery("select t from Tag t " +
                 "where upper(t.tagMessage) = :tagMsg ", Tag.class)
-                .setParameter("tagMsg", tagMsg.toUpperCase() )
+                .setParameter("tagMsg", tagMsg.toUpperCase())
                 .getResultStream()
                 .findFirst();
 
@@ -70,9 +70,9 @@ public class GoalStore {
     }
 
     public List<Tag> getAllTagList() {
-        return new ArrayList<>(em.createQuery(
-                "SELECT t FROM Tag t " +
-                        "order by t.tagMessage").getResultList());
+        return new ArrayList<>(em.createQuery("SELECT t FROM Tag t " +
+                "order by t.tagMessage", Tag.class)
+                .getResultList());
     }
 
 }

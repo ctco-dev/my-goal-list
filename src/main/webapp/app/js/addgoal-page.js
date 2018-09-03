@@ -45,11 +45,16 @@ function loadTags() {
             tableData = {"tags": [{"tagMessage": " "}]};
         }
         console.log(tableData);
-        w3.displayObject("field1", tableData);
-        w3.displayObject("field2", tableData);
-        w3.displayObject("field3", tableData);
-        // w3DisplayData("field1", tableData);
-        // w3DisplayData("field2", tableData);
-        // w3DisplayData("field3", tableData);
+        addOptions(tags, "tags");
     });
+
+    function addOptions(tags, name) {
+        var i;
+        var obj = "";
+        for (i = 0; i < tags.length; i++) {
+            obj += "<option>" + tags[i].tagMessage + "</option>";
+
+        }
+        document.getElementById(name).innerHTML = obj;
+    }
 }
