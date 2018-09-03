@@ -90,7 +90,6 @@ class DotConvenerTest {
     void testConvertTagToTagDtoWithoutCnt() {
         TagDto dto = DtoConvener.convertTagToTagDtoWithoutCnt(tag);
         assertThat(dto.getTagMessage(), is(tag.getTagMessage()));
-        assertThat(dto.getCnt(), is(0));
     }
 
 }

@@ -49,9 +49,9 @@
         <br>Tags:(Max:3)
         <br>
         <div id="tag-list-holder">
-            <input id="field1" type="text" list="tags"/>
-            <input id="field2" type="text" list="tags"/>
-            <input id="field3" type="text" list="tags"/>
+            <input id="tags-field-1" type="text" list="tags"/>
+            <input id="tags-field-2" type="text" list="tags"/>
+            <input id="tags-field-3" type="text" list="tags"/>
             <datalist id="tags">
             </datalist>
         </div>

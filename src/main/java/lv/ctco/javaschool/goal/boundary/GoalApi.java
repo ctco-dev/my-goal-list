@@ -40,6 +40,9 @@ public class GoalApi {
     @Inject
     private GoalStore goalStore;
 
+    @Inject
+    private TagParser tagParser;
+
     @GET
     @RolesAllowed({"ADMIN", "USER"})
     @Path("/mygoals")
@@ -72,7 +75,7 @@ public class GoalApi {
         Goal goal = new Goal();
         if (!goalDto.getGoalMessage().isEmpty() && !goalDto.getDeadline().isEmpty()) {
             goal.setGoalMessage(goalDto.getGoalMessage());
-            goal.setTags(parseStringToTags(goalDto.getTags()));
+            goal.setTags(tagParser.parseStringToTagsAndPersist(goalDto.getTags()));
 
             LocalDate localDate = LocalDate.parse(goalDto.getDeadline(), DateTimeConverter.FORMATTER_DATE);
             goal.setDeadlineDate(localDate);
@@ -85,19 +88,6 @@ public class GoalApi {
         }
     }
 
-
-    Set<Tag> parseStringToTags(String value) {
-        String[] tagList = value.split("\\|");
-        Set<Tag> tagSet = new HashSet<>();
-        for (String item : tagList) {
-            Tag tag;
-            tag = goalStore.addTag(item);
-            if (tag != null) {
-                tagSet.add(tag);
-            }
-        }
-        return tagSet;
-    }
 
     @GET
     @RolesAllowed({"ADMIN", "USER"})

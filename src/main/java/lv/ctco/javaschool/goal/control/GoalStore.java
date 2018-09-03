@@ -12,6 +12,7 @@ import javax.persistence.PersistenceContext;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Optional;
+import java.util.Set;
 
 @Stateless
 public class GoalStore {
@@ -33,21 +34,18 @@ public class GoalStore {
 
     public Tag addTag(String tagMsg) {
         if (tagMsg.equals("")) return null;
-
         Optional<Tag> tagFromDB = em.createQuery("select t from Tag t " +
                 "where upper(t.tagMessage) = :tagMsg ", Tag.class)
                 .setParameter("tagMsg", tagMsg.toUpperCase())
                 .getResultStream()
                 .findFirst();
-
         if (tagFromDB.isPresent()) {
             return tagFromDB.get();
-        } else {
-            Tag tag = new Tag();
-            tag.setTagMessage(tagMsg);
-            em.persist(tag);
-            return tag;
         }
+        Tag tag = new Tag();
+        tag.setTagMessage(tagMsg);
+        em.persist(tag);
+        return tag;
     }
 
     public Optional<Goal> getGoalById(Long goalId) {
@@ -70,9 +68,19 @@ public class GoalStore {
     }
 
     public List<Tag> getAllTagList() {
-        return new ArrayList<>(em.createQuery("SELECT t FROM Tag t " +
+        return em.createQuery("SELECT t FROM Tag t " +
                 "order by t.tagMessage", Tag.class)
-                .getResultList());
+                .getResultList();
+    }
+
+    public void checkIfTagExistsOrPersist(String[] tagList, Set<Tag> tagSet) {
+        for (String item : tagList) {
+            Tag tag;
+            tag = this.addTag(item);
+            if (tag != null) {
+                tagSet.add(tag);
+            }
+        }
     }
 
 }
