@@ -53,13 +53,13 @@
         <br>
         <div id="tag-list-holder">
             <select id="field1">
-                <option w3-repeat="tags" value="{{tagMessage}}">{{tagMessage}}</option>
+                <option w3-repeat="tags">{{tagMessage}}</option>
             </select>
             <select id="field2">
-                <option w3-repeat="tags" value="{{tagMessage}}">{{tagMessage}}</option>
+                <option w3-repeat="tags">{{tagMessage}}</option>
             </select>
             <select id="field3">
-                <option w3-repeat="tags" value="{{tagMessage}}">{{tagMessage}}</option>
+                <option w3-repeat="tags">{{tagMessage}}</option>
             </select>
         </div>
         <input type="button" value="Submit" onclick="submitData()">

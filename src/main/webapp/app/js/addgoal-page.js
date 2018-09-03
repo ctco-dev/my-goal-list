@@ -10,7 +10,7 @@ function submitData() {
     var t1 = document.getElementById("field1").value;
     var t2 = document.getElementById("field2").value;
     var t3 = document.getElementById("field3").value;
-    var tags = t1 + "|" + t2 + "|" + "|" + t3;
+    var tags = t1 + "|" + t2 + "|" + t3;
     var dto = {
         "goalMessage": goalTxt.value,
         "deadline": deadlineTxt.value,
@@ -37,13 +37,19 @@ function loadTags() {
     }).then(function (response) {
         return response.json();
     }).then(function (tags) {
+        console.log(tags);
+        var tableData;
         if (tags.length > 0) {
-            var tableData = {"tags": tags};
+            tableData = {"tags": tags};
         } else {
-            var tableData = {"tags": [{"tagMessage": ""}]};
+            tableData = {"tags": [{"tagMessage": " "}]};
         }
-        w3DisplayData("field1", tableData);
-        w3DisplayData("field2", tableData);
-        w3DisplayData("field3", tableData);
+        console.log(tableData);
+        w3.displayObject("field1", tableData);
+        w3.displayObject("field2", tableData);
+        w3.displayObject("field3", tableData);
+        // w3DisplayData("field1", tableData);
+        // w3DisplayData("field2", tableData);
+        // w3DisplayData("field3", tableData);
     });
 }

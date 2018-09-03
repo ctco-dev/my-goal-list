@@ -87,7 +87,7 @@ public class GoalApi {
 
 
     Set<Tag> parseStringToTags(String value) {
-        String[] tagList = value.split("|");
+        String[] tagList = value.split("\\|");
         Set<Tag> tagSet = new HashSet<>();
         for (String item : tagList) {
             Tag tag;
