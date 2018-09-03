@@ -48,6 +48,9 @@ import static org.mockito.Mockito.when;
 class GoalApiTest {
     Goal goal = new Goal();
     Goal goal2 = new Goal();
+    Tag tag1 = new Tag();
+    Tag tag2 = new Tag();
+    Tag tag3 = new Tag();
     User user1 = new User();
     User user2 = new User();
     Comment comment1 = new Comment();
@@ -57,6 +60,7 @@ class GoalApiTest {
     List<CommentDto> commentDtos = new ArrayList<>();
     List<User> userList = new ArrayList<>();
     List<UserLoginDto> userDtoList = new ArrayList<>();
+    Set<Tag> tags = new HashSet<>();
     List<Tag> tagList = new ArrayList<>();
     String testLine1, expResult1, testLine2, expResult2, testLine3, expResult3, testLine4, expResult4;
 
@@ -64,8 +68,12 @@ class GoalApiTest {
     private UserStore userStore;
     @Mock
     private GoalStore goalStore;
+    @Mock
+    private TagParser tagParser;
+
     @InjectMocks
     private GoalApi goalApi;
+
 
     @BeforeEach
     void init() {
@@ -74,6 +82,12 @@ class GoalApiTest {
         user1.setId(1L);
         user1.setPassword("12345");
         user1.setPhone("12345678");
+        tag1.setId((long) 1);
+        tag2.setId((long) 2);
+        tag3.setId((long) 3);
+        tag1.setTagMessage("qwer");
+        tag2.setTagMessage("qwkeughsdf");
+        tag3.setTagMessage("asdlgn");
 
         user2.setUsername("admin");
         user2.setEmail("admin@admin.com");
@@ -110,6 +124,11 @@ class GoalApiTest {
         tagList.add(new Tag("tag2"));
         tagList.add(new Tag("tag3"));
         tagList.add(new Tag("tag4"));
+
+        tags.add(tag1);
+        tags.add(tag2);
+        tags.add(tag3);
+
     }
 
     @Test
@@ -161,8 +180,11 @@ class GoalApiTest {
         GoalFormDto goalFormDto = new GoalFormDto();
         goalFormDto.setDeadline("25.10.2018");
         goalFormDto.setGoalMessage("hi");
+        goalFormDto.setTags("qwjye|iwefyg|ksdgf");
         when(userStore.getCurrentUser())
                 .thenReturn(user1);
+        when(tagParser.parseStringToTagsAndPersist(goalFormDto.getTags()))
+                .thenReturn(tags);
         goalApi.createNewGoal(goalFormDto);
         verify(goalStore, times(1)).addGoal(any(Goal.class));
     }
