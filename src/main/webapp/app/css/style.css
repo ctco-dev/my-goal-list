@@ -8,7 +8,12 @@ body {
 h1 {
     color: black;
     display: block;
-    font-family: Cursive;
+    text-align: center;
+}
+
+h2 {
+    color: black;
+    display: block;
     text-align: center;
 }
 
@@ -57,11 +62,11 @@ form {
     border: groove;
     border-radius: 10px;
     background-color: white;
-
 }
 
 ul {
     list-style: none;
+    text-align: center;
 }
 
 .repeatable {
@@ -71,4 +76,12 @@ ul {
 
 #tags-field-1, #tags-field-2, #tags-field-3 {
     width: 200px;
+}
+
+#findGoalButton {
+    margin-right: 40%;
+}
+
+#findUserButton {
+    margin-right: 40%;
 }

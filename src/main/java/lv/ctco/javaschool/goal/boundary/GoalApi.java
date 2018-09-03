@@ -2,6 +2,7 @@ package lv.ctco.javaschool.goal.boundary;
 
 import lv.ctco.javaschool.auth.control.UserStore;
 import lv.ctco.javaschool.auth.entity.domain.User;
+import lv.ctco.javaschool.auth.entity.dto.UserSearchDto;
 import lv.ctco.javaschool.goal.control.DateTimeConverter;
 import lv.ctco.javaschool.goal.control.DtoConverter;
 import lv.ctco.javaschool.goal.control.GoalStore;
@@ -15,10 +16,14 @@ import lv.ctco.javaschool.goal.entity.dto.GoalFormDto;
 import lv.ctco.javaschool.goal.entity.dto.MessageDto;
 import lv.ctco.javaschool.goal.entity.dto.TagDto;
 import lv.ctco.javaschool.goal.entity.exception.InvalidGoalException;
+import lv.ctco.javaschool.goal.entity.exception.ValidationException;
 
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import javax.json.JsonObject;
+import javax.json.JsonString;
+import javax.json.JsonValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -26,7 +31,11 @@ import javax.ws.rs.PathParam;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -126,6 +135,71 @@ public class GoalApi {
         return tagList.stream()
                 .map(DtoConverter::convertTagToTagDto)
                 .collect(Collectors.toList());
+    }
+
+    @GET
+    @RolesAllowed({"ADMIN", "USER"})
+    @Path("/findgoals")
+    public List<UserSearchDto> getSimilarUserList() {
+        User currentUser = userStore.getCurrentUser();
+        List<UserSearchDto> userDtoList = new ArrayList<>();
+        List<Goal> goalsList = goalStore.getGoalsListFor(currentUser);
+        List<Tag> userTagListTemp = new ArrayList<>();
+        for (Goal item : goalsList) {
+            for (int i = 0; i < item.getTags().size(); i++) {
+                userTagListTemp.add(goalStore.getAllTagsForGoal(item).get(i));
+            }
+        }
+        //List of all current users goal tags without duplicates.
+        List<Tag> userTagList = new ArrayList<>(new HashSet<>(userTagListTemp));
+
+        return userDtoList;
+    }
+
+    @GET
+    @RolesAllowed({"ADMIN", "USER"})
+    @Path("/tag/{tag}")
+    public List<GoalDto> getGoalListByTag(@PathParam("tag") String tag) {
+       List<GoalDto> goalDtos = new ArrayList<>();
+        Optional<Tag> optionalTag = goalStore.getTagByMessage(tag);
+        if (optionalTag.isPresent()){
+            return goalStore.getGoalsByTag(optionalTag.get())
+                    .stream()
+                    .sorted(Comparator.comparing(Goal::getRegisteredDate))
+                    .map(DtoConverter::convertGoalToGoalDto)
+                    .collect(Collectors.toList());
+        } else {
+            throw new ValidationException("There is no such tag");
+        }
+    }
+
+    @POST
+    @RolesAllowed({"ADMIN", "USER"})
+    @Path("/search-user")
+    public List<UserSearchDto> getSearchParameters(JsonObject searchDto) {
+        List<UserSearchDto> userDtoList = new ArrayList<>();
+        for (Map.Entry<String, JsonValue> pair : searchDto.entrySet()) {
+            String adr = pair.getKey();
+            String value = ((JsonString) pair.getValue()).getString();
+            if (adr.equals("usersearch")) {
+                List<User> userList = userStore.getUserByUsername(value);
+                if (userList.size() != 0) {
+                    userDtoList = userList.stream()
+                            .map(userStore::convertToSearchDto)
+                            .collect(Collectors.toList());
+                } else {
+                    userDtoList = Collections.emptyList();
+                }
+            }
+        }
+        return userDtoList;
+    }
+
+    @GET
+    @RolesAllowed({"ADMIN", "USER"})
+    @Path("/taglist")
+    public List<TagDto> returnTagList() {
+        return goalStore.getTagList();
     }
 
 }
