@@ -20,7 +20,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 
-class DotConvenerTest {
+class DtoConverterTest {
     Goal goal = new Goal();
     User user = new User();
     Comment comment = new Comment();
@@ -53,7 +53,7 @@ class DotConvenerTest {
     @Test
     @DisplayName("Test ConvertUserToUserLoginDto(User user): Checks that User and UserDto contains same data")
     void testConvertUserToUserLoginDto() {
-        UserLoginDto dto = DtoConvener.convertUserToUserLoginDto(user);
+        UserLoginDto dto = DtoConverter.convertUserToUserLoginDto(user);
         assertThat(dto.getUsername(), is(user.getUsername()));
         assertThat(dto.getEmail(), is(user.getEmail()));
         assertThat(dto.getPhone(), is(user.getPhone()));
@@ -63,7 +63,7 @@ class DotConvenerTest {
     @Test
     @DisplayName("Test convertGoalToGoalDto(Goal goal): Checks that goal and goalDto contains same data (List<Tag> excluded)")
     void testConvertGoalToGoalDto() {
-        GoalDto dto = DtoConvener.convertGoalToGoalDto(goal);
+        GoalDto dto = DtoConverter.convertGoalToGoalDto(goal);
         assertThat(dto.getUsername(), is(goal.getUser().getUsername()));
         assertThat(dto.getGoalMessage(), is(goal.getGoalMessage()));
         assertThat(dto.getDeadlineDate(), is(DateTimeConverter.convertDate(goal.getDeadlineDate())));
@@ -78,19 +78,12 @@ class DotConvenerTest {
     @Test
     @DisplayName("Test ConvertCommentToCommentDto(Comment comment): Checks that Comment and CommentDto contains same data")
     void testConvertCommentToCommentDto() {
-        CommentDto dto = DtoConvener.convertCommentToCommentDto(comment);
+        CommentDto dto = DtoConverter.convertCommentToCommentDto(comment);
 
         assertThat(dto.getUsername(), is(comment.getUser().getUsername()));
         assertThat(dto.getCommentMessage(), is(comment.getCommentMessage()));
         assertThat(dto.getRegisteredDate(), is(DateTimeConverter.convertDateTime(comment.getRegisteredDate())));
     }
 
-    @Test
-    @DisplayName("Test convertTagToTagDtoWithoutCnt(Tag tag): Checks that Tag and Tag contains same data (except count)")
-    void testConvertTagToTagDtoWithoutCnt() {
-        TagDto dto = DtoConvener.convertTagToTagDtoWithoutCnt(tag);
-        assertThat(dto.getTagMessage(), is(tag.getTagMessage()));
-
-    }
 
 }

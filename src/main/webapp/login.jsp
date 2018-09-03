@@ -143,22 +143,26 @@
                 showError("Something is wrong!");
             } else {
                 response.json().then(function (json) {
-                    switch (json.errorCode) {
-                        case "CONFLICT":
-                            showError("A user with the same username already exists!");
-                            break;
-                        case "BAD_USERNAME":
-                            showError("Username is invalid!");
-                            break;
-                        case "BAD_PASSWORD":
-                            showError("Password is invalid!");
-                            break;
-                        default:
-                            showError("Something is wrong!");
-                    }
+                    registerErrors(json);
                 })
             }
         })
+    }
+
+    function registerErrors(json) {
+        switch (json.errorCode) {
+            case "CONFLICT":
+                showError("A user with the same username already exists!");
+                break;
+            case "BAD_USERNAME":
+                showError("Username is invalid!");
+                break;
+            case "BAD_PASSWORD":
+                showError("Password is invalid!");
+                break;
+            default:
+                showError("Something is wrong!");
+        }
     }
 
     function hideError() {

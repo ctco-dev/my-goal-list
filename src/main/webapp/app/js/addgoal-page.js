@@ -37,14 +37,6 @@ function loadTags() {
     }).then(function (response) {
         return response.json();
     }).then(function (tags) {
-        console.log(tags);
-        var tableData;
-        if (tags.length > 0) {
-            tableData = {"tags": tags};
-        } else {
-            tableData = {"tags": [{"tagMessage": " "}]};
-        }
-        console.log(tableData);
         addOptions(tags, "tags");
     });
 

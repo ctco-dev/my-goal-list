@@ -9,7 +9,7 @@ import lv.ctco.javaschool.goal.entity.dto.CommentDto;
 import lv.ctco.javaschool.goal.entity.dto.GoalDto;
 import lv.ctco.javaschool.goal.entity.dto.TagDto;
 
-public class DtoConvener {
+public class DtoConverter {
     public static GoalDto convertGoalToGoalDto(Goal goal) {
         GoalDto dto = new GoalDto();
         dto.setUsername(goal.getUser().getUsername());
@@ -38,7 +38,7 @@ public class DtoConvener {
         return dto;
     }
 
-    public static TagDto convertTagToTagDtoWithoutCnt(Tag tag) {
+    public static TagDto convertTagToTagDto(Tag tag) {
         return new TagDto(tag.getTagMessage());
     }
 

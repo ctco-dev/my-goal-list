@@ -139,7 +139,7 @@ class GoalApiTest {
 
     @Test
     @DisplayName("Test getMyGoals(): Current user has goals returns list of dto's")
-    void testGetMyGoals2() {
+    void testGetMyGoalsToReturnListOfDto() {
         goalList1.add(goal);
         when(userStore.getCurrentUser())
                 .thenReturn(user1);
@@ -162,7 +162,7 @@ class GoalApiTest {
 
     @Test
     @DisplayName("Test getGoalById(): throws InvalidGoalException")
-    void testGetGoalById2() {
+    void testGetGoalByIdException() {
         when(goalStore.getGoalById(1L))
                 .thenReturn(java.util.Optional.empty());
         assertThrows(InvalidGoalException.class, () -> goalApi.getGoalDtoByGoalId(1L));
@@ -186,7 +186,7 @@ class GoalApiTest {
 
     @Test
     @DisplayName("Test createNewGoal() : check if throws exception if empty fields of dto object")
-    void testCreateNewGoal2() {
+    void testCreateNewGoalException() {
         GoalFormDto goalFormDto = new GoalFormDto();
         when(userStore.getCurrentUser())
                 .thenReturn(user1);
@@ -208,7 +208,7 @@ class GoalApiTest {
 
     @Test
     @DisplayName("Test receiveCommentsForGoalById(): returns empty Comments dto of goal")
-    void testReturnAllCommentsForGoalById2() {
+    void testReturnAllCommentsForGoalByIdEmptyCommentsDto() {
         when(goalStore.getGoalById(1L))
                 .thenReturn(java.util.Optional.ofNullable(goal));
         when(goalStore.getCommentsForGoal(goal))
@@ -232,7 +232,7 @@ class GoalApiTest {
 
     @Test
     @DisplayName("Test saveNewCommentsForGoalById(): verify if throws exception if optional<goal> isEmpty")
-    void testSaveNewCommentsForGoalById2() {
+    void testSaveNewCommentsForGoalByIdException() {
         MessageDto msg = new MessageDto();
         msg.setMessage("hi");
         when(goalStore.getGoalById(1L))
