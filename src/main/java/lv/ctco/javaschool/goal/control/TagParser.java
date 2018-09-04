@@ -5,7 +5,6 @@ import lv.ctco.javaschool.goal.entity.domain.Tag;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class TagParser {
     public List<Tag> parseStringToTags(String value) {
         String[] tagList = value.split("\\|");
@@ -18,6 +17,5 @@ public class TagParser {
         }
         return tags;
     }
-
 
 }

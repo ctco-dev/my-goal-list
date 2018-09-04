@@ -29,7 +29,6 @@ public class Goal {
     private LocalDate deadlineDate;
     private LocalDateTime registeredDate;
 
-
     public Set<Tag> getTags() {
         return tags;
     }
