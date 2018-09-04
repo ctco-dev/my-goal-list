@@ -6,6 +6,7 @@ function logout() {
             location.href = "/";
         });
 }
+
 function redirectToGoalsAndComments(id) {
     if (id >= 0) {
         location.href = path + "/app/goal.jsp?id=" + id;
@@ -23,6 +24,10 @@ function findGoals() {
 
 function goToMain() {
     location.href = path + "/app/start.jsp";
+}
+
+function redirectToUserById(id) {
+    location.href = path + "/app/user.jsp?id=" + id;
 }
 
 

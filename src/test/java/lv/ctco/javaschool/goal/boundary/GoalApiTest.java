@@ -4,6 +4,7 @@ import lv.ctco.javaschool.auth.control.UserStore;
 import lv.ctco.javaschool.auth.entity.domain.User;
 import lv.ctco.javaschool.auth.entity.dto.UserLoginDto;
 import lv.ctco.javaschool.auth.entity.dto.UserSearchDto;
+import lv.ctco.javaschool.goal.control.DtoConverter;
 import lv.ctco.javaschool.goal.control.GoalStore;
 import lv.ctco.javaschool.goal.control.TagParser;
 import lv.ctco.javaschool.goal.entity.domain.Comment;
@@ -14,7 +15,9 @@ import lv.ctco.javaschool.goal.entity.dto.GoalDto;
 import lv.ctco.javaschool.goal.entity.dto.GoalFormDto;
 import lv.ctco.javaschool.goal.entity.dto.MessageDto;
 import lv.ctco.javaschool.goal.entity.dto.TagDto;
+import lv.ctco.javaschool.goal.entity.dto.UserDto;
 import lv.ctco.javaschool.goal.entity.exception.InvalidGoalException;
+import lv.ctco.javaschool.goal.entity.exception.InvalidUserException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -27,7 +30,11 @@ import javax.json.Json;
 import javax.json.JsonObject;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -43,7 +50,6 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class GoalApiTest {
-
     Goal goal = new Goal();
     Goal goal2 = new Goal();
     Tag tag1 = new Tag();
@@ -71,7 +77,6 @@ class GoalApiTest {
 
     @InjectMocks
     private GoalApi goalApi;
-
 
     @BeforeEach
     void init() {
@@ -130,7 +135,30 @@ class GoalApiTest {
         tagList.add(tag1);
         tagList.add(tag2);
         tagList.add(tag3);
+    }
 
+    @Test
+    @DisplayName("Test getUserById(): returns user if User exists")
+    void testGetUserByIdReturnsUserDtoIfUserExists() {
+        goalList1.add(goal);
+        UserDto userDto = DtoConverter.convertToUserDto(user1, goalList1);
+        when(userStore.findUserById(1L))
+                .thenReturn(Optional.of(user1));
+        when(goalStore.getGoalsListFor(user1))
+                .thenReturn(goalList1);
+        assertThat(goalApi.getUserById(1L).getClass(), equalTo(userDto.getClass()));
+        assertThat(goalApi.getUserById(1L).getEmail(), equalTo(userDto.getEmail()));
+        assertThat(goalApi.getUserById(1L).getId(), equalTo(userDto.getId()));
+        assertThat(goalApi.getUserById(1L).getGoalList().get(0).getDaysLeft(), equalTo(userDto.getGoalList().get(0).getDaysLeft()));
+        assertThat(goalApi.getUserById(1L).getPhone(), equalTo(userDto.getPhone()));
+    }
+
+    @Test
+    @DisplayName("Test getUserById(): throws InvalidUserException if user does not exists(wrong id)")
+    void testGetUserByIdThrowsError() {
+        when(userStore.findUserById(1L))
+                .thenReturn(Optional.empty());
+        assertThrows(InvalidUserException.class, () -> goalApi.getUserById(1L));
     }
 
     @Test
@@ -173,7 +201,6 @@ class GoalApiTest {
                 .thenReturn(java.util.Optional.empty());
         assertThrows(InvalidGoalException.class, () -> goalApi.getGoalDtoByGoalId(1L));
     }
-
 
     @Test
     @DisplayName("Test createNewGoal() : check if persists new Goal")

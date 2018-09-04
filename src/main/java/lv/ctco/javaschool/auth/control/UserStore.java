@@ -5,7 +5,6 @@ import lv.ctco.javaschool.auth.control.exceptions.InvalidUsernameException;
 import lv.ctco.javaschool.auth.control.exceptions.UsernameAlreadyExistsException;
 import lv.ctco.javaschool.auth.entity.domain.Role;
 import lv.ctco.javaschool.auth.entity.domain.User;
-import lv.ctco.javaschool.auth.entity.dto.UserSearchDto;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -85,5 +84,14 @@ public class UserStore {
                         "from User u " +
                         "where u.username like '%" + user + "%'", User.class)
                 .getResultList();
+    }
+
+    public Optional<User> findUserById(Long id) {
+        List<User> user = em.createQuery(
+                "select u from User u " +
+                        "where u.id = :userId", User.class)
+                .setParameter("userId", id)
+                .getResultList();
+        return user.isEmpty() ? Optional.empty() : Optional.of(user.get(0));
     }
 }

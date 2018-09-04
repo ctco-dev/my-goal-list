@@ -9,10 +9,15 @@ import lv.ctco.javaschool.goal.entity.domain.Tag;
 import lv.ctco.javaschool.goal.entity.dto.CommentDto;
 import lv.ctco.javaschool.goal.entity.dto.GoalDto;
 import lv.ctco.javaschool.goal.entity.dto.TagDto;
+import lv.ctco.javaschool.goal.entity.dto.UserDto;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class DtoConverter {
     public static GoalDto convertGoalToGoalDto(Goal goal) {
         GoalDto dto = new GoalDto();
+        dto.setUserId(goal.getUser().getId());
         dto.setUsername(goal.getUser().getUsername());
         dto.setGoalMessage(goal.getGoalMessage());
         dto.setDeadlineDate(DateTimeConverter.convertDate(goal.getDeadlineDate()));
@@ -50,5 +55,12 @@ public class DtoConverter {
         dto.setPhone(user.getPhone());
         dto.setEmail(user.getEmail());
         return dto;
+    }
+
+    public static UserDto convertToUserDto(User user, List<Goal> goalList) {
+        List<GoalDto> goalDtoList = goalList.stream()
+                .map(DtoConverter::convertGoalToGoalDto)
+                .collect(Collectors.toList());
+        return new UserDto(user.getId(), user.getEmail(), user.getPhone(), user.getUsername(), goalDtoList);
     }
 }

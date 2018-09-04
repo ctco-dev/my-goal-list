@@ -10,13 +10,10 @@ import lv.ctco.javaschool.goal.control.TagParser;
 import lv.ctco.javaschool.goal.entity.domain.Comment;
 import lv.ctco.javaschool.goal.entity.domain.Goal;
 import lv.ctco.javaschool.goal.entity.domain.Tag;
-import lv.ctco.javaschool.goal.entity.dto.CommentDto;
-import lv.ctco.javaschool.goal.entity.dto.GoalDto;
-import lv.ctco.javaschool.goal.entity.dto.GoalFormDto;
-import lv.ctco.javaschool.goal.entity.dto.MessageDto;
-import lv.ctco.javaschool.goal.entity.dto.TagDto;
+import lv.ctco.javaschool.goal.entity.dto.*;
 import lv.ctco.javaschool.goal.entity.exception.InvalidGoalException;
-import lv.ctco.javaschool.goal.entity.exception.ValidationException;
+import lv.ctco.javaschool.goal.entity.dto.UserDto;
+import lv.ctco.javaschool.goal.entity.exception.InvalidUserException;
 
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
@@ -32,7 +29,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -47,7 +43,6 @@ public class GoalApi {
     private UserStore userStore;
     @Inject
     private GoalStore goalStore;
-
     @Inject
     private TagParser tagParser;
 
@@ -95,7 +90,6 @@ public class GoalApi {
         }
     }
 
-
     @GET
     @Path("{id}/comments")
     public List<CommentDto> returnAllCommentsForGoalById(@PathParam("id") Long goalId) {
@@ -106,7 +100,7 @@ public class GoalApi {
                     .map(DtoConverter::convertCommentToCommentDto)
                     .collect(Collectors.toList());
         }
-        return new ArrayList<CommentDto>();
+        return new ArrayList<>();
     }
 
     @POST
@@ -180,4 +174,20 @@ public class GoalApi {
         }
         return userDtoList;
     }
+
+    @GET
+    @RolesAllowed({"ADMIN", "USER"})
+    @Path("/user/{id}")
+    public UserDto getUserById(@PathParam("id") Long id) {
+        Optional<User> user = userStore.findUserById(id);
+        if (user.isPresent()) {
+            User u = user.get();
+            List<Goal> goalList = goalStore.getGoalsListFor(u);
+            UserDto userDto = DtoConverter.convertToUserDto(u, goalList);
+            return userDto;
+        } else {
+            throw new InvalidUserException();
+        }
+    }
 }
+
