@@ -28,6 +28,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Path("/goal")
@@ -71,9 +72,11 @@ public class GoalApi {
     public void createNewGoal(GoalFormDto goalDto) {
         User user = userStore.getCurrentUser();
         Goal goal = new Goal();
-        if (!goalDto.getGoalMessage().isEmpty() && !goalDto.getDeadline().isEmpty()) {
+        if (goalDto.getGoalMessage() != null && goalDto.getDeadline() != null) {
             goal.setGoalMessage(goalDto.getGoalMessage());
-            goal.setTags(tagParser.parseStringToTagsAndPersist(goalDto.getTags()));
+            List<Tag> tags = tagParser.parseStringToTags(goalDto.getTags());
+            Set<Tag> tagSet = goalStore.checkIfTagExistsOrPersist(tags);
+            goal.setTags(tagSet);
 
             LocalDate localDate = LocalDate.parse(goalDto.getDeadline(), DateTimeConverter.FORMATTER_DATE);
             goal.setDeadlineDate(localDate);

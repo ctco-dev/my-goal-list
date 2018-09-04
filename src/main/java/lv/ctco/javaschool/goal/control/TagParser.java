@@ -2,19 +2,21 @@ package lv.ctco.javaschool.goal.control;
 
 import lv.ctco.javaschool.goal.entity.domain.Tag;
 
-import javax.inject.Inject;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class TagParser {
-    @Inject
-    private GoalStore goalStore;
-
-    public Set<Tag> parseStringToTagsAndPersist(String value) {
+    public List<Tag> parseStringToTags(String value) {
         String[] tagList = value.split("\\|");
-        Set<Tag> tagSet = new HashSet<>();
-        goalStore.checkIfTagExistsOrPersist(tagList, tagSet);
-        return tagSet;
+        List<Tag> tags = new ArrayList<>();
+        for (String item : tagList) {
+            if (item != null) {
+                Tag tag = new Tag(item);
+                tags.add(tag);
+            }
+        }
+        return tags;
     }
 
 

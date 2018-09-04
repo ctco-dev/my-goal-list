@@ -8,6 +8,7 @@ import lv.ctco.javaschool.goal.entity.domain.Tag;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -30,7 +31,7 @@ public class GoalStore {
         em.persist(goal);
     }
 
-    public Tag addTag(String tagMsg) {
+    public Tag addTagIfNotExists(String tagMsg) {
         if (tagMsg.equals("")) return null;
         Optional<Tag> tagFromDB = em.createQuery("select t from Tag t " +
                 "where upper(t.tagMessage) = :tagMsg ", Tag.class)
@@ -71,14 +72,15 @@ public class GoalStore {
                 .getResultList();
     }
 
-    public void checkIfTagExistsOrPersist(String[] tagList, Set<Tag> tagSet) {
-        for (String item : tagList) {
-            Tag tag;
-            tag = this.addTag(item);
+    public Set<Tag> checkIfTagExistsOrPersist(List<Tag> tags) {
+        Set<Tag> tagSet = new HashSet<>();
+        for (Tag t : tags) {
+            Tag tag = this.addTagIfNotExists(t.getTagMessage());
             if (tag != null) {
                 tagSet.add(tag);
             }
         }
+        return tagSet;
     }
 
 }
