@@ -9,12 +9,14 @@ import lv.ctco.javaschool.goal.control.TagParser;
 import lv.ctco.javaschool.goal.entity.domain.Comment;
 import lv.ctco.javaschool.goal.entity.domain.Goal;
 import lv.ctco.javaschool.goal.entity.domain.Tag;
+import lv.ctco.javaschool.goal.entity.domain.UserDto;
 import lv.ctco.javaschool.goal.entity.dto.CommentDto;
 import lv.ctco.javaschool.goal.entity.dto.GoalDto;
 import lv.ctco.javaschool.goal.entity.dto.GoalFormDto;
 import lv.ctco.javaschool.goal.entity.dto.MessageDto;
 import lv.ctco.javaschool.goal.entity.dto.TagDto;
 import lv.ctco.javaschool.goal.entity.exception.InvalidGoalException;
+import lv.ctco.javaschool.goal.entity.exception.InvalidUserException;
 
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
@@ -39,7 +41,6 @@ public class GoalApi {
     private UserStore userStore;
     @Inject
     private GoalStore goalStore;
-
     @Inject
     private TagParser tagParser;
 
@@ -124,6 +125,32 @@ public class GoalApi {
         return tagList.stream()
                 .map(DtoConverter::convertTagToTagDto)
                 .collect(Collectors.toList());
+    }
+
+//    @GET
+//    @RolesAllowed({"ADMIN", "USER"})
+//    @Path("/user")
+//    public UserDto getCurrentUser() {
+//        User user = userStore.getCurrentUser();
+//        return getUserDto(user);
+//    }
+
+
+    @GET
+    @RolesAllowed({"ADMIN", "USER"})
+    @Path("/user/{id}")
+    public UserDto getUserById(@PathParam("id") Long id) {
+        Optional<User> user = userStore.findUserById(id);
+        if (user.isPresent()) {
+            User u = user.get()
+            List<Goal> goalList = goalStore.getGoalsListFor(u);
+            UserDto userDto = getUserDto(u);
+            userDto.setGoalsDtoList(goalList);
+            return userDto;
+
+        } else {
+            throw new InvalidUserException();
+        }
     }
 
 }
