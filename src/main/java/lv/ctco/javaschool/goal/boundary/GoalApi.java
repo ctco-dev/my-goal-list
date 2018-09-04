@@ -33,7 +33,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -139,30 +138,10 @@ public class GoalApi {
 
     @GET
     @RolesAllowed({"ADMIN", "USER"})
-    @Path("/findgoals")
-    public List<UserSearchDto> getSimilarUserList() {
-        User currentUser = userStore.getCurrentUser();
-        List<UserSearchDto> userDtoList = new ArrayList<>();
-        List<Goal> goalsList = goalStore.getGoalsListFor(currentUser);
-        List<Tag> userTagListTemp = new ArrayList<>();
-        for (Goal item : goalsList) {
-            for (int i = 0; i < item.getTags().size(); i++) {
-                userTagListTemp.add(goalStore.getAllTagsForGoal(item).get(i));
-            }
-        }
-        //List of all current users goal tags without duplicates.
-        List<Tag> userTagList = new ArrayList<>(new HashSet<>(userTagListTemp));
-
-        return userDtoList;
-    }
-
-    @GET
-    @RolesAllowed({"ADMIN", "USER"})
     @Path("/tag/{tag}")
     public List<GoalDto> getGoalListByTag(@PathParam("tag") String tag) {
-       List<GoalDto> goalDtos = new ArrayList<>();
         Optional<Tag> optionalTag = goalStore.getTagByMessage(tag);
-        if (optionalTag.isPresent()){
+        if (optionalTag.isPresent()) {
             return goalStore.getGoalsByTag(optionalTag.get())
                     .stream()
                     .sorted(Comparator.comparing(Goal::getRegisteredDate))
@@ -201,5 +180,4 @@ public class GoalApi {
     public List<TagDto> returnTagList() {
         return goalStore.getTagList();
     }
-
 }

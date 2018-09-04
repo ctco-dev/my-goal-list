@@ -79,20 +79,20 @@ public class UserStore {
         }
     }
 
-    public List<User> getUserByUsername(String user){
+    public List<User> getUserByUsername(String user) {
         return em.createQuery(
                 "select u " +
                         "from User u " +
-                        "where u.username like '%"+user+"%'", User.class)
+                        "where u.username like '%" + user + "%'", User.class)
                 .getResultList();
     }
 
     public UserSearchDto convertToSearchDto(User user) {
         UserSearchDto dto = new UserSearchDto();
+        dto.setId(user.getId());
         dto.setUsername(user.getUsername());
         dto.setPhone(user.getPhone());
         dto.setEmail(user.getEmail());
         return dto;
     }
-
 }

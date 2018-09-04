@@ -8,25 +8,19 @@
     <script src="https://www.w3schools.com/lib/w3.js"></script>
     <script src="http://www.w3schools.com/lib/w3data.js"></script>
     <script type="text/javascript" src="js/redirects.js"></script>
-    <script type="text/javascript" src="js/addgoal-page.js"></script>
-    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-
-    <script src="https://rawgithub.com/indrimuska/jquery-editable-select/master/dist/jquery-editable-select.min.js"></script>
-    <link href="https://rawgithub.com/indrimuska/jquery-editable-select/master/dist/jquery-editable-select.min.css"
-          rel="stylesheet">
-    <title>Find Goals</title>
+    <script type="text/javascript" src="js/findgoals-page.js"></script>
+    <title>Search</title>
 </head>
-<body onLoad="getTagList();switchSearch();">
+<body onLoad="switchSearch();">
 <div id="menu">
     <div class="button-div">
         <button class="menu-button" onclick="logout()" type="button">Log out</button>
     </div>
     <div class="button-div">
-        <button class="menu-button" onclick="findGoals()" type="button">Find goals</button>
+        <button class="menu-button" onclick="findGoals()" type="button">Search</button>
     </div>
     <div class="button-div">
-        <button class="menu-button" onclick="addNewGoal()" type="button">Add new goal</button>
+        <button class="menu-button" onclick="goToMain()" type="button">Go to Main</button>
     </div>
 </div>
 <h2>Search for:<br/>
@@ -40,106 +34,29 @@
     <input id="tag" type="text"/>
     <input type="button" id="findGoalButton" value="Find" onclick="findGoalsByTag();">
 </div>
-<div id="Users-List" class="w3-hide">
-    <h2>Found Names</h2>
-    <ul id="users">
-        <li w3-repeat="users">{{username}}
-        </li>
-    </ul>
-</div>
-<div id="Goals-List" class="w3-hide">
-    <h2>Found Goals</h2>
-    <ul id="goals">
-        <li w3-repeat="goals">{{goalMessage}}
-        </li>
-    </ul>
-</div>
-
-<script>
-    function switchSearch() {
-        var userRadioButton = document.getElementById("rbtnUser");
-        var goalRadioButton = document.getElementById("rbtnGoal");
-        var blockUser = document.getElementById("search-by-Username");
-        var blockGoal = document.getElementById("search-by-Tags");
-        if (userRadioButton.checked) {
-            blockUser.classList.remove("w3-hide");
-            blockGoal.classList.add("w3-hide");
-            document.getElementById("Goals-List").classList.add("w3-hide");
-        } else if (goalRadioButton.checked)   {
-            blockUser.classList.add("w3-hide");
-            blockGoal.classList.remove("w3-hide");
-            document.getElementById("Users-List").classList.add("w3-hide");
-        } else {
-            blockUser.classList.add("w3-hide");
-            blockGoal.classList.add("w3-hide");
-            document.getElementById("Users-List").classList.add("w3-hide");
-            document.getElementById("Goals-List").classList.add("w3-hide");
-        }
-    }
-
-    function getTagList() {
-        fetch("<c:url value='/api/goal/taglist'/>", {
-            "method": "GET",
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            }
-        }).then(function (response) {
-            return response.json();
-        }).then(function (tags) {
-            console.log(JSON.stringify(tags));
-        });
-    }
-
-    function findUserByName() {
-        var username = document.getElementById("username");
-        var dto = {
-            "usersearch": username.value
-        };
-        console.log(JSON.stringify(dto));
-        fetch("<c:url value='/api/goal/search-user'/>", {
-            "method": "POST",
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(dto)
-        }).then(function (response) {
-            return response.json();
-        }).then(function (users) {
-            console.log(users);
-            if (users.length > 0) {
-                var tabledata = {'users': users};
-                document.getElementById("Users-List").classList.remove("w3-hide");
-                w3DisplayData("users", tabledata);
-            } else {
-                document.getElementById("Users-List").classList.add("w3-hide");
-            }
-        });
-    }
-
-    function findGoalsByTag() {
-        var tag = document.getElementById("tag").value;
-        fetch("<c:url value='/api/goal/tag/'/>" + tag, {
-            "method": "GET",
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            }
-        }).then(function (response) {
-            return response.json();
-        }).then(function (similargoals) {
-            console.log(similargoals);
-            if (similargoals.length > 0) {
-                var tabledata = {'goals': similargoals};
-                document.getElementById("Goals-List").classList.remove("w3-hide");
-                w3DisplayData("goals", tabledata);
-            } else {
-                document.getElementById("Goals-List").classList.add("w3-hide");
-            }
-        });
-    }
-</script>
-
+<table id="Users-List" class="w3-table-all w3-hoverable w3-hide">
+    <tr class="w3-blue">
+        <th>User</th>
+        <th>E-mail</th>
+        <th>Phone number</th>
+    </tr>
+    <tr w3-repeat="users" id="{{id}}" onclick="redirectToUserPage(id)">
+        <td>{{username}}</td>
+        <td>{{email}}</td>
+        <td>{{phone}}</td>
+    </tr>
+</table>
+<table id="Goals-List" class="w3-table-all w3-hoverable w3-hide">
+    <tr class="w3-blue">
+        <th>Goal</th>
+        <th>Deadline</th>
+        <th>Days left</th>
+    </tr>
+    <tr w3-repeat="goals" id="{{id}}" onclick="redirectToGoalsAndComments(id)">
+        <td>{{goalMessage}}</td>
+        <td>{{deadlineDate}}</td>
+        <td>{{daysLeft}}</td>
+    </tr>
+</table>
 </body>
 </html>

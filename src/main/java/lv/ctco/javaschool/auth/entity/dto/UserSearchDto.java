@@ -1,10 +1,19 @@
 package lv.ctco.javaschool.auth.entity.dto;
 
 public class UserSearchDto {
+
+    private Long id;
     private String username;
     private String email;
     private String phone;
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getUsername() {
         return username;
