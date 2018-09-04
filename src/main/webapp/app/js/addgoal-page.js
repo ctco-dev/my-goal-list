@@ -41,9 +41,8 @@ function loadTags() {
     });
 
     function addOptions(tags, name) {
-        var i;
         var obj = "";
-        for (i = 0; i < tags.length; i++) {
+        for (var i = 0; i < tags.length; i++) {
             obj += "<option>" + tags[i].tagMessage + "</option>";
 
         }

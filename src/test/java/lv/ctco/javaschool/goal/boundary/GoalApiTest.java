@@ -125,6 +125,10 @@ class GoalApiTest {
         tags.add(tag2);
         tags.add(tag3);
 
+        tagList.add(tag1);
+        tagList.add(tag2);
+        tagList.add(tag3);
+
     }
 
     @Test
@@ -178,7 +182,9 @@ class GoalApiTest {
         goalFormDto.setTags("qwjye|iwefyg|ksdgf");
         when(userStore.getCurrentUser())
                 .thenReturn(user1);
-        when(tagParser.parseStringToTagsAndPersist(goalFormDto.getTags()))
+        when(tagParser.parseStringToTags(goalFormDto.getTags()))
+                .thenReturn(tagList);
+        when(goalStore.checkIfTagExistsOrPersist(tagList))
                 .thenReturn(tags);
         goalApi.createNewGoal(goalFormDto);
         verify(goalStore, times(1)).addGoal(any(Goal.class));
