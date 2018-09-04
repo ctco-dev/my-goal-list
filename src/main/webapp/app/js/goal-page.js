@@ -1,5 +1,6 @@
 var path = "";
 var id = getQueryVariable("id");
+
 function getComments() {
     fetch(path + "/api/goal/" + id + "/comments", {
         "method": "GET",

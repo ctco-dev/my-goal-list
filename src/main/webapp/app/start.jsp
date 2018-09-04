@@ -41,14 +41,11 @@
         <th>Days left</th>
 
     </tr>
+
     <tr w3-repeat="goals" id="{{id}}" onclick="redirectToGoalsAndComments(id)">
-
         <td>{{goalMessage}}</td>
-
         <td>{{deadlineDate}}</td>
-
         <td>{{daysLeft}}</td>
-
     </tr>
 </table>
 </body>

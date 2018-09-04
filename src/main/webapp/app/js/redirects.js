@@ -6,6 +6,7 @@ function logout() {
             location.href = "/";
         });
 }
+
 function redirectToGoalsAndComments(id) {
     if (id >= 0) {
         location.href = path + "/app/goal.jsp?id=" + id;

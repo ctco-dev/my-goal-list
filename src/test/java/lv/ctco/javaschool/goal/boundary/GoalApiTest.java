@@ -70,7 +70,6 @@ class GoalApiTest {
     @InjectMocks
     private GoalApi goalApi;
 
-
     @BeforeEach
     void init() {
         user1.setUsername("user");
@@ -171,7 +170,6 @@ class GoalApiTest {
                 .thenReturn(java.util.Optional.empty());
         assertThrows(InvalidGoalException.class, () -> goalApi.getGoalDtoByGoalId(1L));
     }
-
 
     @Test
     @DisplayName("Test createNewGoal() : check if persists new Goal")

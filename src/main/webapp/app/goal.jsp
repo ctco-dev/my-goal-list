@@ -54,7 +54,6 @@
                     <p>{{commentMessage}}</p>
                 </li>
             </ul>
-
         </div>
     </div>
 </div>
