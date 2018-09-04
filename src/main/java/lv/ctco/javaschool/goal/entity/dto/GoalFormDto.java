@@ -1,8 +1,10 @@
 package lv.ctco.javaschool.goal.entity.dto;
 
+import java.time.LocalDate;
+
 public class GoalFormDto {
     private String goalMessage = "";
-    private String deadline = "";
+    private LocalDate deadline;
 
     public String getGoalMessage() {
         return goalMessage;
@@ -12,11 +14,11 @@ public class GoalFormDto {
         this.goalMessage = goalMessage;
     }
 
-    public String getDeadline() {
+    public LocalDate getDeadline() {
         return deadline;
     }
 
-    public void setDeadline(String deadline) {
+    public void setDeadline(LocalDate deadline) {
         this.deadline = deadline;
     }
 }

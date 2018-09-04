@@ -2,14 +2,14 @@ var path = "";
 
 function submitData() {
     var goalTxt = document.getElementById("goal-txt");
-    var deadlineTxt = document.getElementById("datepicker");
-    if (String(goalTxt.value) === "" || String(deadlineTxt.value) === "") {
+    var deadlineDate = document.getElementById("goal-deadline");
+    if (String(goalTxt.value) === "" || String(deadlineDate.value) === "") {
         alert("Not all fields filled out!");
         return false;
     }
     var dto = {
         "goalMessage": goalTxt.value,
-        "deadline": deadlineTxt.value,
+        "deadline": deadlineDate.value
     };
     fetch(path + "/api/goal/newgoal", {
         "method": "POST",

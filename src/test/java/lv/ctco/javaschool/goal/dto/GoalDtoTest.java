@@ -1,6 +1,5 @@
 package lv.ctco.javaschool.goal.dto;
 
-import lv.ctco.javaschool.goal.control.DateTimeConverter;
 import lv.ctco.javaschool.goal.entity.dto.GoalDto;
 import org.junit.jupiter.api.Test;
 
@@ -34,16 +33,16 @@ class GoalDtoTest {
     void testGetAndSetDeadlineDate() {
         LocalDate newDt = LocalDate.now();
         GoalDto dto = new GoalDto();
-        dto.setDeadlineDate(newDt.format(DateTimeConverter.FORMATTER_DATE));
-        assertThat(dto.getDeadlineDate(), is(newDt.format(DateTimeConverter.FORMATTER_DATE)));
+        dto.setDeadlineDate(LocalDate.now());
+        assertThat(dto.getDeadlineDate(), is(LocalDate.now()));
     }
 
     @Test
     void testGetAndSetRegisteredDate() {
         LocalDateTime newDt = LocalDateTime.now();
         GoalDto dto = new GoalDto();
-        dto.setRegisteredDate(newDt.format(DateTimeConverter.FORMATTER_DATE_TIME));
-        assertThat(dto.getRegisteredDate(), is(newDt.format(DateTimeConverter.FORMATTER_DATE_TIME)));
+        dto.setRegisteredDate(LocalDateTime.now());
+        assertThat(dto.getRegisteredDate(), is(LocalDateTime.now()));
     }
 
     @Test

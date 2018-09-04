@@ -5,20 +5,11 @@
     <title id="title">{{goalMessage}}</title>
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <link rel="stylesheet" type="text/css" href="css/style.css">
-    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <script type="text/javascript" src="js/redirects.js"></script>
     <script type="text/javascript" src="js/goal-page.js"></script>
     <script src="https://www.w3schools.com/lib/w3.js"></script>
     <script src="http://www.w3schools.com/lib/w3data.js"></script>
     <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
-
-    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-    <script>
-        $(function () {
-            $("#datepicker").datepicker({dateFormat: 'dd.mm.yy'});
-        });
-    </script>
 </head>
 <body onload="onLoad()">
 <div id="menu">
@@ -32,7 +23,7 @@
         <button class="menu-button" onclick="goToMain()" type="button">Go to Main</button>
     </div>
     <div class="button-div">
-        <button class="menu-button" onclick="editGoal()" type="button">Edit Goal</button>
+        <button id="edit-button" class="menu-button" onclick="editGoal()" type="button">Edit Goal</button>
     </div>
 </div>
 
@@ -43,13 +34,13 @@
         <h5>{{goalMessage}}</h5>
     </div>
     <div id="edit-goal">
-        <label for="datepicker">Deadline: </label>
-        <input type="text" id="datepicker">
+        <label for="edit-goal-deadline">Deadline: </label>
+        <input id="edit-goal-deadline" type="date" onkeydown="return false">
         <br>
         <label for="edit-goal-text">Goal: </label>
         <input id="edit-goal-text" type="text" value="{{goalMessage}}">
         <div class="button-div">
-            <button class="menu-button" onclick="" type="button">Save</button>
+            <button class="menu-button" onclick="saveEditGoal()" type="button">Save</button>
         </div>
     </div>
 
@@ -73,8 +64,8 @@
                     <small>
                         <span class="glyphicon glyphicon-time"></span>{{registeredDate}}
                     </small>
-                    </br>
-                    </br>
+                    <br/>
+                    <br/>
                     <p>{{commentMessage}}</p>
                 </li>
             </ul>

@@ -2,11 +2,9 @@ package lv.ctco.javaschool.goal.boundary;
 
 import lv.ctco.javaschool.auth.control.UserStore;
 import lv.ctco.javaschool.auth.entity.domain.User;
-import lv.ctco.javaschool.auth.entity.dto.UserLoginDto;
 import lv.ctco.javaschool.goal.control.DtoConventer;
 import lv.ctco.javaschool.goal.control.GoalStore;
 import lv.ctco.javaschool.goal.control.TagParser;
-import lv.ctco.javaschool.goal.control.DateTimeConverter;
 import lv.ctco.javaschool.goal.entity.domain.Comment;
 import lv.ctco.javaschool.goal.entity.domain.Goal;
 import lv.ctco.javaschool.goal.entity.domain.Tag;
@@ -14,7 +12,6 @@ import lv.ctco.javaschool.goal.entity.dto.CommentDto;
 import lv.ctco.javaschool.goal.entity.dto.GoalDto;
 import lv.ctco.javaschool.goal.entity.dto.GoalFormDto;
 import lv.ctco.javaschool.goal.entity.dto.MessageDto;
-import lv.ctco.javaschool.goal.entity.dto.TagDto;
 import lv.ctco.javaschool.goal.entity.exception.InvalidGoalException;
 
 import javax.annotation.security.RolesAllowed;
@@ -24,19 +21,9 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
-import javax.json.JsonObject;
-import javax.json.JsonString;
-import javax.json.JsonValue;
 
 @Path("/goal")
 @Stateless
@@ -76,12 +63,11 @@ public class GoalApi {
     public void createNewGoal(GoalFormDto goalDto) {
         User user = userStore.getCurrentUser();
         Goal goal = new Goal();
-        if (!goalDto.getGoalMessage().isEmpty() && !goalDto.getDeadline().isEmpty()) {
+        if (goalDto.getGoalMessage() != null && goalDto.getDeadline() != null) {
             goal.setGoalMessage(goalDto.getGoalMessage());
             goal.setTags(parseStringToTags(goalDto.getGoalMessage()));
 
-            LocalDate localDate = LocalDate.parse(goalDto.getDeadline(), DateTimeConverter.FORMATTER_DATE);
-            goal.setDeadlineDate(localDate);
+            goal.setDeadlineDate(goalDto.getDeadline());
 
             goal.setUser(user);
             goal.setRegisteredDate(LocalDateTime.now());
@@ -115,7 +101,7 @@ public class GoalApi {
                     .map(DtoConventer::convertCommentToCommentDto)
                     .collect(Collectors.toList());
         }
-        return new ArrayList<CommentDto>();
+        return new ArrayList<>();
     }
 
     @POST
@@ -132,6 +118,29 @@ public class GoalApi {
             goalStore.addComment(comment);
         } else {
             throw new InvalidGoalException();
+        }
+    }
+
+    @GET
+    @RolesAllowed({"ADMIN", "USER"})
+    @Path("{id}/edit")
+    public boolean isCurrentUsersGoal(@PathParam("id") Long goalId) {
+        User user = userStore.getCurrentUser();
+        Optional<Goal> goal = goalStore.getCurrentUserGoalById(user, goalId);
+        return goal.isPresent();
+    }
+
+    @POST
+    @RolesAllowed({"ADMIN", "USER"})
+    @Path("{id}/edit")
+    public void editGoal(@PathParam("id") Long goalId, GoalFormDto newGoalDto) {
+        User user = userStore.getCurrentUser();
+        if (newGoalDto.getGoalMessage() != null && newGoalDto.getDeadline() != null) {
+            Optional<Goal> goal = goalStore.getCurrentUserGoalById(user, goalId);
+            goal.ifPresent(g -> {
+                g.setGoalMessage(newGoalDto.getGoalMessage());
+                g.setDeadlineDate(newGoalDto.getDeadline());
+            });
         }
     }
 }

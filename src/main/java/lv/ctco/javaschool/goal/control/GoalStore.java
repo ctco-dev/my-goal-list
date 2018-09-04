@@ -1,15 +1,14 @@
 package lv.ctco.javaschool.goal.control;
 
 import lv.ctco.javaschool.auth.entity.domain.User;
+import lv.ctco.javaschool.goal.entity.domain.Comment;
 import lv.ctco.javaschool.goal.entity.domain.Goal;
 import lv.ctco.javaschool.goal.entity.domain.Tag;
-import lv.ctco.javaschool.goal.entity.dto.TagDto;
-import lv.ctco.javaschool.goal.entity.domain.Comment;
+
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.List;
-import java.util.ArrayList;
 import java.util.Optional;
 
 @Stateless
@@ -63,5 +62,14 @@ public class GoalStore {
 
     public void addComment(Comment comment) {
         em.persist(comment);
+    }
+
+    public Optional<Goal> getCurrentUserGoalById(User user, Long goalId) {
+        return em.createQuery("select g from Goal g where g.user=:user and g.id=:id",Goal.class)
+                .setParameter("user",user)
+                .setParameter("id",goalId)
+                .setMaxResults(1)
+                .getResultStream()
+                .findFirst();
     }
 }

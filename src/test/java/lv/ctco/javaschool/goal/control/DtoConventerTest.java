@@ -19,9 +19,9 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 
 class DtoConventerTest {
-    Goal goal = new Goal();
-    User user = new User();
-    Comment comment = new Comment();
+    private Goal goal = new Goal();
+    private User user = new User();
+    private Comment comment = new Comment();
 
     @BeforeEach
     void init() {
@@ -57,22 +57,22 @@ class DtoConventerTest {
 
     @Test
     @DisplayName("Test convertGoalToGoalDto(Goal goal): Checks that goal and goalDto contains same data (List<Tag> excluded)")
-    void testconvertGoalToGoalDto() {
+    void testConvertGoalToGoalDto() {
         GoalDto dto = DtoConventer.convertGoalToGoalDto(goal);
         assertThat( dto.getUsername(), is(goal.getUser().getUsername()));
         assertThat( dto.getGoalMessage(), is(goal.getGoalMessage()));
-        assertThat( dto.getDeadlineDate(), is(DateTimeConverter.convertDate(goal.getDeadlineDate())));
+        assertThat( dto.getDeadlineDate(), is(goal.getDeadlineDate()));
         assertThat( dto.getId(), is(goal.getId()));
-        assertThat( dto.getRegisteredDate(), is(DateTimeConverter.convertDateTime(goal.getRegisteredDate())));
-        assertThat( dto.getRegisteredDate(), is(DateTimeConverter.convertDateTime(goal.getRegisteredDate())));
-        assertThat( dto.getRegisteredDate(), is(DateTimeConverter.convertDateTime(goal.getRegisteredDate())));
+        assertThat( dto.getRegisteredDate(), is(goal.getRegisteredDate()));
+        assertThat( dto.getRegisteredDate(), is(goal.getRegisteredDate()));
+        assertThat( dto.getRegisteredDate(), is(goal.getRegisteredDate()));
         assertThat(dto.getTagList(), nullValue());
     }
 
 
     @Test
-    @DisplayName("Test testconvertCommentToCommentDto(Comment comment): Checks that Comment and CommentDto contains same data")
-    void testconvertCommentToCommentDto() {
+    @DisplayName("Test testConvertCommentToCommentDto(Comment comment): Checks that Comment and CommentDto contains same data")
+    void testConvertCommentToCommentDto() {
         CommentDto dto = DtoConventer.convertCommentToCommentDto(comment);
 
         assertThat( dto.getUsername(), is(comment.getUser().getUsername()));
