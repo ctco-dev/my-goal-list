@@ -26,4 +26,8 @@ function goToMain() {
     location.href = path + "/app/start.jsp";
 }
 
+function redirectToUserById(id) {
+    location.href = path + "/app/user.jsp?id=" + id;
+}
+
 

@@ -7,11 +7,20 @@ import java.util.Set;
 public class GoalDto {
     private Long id;
     private String username;
+    private Long userId;
     private String goalMessage;
     private String deadlineDate;
     private String registeredDate;
     private Set<Tag> tags;
     private int daysLeft;
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userID) {
+        this.userId = userID;
+    }
 
     public Long getId() {
         return id;

@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 public class DtoConverter {
     public static GoalDto convertGoalToGoalDto(Goal goal) {
         GoalDto dto = new GoalDto();
+        dto.setUserId(goal.getUser().getId());
         dto.setUsername(goal.getUser().getUsername());
         dto.setGoalMessage(goal.getGoalMessage());
         dto.setDeadlineDate(DateTimeConverter.convertDate(goal.getDeadlineDate()));
