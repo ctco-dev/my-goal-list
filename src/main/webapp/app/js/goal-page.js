@@ -1,5 +1,6 @@
 var path = "";
 var id = getQueryVariable("id");
+
 function getComments() {
     fetch(path + "/api/goal/" + id + "/comments", {
         "method": "GET",
@@ -34,6 +35,7 @@ function onLoad() {
             return false;
         }
     }).then(function (goal) {
+        console;
         w3.displayObject("title", goal);
         w3.displayObject("goal-fields", goal);
         w3DisplayData("tags-list", goal);

@@ -27,6 +27,7 @@ function submitData() {
         location.href = path + "/app/start.jsp";
     });
 }
+
 function loadTags() {
     fetch(path + "/api/goal/tags", {
         "method": "GET",
@@ -39,13 +40,12 @@ function loadTags() {
     }).then(function (tags) {
         addOptions(tags, "tags");
     });
+}
 
-    function addOptions(tags, name) {
-        var obj = "";
-        for (var i = 0; i < tags.length; i++) {
-            obj += "<option>" + tags[i].tagMessage + "</option>";
-
-        }
-        document.getElementById(name).innerHTML = obj;
+function addOptions(tags, name) {
+    var obj = "";
+    for (var i = 0; i < tags.length; i++) {
+        obj += "<option>" + tags[i].tagMessage + "</option>";
     }
+    document.getElementById(name).innerHTML = obj;
 }

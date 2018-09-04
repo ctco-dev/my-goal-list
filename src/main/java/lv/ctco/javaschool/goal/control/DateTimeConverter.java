@@ -24,5 +24,4 @@ public class DateTimeConverter {
         return date.format(DateTimeConverter.FORMATTER_DATE_TIME);
     }
 
-
 }

@@ -1,6 +1,5 @@
 package lv.ctco.javaschool.goal.control;
 
-
 import lv.ctco.javaschool.auth.entity.domain.User;
 import lv.ctco.javaschool.auth.entity.dto.UserLoginDto;
 import lv.ctco.javaschool.goal.entity.domain.Comment;
@@ -8,7 +7,6 @@ import lv.ctco.javaschool.goal.entity.domain.Goal;
 import lv.ctco.javaschool.goal.entity.domain.Tag;
 import lv.ctco.javaschool.goal.entity.dto.CommentDto;
 import lv.ctco.javaschool.goal.entity.dto.GoalDto;
-import lv.ctco.javaschool.goal.entity.dto.TagDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -59,7 +57,6 @@ class DtoConverterTest {
         assertThat(dto.getPhone(), is(user.getPhone()));
     }
 
-
     @Test
     @DisplayName("Test convertGoalToGoalDto(Goal goal): Checks that goal and goalDto contains same data (List<Tag> excluded)")
     void testConvertGoalToGoalDto() {
@@ -74,7 +71,6 @@ class DtoConverterTest {
         assertThat(dto.getTags(), nullValue());
     }
 
-
     @Test
     @DisplayName("Test ConvertCommentToCommentDto(Comment comment): Checks that Comment and CommentDto contains same data")
     void testConvertCommentToCommentDto() {
@@ -84,6 +80,5 @@ class DtoConverterTest {
         assertThat(dto.getCommentMessage(), is(comment.getCommentMessage()));
         assertThat(dto.getRegisteredDate(), is(DateTimeConverter.convertDateTime(comment.getRegisteredDate())));
     }
-
 
 }

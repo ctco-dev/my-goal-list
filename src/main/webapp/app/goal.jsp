@@ -25,7 +25,8 @@
 </div>
 
 <div id="goal-fields">
-    <h5>Author: {{username}}</h5>
+    <h3>Goal: {{goalMessage}}</h3>
+    <h5>Author: <a onclick="redirectToUserById('{{userId}}')">{{username}}</a></h5>
     <h5>Deadline: {{deadlineDate}} (days left: {{daysLeft}})</h5>
     <div id="tags-list" w3-repeat="tags">
         <span id="{{id}}">{{tagMessage}}</span>
@@ -54,7 +55,6 @@
                     <p>{{commentMessage}}</p>
                 </li>
             </ul>
-
         </div>
     </div>
 </div>

@@ -78,4 +78,12 @@ public class UserStore {
         }
     }
 
+    public Optional<User> findUserById(Long id) {
+        List<User> user = em.createQuery(
+                "select u from User u " +
+                        "where u.id = :userId", User.class)
+                .setParameter("userId", id)
+                .getResultList();
+        return user.isEmpty() ? Optional.empty() : Optional.of(user.get(0));
+    }
 }
