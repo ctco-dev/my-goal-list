@@ -3,8 +3,8 @@ package lv.ctco.javaschool.goal.entity.domain;
 import lv.ctco.javaschool.auth.entity.domain.User;
 
 import javax.persistence.Entity;
-import javax.persistence.Id;
 import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
@@ -18,16 +18,13 @@ public class Goal {
     @Id
     @GeneratedValue
     private Long id;
-
     @ManyToOne
     private User user;
-
     @OneToMany
     @JoinTable(name = "goal_tags",
             joinColumns = @JoinColumn(name = "goal_id"),
             inverseJoinColumns = @JoinColumn(name = "tag_id"))
     private Set<Tag> tags;
-
     private String goalMessage;
     private LocalDate deadlineDate;
     private LocalDateTime registeredDate;

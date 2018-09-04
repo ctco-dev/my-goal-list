@@ -2,8 +2,6 @@ package lv.ctco.javaschool.auth.control;
 
 import lv.ctco.javaschool.auth.control.exceptions.InvalidPasswordException;
 import lv.ctco.javaschool.auth.control.exceptions.InvalidUsernameException;
-import lv.ctco.javaschool.auth.entity.domain.User;
-import lv.ctco.javaschool.auth.entity.dto.UserLoginDto;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
 

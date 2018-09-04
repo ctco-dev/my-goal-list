@@ -1,16 +1,17 @@
 package lv.ctco.javaschool.goal.control;
 
 import lv.ctco.javaschool.auth.entity.domain.User;
+import lv.ctco.javaschool.goal.entity.domain.Comment;
 import lv.ctco.javaschool.goal.entity.domain.Goal;
 import lv.ctco.javaschool.goal.entity.domain.Tag;
-import lv.ctco.javaschool.goal.entity.dto.TagDto;
-import lv.ctco.javaschool.goal.entity.domain.Comment;
+
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.util.HashSet;
 import java.util.List;
-import java.util.ArrayList;
 import java.util.Optional;
+import java.util.Set;
 
 @Stateless
 public class GoalStore {
@@ -30,20 +31,20 @@ public class GoalStore {
         em.persist(goal);
     }
 
-    public Tag addTag( String tagMsg ){
+    public Tag addTagIfNotExists(String tagMsg) {
         if (tagMsg.equals("")) return null;
-        Optional<Tag> tagFromDB= em.createQuery("select t from Tag t " +
+        Optional<Tag> tagFromDB = em.createQuery("select t from Tag t " +
                 "where upper(t.tagMessage) = :tagMsg ", Tag.class)
-                .setParameter("tagMsg", tagMsg.toUpperCase() )
+                .setParameter("tagMsg", tagMsg.toUpperCase())
                 .getResultStream()
                 .findFirst();
-        if (tagFromDB.isPresent()) return tagFromDB.get();
-        else {
-            Tag tag = new Tag();
-            tag.setTagMessage(tagMsg);
-            em.persist(tag);
-            return tag;
+        if (tagFromDB.isPresent()) {
+            return tagFromDB.get();
         }
+        Tag tag = new Tag();
+        tag.setTagMessage(tagMsg);
+        em.persist(tag);
+        return tag;
     }
 
     public Optional<Goal> getGoalById(Long goalId) {
@@ -64,4 +65,22 @@ public class GoalStore {
     public void addComment(Comment comment) {
         em.persist(comment);
     }
+
+    public List<Tag> getAllTagList() {
+        return em.createQuery("SELECT t FROM Tag t " +
+                "order by t.tagMessage", Tag.class)
+                .getResultList();
+    }
+
+    public Set<Tag> checkIfTagExistsOrPersist(List<Tag> tags) {
+        Set<Tag> tagSet = new HashSet<>();
+        for (Tag t : tags) {
+            Tag tag = this.addTagIfNotExists(t.getTagMessage());
+            if (tag != null) {
+                tagSet.add(tag);
+            }
+        }
+        return tagSet;
+    }
+
 }

@@ -39,6 +39,6 @@ class DateTimeConverterTest {
         int fewDays = 4;
         LocalDate nextFewDays = LocalDate.now().plusDays(fewDays);
         assertThat(DateTimeConverter.countDaysLeft(nextFewDays), is(fewDays));
-        assertThat(DateTimeConverter.countDaysLeft(nextFewDays), not(fewDays +1));
+        assertThat(DateTimeConverter.countDaysLeft(nextFewDays), not(fewDays + 1));
     }
 }

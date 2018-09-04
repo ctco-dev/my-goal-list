@@ -30,12 +30,13 @@ function onLoad() {
         if (response.status === 200) {
             return response.json();
         } else {
-            alert("Sompthing went wrong! error:404");
+            alert("Something went wrong! error:404");
             return false;
         }
     }).then(function (goal) {
         w3.displayObject("title", goal);
         w3.displayObject("goal-fields", goal);
+        w3DisplayData("tags-list", goal);
         getComments();
     });
 }

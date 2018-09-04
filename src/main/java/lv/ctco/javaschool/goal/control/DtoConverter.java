@@ -4,10 +4,12 @@ import lv.ctco.javaschool.auth.entity.domain.User;
 import lv.ctco.javaschool.auth.entity.dto.UserLoginDto;
 import lv.ctco.javaschool.goal.entity.domain.Comment;
 import lv.ctco.javaschool.goal.entity.domain.Goal;
+import lv.ctco.javaschool.goal.entity.domain.Tag;
 import lv.ctco.javaschool.goal.entity.dto.CommentDto;
 import lv.ctco.javaschool.goal.entity.dto.GoalDto;
+import lv.ctco.javaschool.goal.entity.dto.TagDto;
 
-public class DtoConventer {
+public class DtoConverter {
     public static GoalDto convertGoalToGoalDto(Goal goal) {
         GoalDto dto = new GoalDto();
         dto.setUsername(goal.getUser().getUsername());
@@ -16,6 +18,7 @@ public class DtoConventer {
         dto.setRegisteredDate(DateTimeConverter.convertDateTime(goal.getRegisteredDate()));
         dto.setDaysLeft(DateTimeConverter.countDaysLeft(goal.getDeadlineDate()));
         dto.setId(goal.getId());
+        dto.setTags(goal.getTags());
         return dto;
     }
 
@@ -35,5 +38,7 @@ public class DtoConventer {
         return dto;
     }
 
-
+    public static TagDto convertTagToTagDto(Tag tag) {
+        return new TagDto(tag.getTagMessage());
+    }
 }

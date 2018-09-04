@@ -1,5 +1,8 @@
 package lv.ctco.javaschool.goal.boundary;
 
+import lv.ctco.javaschool.auth.control.UserStore;
+import lv.ctco.javaschool.auth.entity.domain.User;
+import lv.ctco.javaschool.auth.entity.dto.UserLoginDto;
 import lv.ctco.javaschool.goal.control.GoalStore;
 import lv.ctco.javaschool.goal.control.TagParser;
 import lv.ctco.javaschool.goal.entity.domain.Comment;
@@ -8,11 +11,8 @@ import lv.ctco.javaschool.goal.entity.domain.Tag;
 import lv.ctco.javaschool.goal.entity.dto.CommentDto;
 import lv.ctco.javaschool.goal.entity.dto.GoalDto;
 import lv.ctco.javaschool.goal.entity.dto.GoalFormDto;
-import lv.ctco.javaschool.auth.control.UserStore;
-import lv.ctco.javaschool.auth.entity.domain.User;
-import lv.ctco.javaschool.auth.entity.dto.UserLoginDto;
-
 import lv.ctco.javaschool.goal.entity.dto.MessageDto;
+import lv.ctco.javaschool.goal.entity.dto.TagDto;
 import lv.ctco.javaschool.goal.entity.exception.InvalidGoalException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -30,15 +30,12 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.hamcrest.Matchers.nullValue;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -47,6 +44,9 @@ import static org.mockito.Mockito.when;
 class GoalApiTest {
     Goal goal = new Goal();
     Goal goal2 = new Goal();
+    Tag tag1 = new Tag();
+    Tag tag2 = new Tag();
+    Tag tag3 = new Tag();
     User user1 = new User();
     User user2 = new User();
     Comment comment1 = new Comment();
@@ -56,14 +56,20 @@ class GoalApiTest {
     List<CommentDto> commentDtos = new ArrayList<>();
     List<User> userList = new ArrayList<>();
     List<UserLoginDto> userDtoList = new ArrayList<>();
+    Set<Tag> tags = new HashSet<>();
+    List<Tag> tagList = new ArrayList<>();
     String testLine1, expResult1, testLine2, expResult2, testLine3, expResult3, testLine4, expResult4;
 
     @Mock
     private UserStore userStore;
     @Mock
     private GoalStore goalStore;
+    @Mock
+    private TagParser tagParser;
+
     @InjectMocks
     private GoalApi goalApi;
+
 
     @BeforeEach
     void init() {
@@ -72,6 +78,12 @@ class GoalApiTest {
         user1.setId(1L);
         user1.setPassword("12345");
         user1.setPhone("12345678");
+        tag1.setId((long) 1);
+        tag2.setId((long) 2);
+        tag3.setId((long) 3);
+        tag1.setTagMessage("qwer");
+        tag2.setTagMessage("qwkeughsdf");
+        tag3.setTagMessage("asdlgn");
 
         user2.setUsername("admin");
         user2.setEmail("admin@admin.com");
@@ -103,6 +115,20 @@ class GoalApiTest {
         expResult3 = "";
         testLine4 = "I will start to learn Java!";
         expResult4 = "learn Java";
+
+        tagList.add(new Tag("tag1"));
+        tagList.add(new Tag("tag2"));
+        tagList.add(new Tag("tag3"));
+        tagList.add(new Tag("tag4"));
+
+        tags.add(tag1);
+        tags.add(tag2);
+        tags.add(tag3);
+
+        tagList.add(tag1);
+        tagList.add(tag2);
+        tagList.add(tag3);
+
     }
 
     @Test
@@ -117,7 +143,7 @@ class GoalApiTest {
 
     @Test
     @DisplayName("Test getMyGoals(): Current user has goals returns list of dto's")
-    void testGetMyGoals2() {
+    void testGetMyGoalsToReturnListOfDto() {
         goalList1.add(goal);
         when(userStore.getCurrentUser())
                 .thenReturn(user1);
@@ -133,58 +159,19 @@ class GoalApiTest {
     void testGetGoalById() {
         when(goalStore.getGoalById(1L))
                 .thenReturn(java.util.Optional.ofNullable(goal));
-        assertThat( goalApi.getGoalDtoByGoalId(1L).getId(), is(1L));
-        assertThat( goalApi.getGoalDtoByGoalId(1L).getUsername(), is(user1.getUsername()));
-        assertThat( goalApi.getGoalDtoByGoalId(1L).getGoalMessage(), is("abc"));
+        assertThat(goalApi.getGoalDtoByGoalId(1L).getId(), is(1L));
+        assertThat(goalApi.getGoalDtoByGoalId(1L).getUsername(), is(user1.getUsername()));
+        assertThat(goalApi.getGoalDtoByGoalId(1L).getGoalMessage(), is("abc"));
     }
 
     @Test
     @DisplayName("Test getGoalById(): throws InvalidGoalException")
-    void testGetGoalById2() {
-        when(goalStore.getGoalById( 1L))
+    void testGetGoalByIdException() {
+        when(goalStore.getGoalById(1L))
                 .thenReturn(java.util.Optional.empty());
         assertThrows(InvalidGoalException.class, () -> goalApi.getGoalDtoByGoalId(1L));
     }
 
-
-    @Test
-    @DisplayName("Test parseStringToTags(String value): Checks work of tag list generation from goal message")
-    void testParsingGoalStringToTags() {
-        Tag tag1 = new Tag(expResult1);
-        Set<Tag> tagset1 = new HashSet<>();
-        tagset1.add(tag1);
-        String[] arr = expResult4.split(" ");
-        Tag tag4a = new Tag(arr[0]);
-        Tag tag4b = new Tag(arr[1]);
-        Set<Tag> tagset4 = new HashSet<>();
-        tagset4.add(tag4a);
-        tagset4.add(tag4b);
-        Set<Tag> emptySet = new HashSet<>();
-        doAnswer(invocation -> {
-            String txt = invocation.getArgument(0).toString();
-            if (txt.equals("")) return null;
-            if (txt.equals(expResult1)) return tag1;
-            if (txt.equals(arr[0])) return tag4a;
-            if (txt.equals(arr[1])) return tag4b;
-            return new Tag(txt);
-        }).when(goalStore).addTag(any(String.class));
-        assertThat(goalApi.parseStringToTags(testLine1), equalTo(tagset1));
-        assertThat(goalApi.parseStringToTags(testLine4), equalTo(tagset4));
-        assertThat(goalApi.parseStringToTags(testLine4), not(equalTo(tagset1)));
-        assertThat(goalApi.parseStringToTags("some_text"), notNullValue());
-        assertThat(goalApi.parseStringToTags(""), equalTo(emptySet));
-    }
-
-    @Test
-    @DisplayName("generateTagsList: Checks work of tag list generation from goal message")
-    void testGenerationOfTagsList() {
-        assertThat(String.join(" ", TagParser.generateTagsList(testLine1)), is(expResult1));
-        assertThat(String.join(" ", TagParser.generateTagsList(testLine2)), is(expResult2));
-        assertThat(String.join(" ", TagParser.generateTagsList(testLine3)), is(expResult3));
-        assertThat(String.join(" ", TagParser.generateTagsList(testLine4)), is(expResult4));
-        assertThat(String.join(" ", TagParser.generateTagsList(testLine1)), not(expResult2));
-        assertThat(String.join(" ", TagParser.generateTagsList(testLine2)), not(expResult1));
-    }
 
     @Test
     @DisplayName("Test createNewGoal() : check if persists new Goal")
@@ -192,15 +179,20 @@ class GoalApiTest {
         GoalFormDto goalFormDto = new GoalFormDto();
         goalFormDto.setDeadline("25.10.2018");
         goalFormDto.setGoalMessage("hi");
+        goalFormDto.setTags("qwjye|iwefyg|ksdgf");
         when(userStore.getCurrentUser())
                 .thenReturn(user1);
+        when(tagParser.parseStringToTags(goalFormDto.getTags()))
+                .thenReturn(tagList);
+        when(goalStore.checkIfTagExistsOrPersist(tagList))
+                .thenReturn(tags);
         goalApi.createNewGoal(goalFormDto);
         verify(goalStore, times(1)).addGoal(any(Goal.class));
     }
 
     @Test
     @DisplayName("Test createNewGoal() : check if throws exception if empty fields of dto object")
-    void testCreateNewGoal2() {
+    void testCreateNewGoalException() {
         GoalFormDto goalFormDto = new GoalFormDto();
         when(userStore.getCurrentUser())
                 .thenReturn(user1);
@@ -209,7 +201,7 @@ class GoalApiTest {
 
     @Test
     @DisplayName("Test returnAllCommentsForGoalById(): returns Comments dto of goal by id")
-    void returnAllCommentsForGoalById() {
+    void testReturnAllCommentsForGoalById() {
         comments.add(comment1);
         when(goalStore.getGoalById(1l))
                 .thenReturn(java.util.Optional.ofNullable(goal));
@@ -222,7 +214,7 @@ class GoalApiTest {
 
     @Test
     @DisplayName("Test receiveCommentsForGoalById(): returns empty Comments dto of goal")
-    void returnAllCommentsForGoalById2() {
+    void testReturnAllCommentsForGoalByIdEmptyCommentsDto() {
         when(goalStore.getGoalById(1L))
                 .thenReturn(java.util.Optional.ofNullable(goal));
         when(goalStore.getCommentsForGoal(goal))
@@ -233,7 +225,7 @@ class GoalApiTest {
 
     @Test
     @DisplayName("Test saveNewCommentsForGoalById(): verify if persists Comments")
-    void saveNewCommentsForGoalById() {
+    void testSaveNewCommentsForGoalById() {
         MessageDto msg = new MessageDto();
         msg.setMessage("hi");
         when(userStore.getCurrentUser())
@@ -246,7 +238,7 @@ class GoalApiTest {
 
     @Test
     @DisplayName("Test saveNewCommentsForGoalById(): verify if throws exception if optional<goal> isEmpty")
-    void saveNewCommentsForGoalById2() {
+    void testSaveNewCommentsForGoalByIdException() {
         MessageDto msg = new MessageDto();
         msg.setMessage("hi");
         when(goalStore.getGoalById(1L))
@@ -254,4 +246,15 @@ class GoalApiTest {
         assertThrows(InvalidGoalException.class, () -> goalApi.saveNewCommentsForGoalById(1L, msg));
     }
 
+    @Test
+    @DisplayName("Test returnAllTags(): verify if throws exception if optional<goal> isEmpty")
+    void testReturnAllTags() {
+        when(goalStore.getAllTagList()).thenReturn(tagList);
+        List<TagDto> dtoList = goalApi.returnAllTags();
+        assertThat(dtoList.size(), is(tagList.size()));
+        for (int i = 0; i < dtoList.size(); i++) {
+            assertThat(dtoList.get(i).getTagMessage(), is(tagList.get(i).getTagMessage()));
+        }
+        assertThat(dtoList.get(0).getTagMessage(), is(not(tagList.get(2).getTagMessage())));
+    }
 }

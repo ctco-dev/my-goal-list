@@ -2,11 +2,10 @@ package lv.ctco.javaschool.goal.boundary;
 
 import lv.ctco.javaschool.auth.control.UserStore;
 import lv.ctco.javaschool.auth.entity.domain.User;
-import lv.ctco.javaschool.auth.entity.dto.UserLoginDto;
-import lv.ctco.javaschool.goal.control.DtoConventer;
+import lv.ctco.javaschool.goal.control.DateTimeConverter;
+import lv.ctco.javaschool.goal.control.DtoConverter;
 import lv.ctco.javaschool.goal.control.GoalStore;
 import lv.ctco.javaschool.goal.control.TagParser;
-import lv.ctco.javaschool.goal.control.DateTimeConverter;
 import lv.ctco.javaschool.goal.entity.domain.Comment;
 import lv.ctco.javaschool.goal.entity.domain.Goal;
 import lv.ctco.javaschool.goal.entity.domain.Tag;
@@ -27,18 +26,13 @@ import javax.ws.rs.PathParam;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
-import javax.json.JsonObject;
-import javax.json.JsonString;
-import javax.json.JsonValue;
 
 @Path("/goal")
+@RolesAllowed({"ADMIN", "USER"})
 @Stateless
 public class GoalApi {
     @Inject
@@ -46,39 +40,41 @@ public class GoalApi {
     @Inject
     private GoalStore goalStore;
 
+    @Inject
+    private TagParser tagParser;
+
     @GET
-    @RolesAllowed({"ADMIN", "USER"})
     @Path("/mygoals")
     public List<GoalDto> getMyGoals() {
         User currentUser = userStore.getCurrentUser();
         List<Goal> goalsList = goalStore.getGoalsListFor(currentUser);
         return goalsList.stream()
-                .map(DtoConventer::convertGoalToGoalDto)
+                .map(DtoConverter::convertGoalToGoalDto)
                 .collect(Collectors.toList());
     }
 
     @GET
-    @RolesAllowed({"ADMIN", "USER"})
     @Path("/mygoals/{id}")
     public GoalDto getGoalDtoByGoalId(@PathParam("id") Long goalId) {
         Optional<Goal> goal = goalStore.getGoalById(goalId);
         if (goal.isPresent()) {
             Goal g = goal.get();
-            return DtoConventer.convertGoalToGoalDto(g);
+            return DtoConverter.convertGoalToGoalDto(g);
         } else {
             throw new InvalidGoalException();
         }
     }
 
     @POST
-    @RolesAllowed({"ADMIN", "USER"})
     @Path("/newgoal")
     public void createNewGoal(GoalFormDto goalDto) {
         User user = userStore.getCurrentUser();
         Goal goal = new Goal();
-        if (!goalDto.getGoalMessage().isEmpty() && !goalDto.getDeadline().isEmpty()) {
+        if (goalDto.getGoalMessage() != null && goalDto.getDeadline() != null) {
             goal.setGoalMessage(goalDto.getGoalMessage());
-            goal.setTags(parseStringToTags(goalDto.getGoalMessage()));
+            List<Tag> tags = tagParser.parseStringToTags(goalDto.getTags());
+            Set<Tag> tagSet = goalStore.checkIfTagExistsOrPersist(tags);
+            goal.setTags(tagSet);
 
             LocalDate localDate = LocalDate.parse(goalDto.getDeadline(), DateTimeConverter.FORMATTER_DATE);
             goal.setDeadlineDate(localDate);
@@ -91,35 +87,21 @@ public class GoalApi {
         }
     }
 
-    Set<Tag> parseStringToTags(String value) {
-        List<String> tagList = TagParser.generateTagsList(value);
-        Set<Tag> tagSet = new HashSet<>();
-        for (String item : tagList) {
-            Tag tag;
-            tag = goalStore.addTag(item);
-            if (tag != null) {
-                tagSet.add(tag);
-            }
-        }
-        return tagSet;
-    }
 
     @GET
-    @RolesAllowed({"ADMIN", "USER"})
     @Path("{id}/comments")
     public List<CommentDto> returnAllCommentsForGoalById(@PathParam("id") Long goalId) {
         Optional<Goal> goal = goalStore.getGoalById(goalId);
         if (goal.isPresent()) {
             List<Comment> comments = goalStore.getCommentsForGoal(goal.get());
             return comments.stream()
-                    .map(DtoConventer::convertCommentToCommentDto)
+                    .map(DtoConverter::convertCommentToCommentDto)
                     .collect(Collectors.toList());
         }
         return new ArrayList<CommentDto>();
     }
 
     @POST
-    @RolesAllowed({"ADMIN", "USER"})
     @Path("{id}/comments")
     public void saveNewCommentsForGoalById(@PathParam("id") Long goalId, MessageDto msg) {
         Optional<Goal> goal = goalStore.getGoalById(goalId);
@@ -134,4 +116,14 @@ public class GoalApi {
             throw new InvalidGoalException();
         }
     }
+
+    @GET
+    @Path("/tags")
+    public List<TagDto> returnAllTags() {
+        List<Tag> tagList = goalStore.getAllTagList();
+        return tagList.stream()
+                .map(DtoConverter::convertTagToTagDto)
+                .collect(Collectors.toList());
+    }
+
 }

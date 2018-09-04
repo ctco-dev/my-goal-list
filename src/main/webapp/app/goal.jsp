@@ -27,7 +27,9 @@
 <div id="goal-fields">
     <h5>Author: {{username}}</h5>
     <h5>Deadline: {{deadlineDate}} (days left: {{daysLeft}})</h5>
-    <h5>{{goalMessage}}</h5>
+    <div id="tags-list" w3-repeat="tags">
+        <span id="{{id}}">{{tagMessage}}</span>
+    </div>
 </div>
 
 <div class="container">

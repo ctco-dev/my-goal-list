@@ -68,3 +68,7 @@ ul {
     border-radius: 10px;
     background-color: lightgray;
 }
+
+#tags-field-1, #tags-field-2, #tags-field-3 {
+    width: 200px;
+}
