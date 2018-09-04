@@ -5,10 +5,10 @@ import lv.ctco.javaschool.auth.entity.dto.UserLoginDto;
 import lv.ctco.javaschool.goal.entity.domain.Comment;
 import lv.ctco.javaschool.goal.entity.domain.Goal;
 import lv.ctco.javaschool.goal.entity.domain.Tag;
-import lv.ctco.javaschool.goal.entity.domain.UserDto;
 import lv.ctco.javaschool.goal.entity.dto.CommentDto;
 import lv.ctco.javaschool.goal.entity.dto.GoalDto;
 import lv.ctco.javaschool.goal.entity.dto.TagDto;
+import lv.ctco.javaschool.goal.entity.dto.UserDto;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -46,11 +46,10 @@ public class DtoConverter {
         return new TagDto(tag.getTagMessage());
     }
 
-    private UserDto getUserDto(User user, List<Goal> goalList) {
+    public static UserDto convertToUserDto(User user, List<Goal> goalList) {
         List<GoalDto> goalDtoList = goalList.stream()
-                .map(this::convertToDto)
+                .map(DtoConverter::convertGoalToGoalDto)
                 .collect(Collectors.toList());
-        UserDto userDto = new UserDto(user.getId(), user.getEmail(), user.getPhone(), user.getUsername(), goalDtoList);
-        return userDto;
+        return new UserDto(user.getId(), user.getEmail(), user.getPhone(), user.getUsername(), goalDtoList);
     }
 }

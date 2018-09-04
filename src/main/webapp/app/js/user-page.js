@@ -1,28 +1,38 @@
 var userid = getQueryVariable("id");
+var path;
 function loadUser() {
-    var path = "/api/goal/user";
+    var userPath = "/api/goal/user";
     if (userid) {
-        path = path + "/" + userid;
+        userPath = path + userPath + "/" + userid;
+        fetch(userPath, {
+            "method": "GET",
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
+        }).then(function (response) {
+            if (response.status === 200) {
+                return response.json();
+            } else {
+                alert("Something went wrong! error:404");
+                history.go(-1);
+                return false;
+            }
+        }).then(function (userDto) {
+            if (userDto.username !== "undefined") {
+                setDataToFields(userDto);
+            } else {
+                location.href = "/app/404.jsp";
+            }
+        });
+    } else {
+        location.href = path + "/app/start.jsp";
     }
-    fetch(path, {
-        "method": "GET",
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-        }
-    }).then(function (response) {
-        return response.json();
-    }).then(function (userDto) {
-        if (userDto.username !== "undefined") {
-            setDataToFields(userDto);
-        } else {
-            location.href = "/app/404.jsp";
-        }
-    });
+
 }
 
 function setDataToFields(userDto) {
-    var list = userDto.goalDtoList;
+    var list = userDto.goalList;
     var tabledata;
     console.log(userDto);
     w3.displayObject("title", userDto);
@@ -32,16 +42,6 @@ function setDataToFields(userDto) {
         tabledata = {"goals": list};
         console.log(tabledata);
         w3DisplayData("goals-list", tabledata);
-    } else if (list.length === 0 && !userid) {
-        tabledata = {
-            "goals": [{
-                "id": "-1",
-                "daysLeft": "",
-                "deadlineDate": "",
-                "goalMessage": "You need to create new Goals"
-            }]
-        };
-        w3DisplayData("goals-list", tabledata);
     } else {
         document.getElementById("hidden").classList.remove("w3-hide");
         document.getElementById("goals-list").classList.add("w3-hide");
@@ -50,7 +50,7 @@ function setDataToFields(userDto) {
 
 function redirectToGoalsAndComments(id) {
     if (id >= 0) {
-        location.href = "<c:url value='/app/goal.jsp?id='/>" + id;
+        location.href = path + "/app/goal.jsp?id=" + id;
     } else {
         addNewGoal()
     }

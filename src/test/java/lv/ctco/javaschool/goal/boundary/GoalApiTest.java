@@ -3,6 +3,7 @@ package lv.ctco.javaschool.goal.boundary;
 import lv.ctco.javaschool.auth.control.UserStore;
 import lv.ctco.javaschool.auth.entity.domain.User;
 import lv.ctco.javaschool.auth.entity.dto.UserLoginDto;
+import lv.ctco.javaschool.goal.control.DtoConverter;
 import lv.ctco.javaschool.goal.control.GoalStore;
 import lv.ctco.javaschool.goal.control.TagParser;
 import lv.ctco.javaschool.goal.entity.domain.Comment;
@@ -13,7 +14,9 @@ import lv.ctco.javaschool.goal.entity.dto.GoalDto;
 import lv.ctco.javaschool.goal.entity.dto.GoalFormDto;
 import lv.ctco.javaschool.goal.entity.dto.MessageDto;
 import lv.ctco.javaschool.goal.entity.dto.TagDto;
+import lv.ctco.javaschool.goal.entity.dto.UserDto;
 import lv.ctco.javaschool.goal.entity.exception.InvalidGoalException;
+import lv.ctco.javaschool.goal.entity.exception.InvalidUserException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -127,7 +130,30 @@ class GoalApiTest {
         tagList.add(tag1);
         tagList.add(tag2);
         tagList.add(tag3);
+    }
 
+    @Test
+    @DisplayName("Test getUserById(): returns user if User exists")
+    void testGetUserByIdReturnsUserDtoIfUserExists() {
+        goalList1.add(goal);
+        UserDto userDto = DtoConverter.convertToUserDto(user1, goalList1);
+        when(userStore.findUserById(1L))
+                .thenReturn(Optional.of(user1));
+        when(goalStore.getGoalsListFor(user1))
+                .thenReturn(goalList1);
+        assertThat(goalApi.getUserById(1L).getClass(), equalTo(userDto.getClass()));
+        assertThat(goalApi.getUserById(1L).getEmail(), equalTo(userDto.getEmail()));
+        assertThat(goalApi.getUserById(1L).getId(), equalTo(userDto.getId()));
+        assertThat(goalApi.getUserById(1L).getGoalList().get(0).getDaysLeft(), equalTo(userDto.getGoalList().get(0).getDaysLeft()));
+        assertThat(goalApi.getUserById(1L).getPhone(), equalTo(userDto.getPhone()));
+    }
+
+    @Test
+    @DisplayName("Test getUserById(): throws InvalidUserException if user does not exists(wrong id)")
+    void testGetUserByIdThrowsError() {
+        when(userStore.findUserById(1L))
+                .thenReturn(Optional.empty());
+        assertThrows(InvalidUserException.class, () -> goalApi.getUserById(1L));
     }
 
     @Test
