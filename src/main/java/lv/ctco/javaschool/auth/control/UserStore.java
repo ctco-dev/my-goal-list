@@ -86,13 +86,4 @@ public class UserStore {
                         "where u.username like '%" + user + "%'", User.class)
                 .getResultList();
     }
-
-    public UserSearchDto convertToSearchDto(User user) {
-        UserSearchDto dto = new UserSearchDto();
-        dto.setId(user.getId());
-        dto.setUsername(user.getUsername());
-        dto.setPhone(user.getPhone());
-        dto.setEmail(user.getEmail());
-        return dto;
-    }
 }

@@ -45,8 +45,33 @@ function findUserByName() {
     });
 }
 function findGoalsByTag() {
-    var tag = document.getElementById("tag").value;
-    fetch("/api/goal/tag/" + tag, {
+    var tag = document.getElementById("tag");
+    var dto = {
+        "goalsearch": tag.value
+    };
+    console.log(JSON.stringify(dto));
+    fetch("/api/goal/search-goals", {
+        "method": "POST",
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(dto)
+    }).then(function (response) {
+        return response.json();
+    }).then(function (goals) {
+        console.log(goals);
+        if (goals.length > 0) {
+            var tabledata = {'goals': goals};
+            document.getElementById("Goals-List").classList.remove("w3-hide");
+            w3DisplayData("Goals-List", tabledata);
+        } else {
+            document.getElementById("Goals-List").classList.add("w3-hide");
+        }
+    });
+}
+function loadTags() {
+    fetch("/api/goal/tags", {
         "method": "GET",
         headers: {
             'Accept': 'application/json',
@@ -54,14 +79,14 @@ function findGoalsByTag() {
         }
     }).then(function (response) {
         return response.json();
-    }).then(function (similargoals) {
-        console.log(similargoals);
-        if (similargoals.length > 0) {
-            var tabledata = {'goals': similargoals};
-            document.getElementById("Goals-List").classList.remove("w3-hide");
-            w3DisplayData("Goals-List", tabledata);
-        } else {
-            alert("There are no goals with such tag");
-        }
+    }).then(function (tags) {
+        addOptions(tags, "tags");
     });
+}
+function addOptions(tags, name) {
+    var obj = "";
+    for (var i = 0; i < tags.length; i++) {
+        obj += "<option>" + tags[i].tagMessage + "</option>";
+    }
+    document.getElementById(name).innerHTML = obj;
 }

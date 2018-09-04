@@ -134,20 +134,29 @@ public class GoalApi {
                 .collect(Collectors.toList());
     }
 
-    @GET
+    @POST
     @RolesAllowed({"ADMIN", "USER"})
-    @Path("/tag/{tag}")
-    public List<GoalDto> getGoalListByTag(@PathParam("tag") String tag) {
-        Optional<Tag> optionalTag = goalStore.getTagByMessage(tag);
-        if (optionalTag.isPresent()) {
-            return goalStore.getGoalsByTag(optionalTag.get())
-                    .stream()
-                    .sorted(Comparator.comparing(Goal::getRegisteredDate))
-                    .map(DtoConverter::convertGoalToGoalDto)
-                    .collect(Collectors.toList());
-        } else {
-            throw new ValidationException("There is no such tag");
+    @Path("/search-goals")
+    public List<GoalDto> getGoals(JsonObject searchDto) {
+        List<GoalDto> goalDtoList = new ArrayList<>();
+        for (Map.Entry<String, JsonValue> pair : searchDto.entrySet()) {
+            String adr = pair.getKey();
+            String value = ((JsonString) pair.getValue()).getString();
+            if (adr.equals("goalsearch")) {
+                List<Tag> tagList = goalStore.getTagsByMessage(value);
+                for (Tag tag : tagList) {
+                    List<Goal> goalList = goalStore.getGoalsByTag(tag);
+                    if (goalList.size() != 0) {
+                        goalDtoList = goalList.stream()
+                                .map(DtoConverter::convertGoalToGoalDto)
+                                .collect(Collectors.toList());
+                    } else {
+                        goalDtoList = Collections.emptyList();
+                    }
+                }
+            }
         }
+        return goalDtoList;
     }
 
     @POST
@@ -162,7 +171,7 @@ public class GoalApi {
                 List<User> userList = userStore.getUserByUsername(value);
                 if (userList.size() != 0) {
                     userDtoList = userList.stream()
-                            .map(userStore::convertToSearchDto)
+                            .map(DtoConverter::convertUserToUserSearchDto)
                             .collect(Collectors.toList());
                 } else {
                     userDtoList = Collections.emptyList();
@@ -170,12 +179,5 @@ public class GoalApi {
             }
         }
         return userDtoList;
-    }
-
-    @GET
-    @RolesAllowed({"ADMIN", "USER"})
-    @Path("/taglist")
-    public List<TagDto> returnTagList() {
-        return goalStore.getTagList();
     }
 }

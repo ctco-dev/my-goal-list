@@ -115,6 +115,11 @@ public class GoalStore {
                         "GROUP BY t.id").getResultList());
     }
 
-
-
+    public List<Tag> getTagsByMessage(String message) {
+        return em.createQuery(
+                "select t " +
+                        "from Tag t " +
+                        "where t.tagMessage like '%" + message + "%'", Tag.class)
+                .getResultList();
+    }
 }

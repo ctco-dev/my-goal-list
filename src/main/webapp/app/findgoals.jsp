@@ -11,7 +11,7 @@
     <script type="text/javascript" src="js/findgoals-page.js"></script>
     <title>Search</title>
 </head>
-<body onLoad="switchSearch();">
+<body onLoad="switchSearch();loadTags()">
 <div id="menu">
     <div class="button-div">
         <button class="menu-button" onclick="logout()" type="button">Log out</button>
@@ -31,7 +31,9 @@
     <input type="button" id="findUserButton" value="Find" onclick="findUserByName();">
 </div>
 <div id="search-by-Tags" class="w3-hide">
-    <input id="tag" type="text"/>
+    <input id="tag"  type="text" list="tags"/>
+    <datalist id="tags">
+    </datalist>
     <input type="button" id="findGoalButton" value="Find" onclick="findGoalsByTag();">
 </div>
 <table id="Users-List" class="w3-table-all w3-hoverable w3-hide">
