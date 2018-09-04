@@ -32,6 +32,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Path("/goal")
+@RolesAllowed({"ADMIN", "USER"})
 @Stateless
 public class GoalApi {
     @Inject
@@ -43,7 +44,6 @@ public class GoalApi {
     private TagParser tagParser;
 
     @GET
-    @RolesAllowed({"ADMIN", "USER"})
     @Path("/mygoals")
     public List<GoalDto> getMyGoals() {
         User currentUser = userStore.getCurrentUser();
@@ -54,7 +54,6 @@ public class GoalApi {
     }
 
     @GET
-    @RolesAllowed({"ADMIN", "USER"})
     @Path("/mygoals/{id}")
     public GoalDto getGoalDtoByGoalId(@PathParam("id") Long goalId) {
         Optional<Goal> goal = goalStore.getGoalById(goalId);
@@ -67,7 +66,6 @@ public class GoalApi {
     }
 
     @POST
-    @RolesAllowed({"ADMIN", "USER"})
     @Path("/newgoal")
     public void createNewGoal(GoalFormDto goalDto) {
         User user = userStore.getCurrentUser();
@@ -91,7 +89,6 @@ public class GoalApi {
 
 
     @GET
-    @RolesAllowed({"ADMIN", "USER"})
     @Path("{id}/comments")
     public List<CommentDto> returnAllCommentsForGoalById(@PathParam("id") Long goalId) {
         Optional<Goal> goal = goalStore.getGoalById(goalId);
@@ -105,7 +102,6 @@ public class GoalApi {
     }
 
     @POST
-    @RolesAllowed({"ADMIN", "USER"})
     @Path("{id}/comments")
     public void saveNewCommentsForGoalById(@PathParam("id") Long goalId, MessageDto msg) {
         Optional<Goal> goal = goalStore.getGoalById(goalId);
@@ -122,7 +118,6 @@ public class GoalApi {
     }
 
     @GET
-    @RolesAllowed({"ADMIN", "USER"})
     @Path("/tags")
     public List<TagDto> returnAllTags() {
         List<Tag> tagList = goalStore.getAllTagList();

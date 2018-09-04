@@ -41,6 +41,4 @@ public class DtoConverter {
     public static TagDto convertTagToTagDto(Tag tag) {
         return new TagDto(tag.getTagMessage());
     }
-
-
 }
