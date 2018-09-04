@@ -1,8 +1,8 @@
 package lv.ctco.javaschool.goal.control;
 
-
 import lv.ctco.javaschool.auth.entity.domain.User;
 import lv.ctco.javaschool.auth.entity.dto.UserLoginDto;
+import lv.ctco.javaschool.auth.entity.dto.UserSearchDto;
 import lv.ctco.javaschool.goal.entity.domain.Comment;
 import lv.ctco.javaschool.goal.entity.domain.Goal;
 import lv.ctco.javaschool.goal.entity.domain.Tag;
@@ -21,6 +21,7 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 
 class DtoConverterTest {
+
     Goal goal = new Goal();
     User user = new User();
     Comment comment = new Comment();
@@ -59,7 +60,6 @@ class DtoConverterTest {
         assertThat(dto.getPhone(), is(user.getPhone()));
     }
 
-
     @Test
     @DisplayName("Test convertGoalToGoalDto(Goal goal): Checks that goal and goalDto contains same data (List<Tag> excluded)")
     void testConvertGoalToGoalDto() {
@@ -74,16 +74,29 @@ class DtoConverterTest {
         assertThat(dto.getTags(), nullValue());
     }
 
-
     @Test
     @DisplayName("Test ConvertCommentToCommentDto(Comment comment): Checks that Comment and CommentDto contains same data")
     void testConvertCommentToCommentDto() {
         CommentDto dto = DtoConverter.convertCommentToCommentDto(comment);
-
         assertThat(dto.getUsername(), is(comment.getUser().getUsername()));
         assertThat(dto.getCommentMessage(), is(comment.getCommentMessage()));
         assertThat(dto.getRegisteredDate(), is(DateTimeConverter.convertDateTime(comment.getRegisteredDate())));
     }
 
+    @Test
+    @DisplayName("Test ConvertTagToTagDto(Tag tag): Checks that Tag and TagDto contain the same data")
+    void testConvertTagToTagDto() {
+        TagDto tagDto = DtoConverter.convertTagToTagDto(tag);
+        assertThat(tagDto.getTagMessage(), is(tag.getTagMessage()));
+    }
 
+    @Test
+    @DisplayName("Test ConvertUserToUserSearchDto(User user): Checks that User and UserSearchDto contain the same data")
+    void testConvertUserToUserSearchDto() {
+        UserSearchDto userSearchDto = DtoConverter.convertUserToUserSearchDto(user);
+        assertThat(userSearchDto.getId(), is(user.getId()));
+        assertThat(userSearchDto.getUsername(), is(user.getUsername()));
+        assertThat(userSearchDto.getEmail(), is(user.getEmail()));
+        assertThat(userSearchDto.getPhone(), is(user.getPhone()));
+    }
 }

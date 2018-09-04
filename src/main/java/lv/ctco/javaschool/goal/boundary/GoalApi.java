@@ -137,7 +137,7 @@ public class GoalApi {
     @POST
     @RolesAllowed({"ADMIN", "USER"})
     @Path("/search-goals")
-    public List<GoalDto> getGoals(JsonObject searchDto) {
+    public List<GoalDto> getGoalsByTag(JsonObject searchDto) {
         List<GoalDto> goalDtoList = new ArrayList<>();
         for (Map.Entry<String, JsonValue> pair : searchDto.entrySet()) {
             String adr = pair.getKey();
@@ -162,7 +162,7 @@ public class GoalApi {
     @POST
     @RolesAllowed({"ADMIN", "USER"})
     @Path("/search-user")
-    public List<UserSearchDto> getSearchParameters(JsonObject searchDto) {
+    public List<UserSearchDto> getUsersByUsername(JsonObject searchDto) {
         List<UserSearchDto> userDtoList = new ArrayList<>();
         for (Map.Entry<String, JsonValue> pair : searchDto.entrySet()) {
             String adr = pair.getKey();
