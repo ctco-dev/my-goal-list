@@ -106,9 +106,9 @@ public class GoalStore {
     }
 
     public Optional<Goal> getCurrentUserGoalById(User user, Long goalId) {
-        return em.createQuery("select g from Goal g where g.user=:user and g.id=:id",Goal.class)
-                .setParameter("user",user)
-                .setParameter("id",goalId)
+        return em.createQuery("select g from Goal g where g.user=:user and g.id=:id", Goal.class)
+                .setParameter("user", user)
+                .setParameter("id", goalId)
                 .setMaxResults(1)
                 .getResultStream()
                 .findFirst();

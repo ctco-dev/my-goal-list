@@ -39,7 +39,7 @@ function onLoad() {
         w3.displayObject("title", goal);
         w3.displayObject("goal-fields", goal);
         w3DisplayData("tags-list", goal);
-        document.getElementById("goal-deadline").setAttribute("value",goal.deadlineDate);
+        document.getElementById("goal-deadline").setAttribute("value", goal.deadlineDate);
         getComments();
     });
     isGoalEditable();
@@ -98,7 +98,6 @@ function isGoalEditable() {
             document.getElementById("edit-button").classList.add("w3-hide");
         isMyGoal = goalEdit;
     });
-
 }
 
 function editGoal() {
