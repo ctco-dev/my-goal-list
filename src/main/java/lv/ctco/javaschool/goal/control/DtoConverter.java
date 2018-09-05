@@ -25,6 +25,7 @@ public class DtoConverter {
         dto.setDaysLeft(DateTimeConverter.countDaysLeft(goal.getDeadlineDate()));
         dto.setId(goal.getId());
         dto.setTags(goal.getTags());
+        dto.setGoalStatus(goal.getStatus());
         return dto;
     }
 

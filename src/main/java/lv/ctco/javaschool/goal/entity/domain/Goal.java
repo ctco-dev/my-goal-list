@@ -3,6 +3,8 @@ package lv.ctco.javaschool.goal.entity.domain;
 import lv.ctco.javaschool.auth.entity.domain.User;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -31,6 +33,16 @@ public class Goal {
     private String goalMessage;
     private LocalDate deadlineDate;
     private LocalDateTime registeredDate;
+    @Enumerated(EnumType.STRING)
+    private GoalStatus status;
+
+    public GoalStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(GoalStatus status) {
+        this.status = status;
+    }
 
     public Goal() {
     }

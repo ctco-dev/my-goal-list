@@ -8,6 +8,7 @@ import lv.ctco.javaschool.goal.control.GoalStore;
 import lv.ctco.javaschool.goal.control.TagParser;
 import lv.ctco.javaschool.goal.entity.domain.Comment;
 import lv.ctco.javaschool.goal.entity.domain.Goal;
+import lv.ctco.javaschool.goal.entity.domain.GoalStatus;
 import lv.ctco.javaschool.goal.entity.domain.Tag;
 import lv.ctco.javaschool.goal.entity.dto.CommentDto;
 import lv.ctco.javaschool.goal.entity.dto.GoalDto;
@@ -81,7 +82,7 @@ public class GoalApi {
             goal.setTags(tagSet);
 
             goal.setDeadlineDate(goalDto.getDeadline());
-
+            goal.setStatus(GoalStatus.OPEN);
             goal.setUser(user);
             goal.setRegisteredDate(LocalDateTime.now());
             goalStore.addGoal(goal);

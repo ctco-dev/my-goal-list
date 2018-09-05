@@ -49,6 +49,7 @@
         } else var line = ((deadline.getDate() + 1) - today.getDate()).toString() + " days left";
         document.getElementById('days-left').innerHTML = line;
     }
+
 </script>
 
 </body>

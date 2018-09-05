@@ -3,11 +3,14 @@ package lv.ctco.javaschool.goal.control;
 import lv.ctco.javaschool.auth.entity.domain.User;
 import lv.ctco.javaschool.goal.entity.domain.Comment;
 import lv.ctco.javaschool.goal.entity.domain.Goal;
+import lv.ctco.javaschool.goal.entity.domain.GoalStatus;
 import lv.ctco.javaschool.goal.entity.domain.Tag;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -19,12 +22,24 @@ public class GoalStore {
     private EntityManager em;
 
     public List<Goal> getGoalsListFor(User user) {
-        return em.createQuery(
+        List<Goal> goals = em.createQuery(
                 "select g " +
                         "from Goal g " +
                         "where g.user = :user ", Goal.class)
                 .setParameter("user", user)
                 .getResultList();
+        return CheckStatus(goals);
+    }
+
+    private List<Goal> CheckStatus(List<Goal> goals) {
+        List<Goal> goalsToReturn = new ArrayList<>();
+        for (Goal goal : goals) {
+            if (goal.getDeadlineDate().isBefore(LocalDate.now()) || goal.getDeadlineDate().isEqual(LocalDate.now())) {
+                goal.setStatus(GoalStatus.OVERDUE);
+            }
+            goalsToReturn.add(goal);
+        }
+        return goalsToReturn;
     }
 
     public void addGoal(Goal goal) {
