@@ -78,6 +78,15 @@ public class UserStore {
         }
     }
 
+    public List<User> getUserByUsername(String user) {
+        return em.createQuery(
+                "select u " +
+                        "from User u " +
+                        "where lower(u.username) like lower(:user)", User.class)
+                .setParameter("user", "%" + user + "%")
+                .getResultList();
+    }
+
     public Optional<User> findUserById(Long id) {
         List<User> user = em.createQuery(
                 "select u from User u " +

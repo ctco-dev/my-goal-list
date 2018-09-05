@@ -17,13 +17,12 @@
         <button class="menu-button" onclick="logout()" type="button">Log out</button>
     </div>
     <div class="button-div">
-        <button class="menu-button" onclick="findGoals()" type="button">Find goals</button>
+        <button class="menu-button" onclick="findGoals()" type="button">Search</button>
     </div>
     <div class="button-div">
         <button class="menu-button" onclick="goToMain()" type="button">Go to Main</button>
     </div>
 </div>
-
 <div id="goal-fields">
     <h3>Goal: {{goalMessage}}</h3>
     <h5>Author: <a onclick="redirectToUserById('{{userId}}')">{{username}}</a></h5>
@@ -32,7 +31,6 @@
         <span id="{{id}}">{{tagMessage}}</span>
     </div>
 </div>
-
 <div class="container">
     <div class="text-center">
         <div class="well">

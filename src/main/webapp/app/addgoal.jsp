@@ -15,7 +15,6 @@
     <script src="https://rawgithub.com/indrimuska/jquery-editable-select/master/dist/jquery-editable-select.min.js"></script>
     <link href="https://rawgithub.com/indrimuska/jquery-editable-select/master/dist/jquery-editable-select.min.css"
           rel="stylesheet">
-
     <script>
         $(function () {
             $("#datepicker").datepicker({dateFormat: 'dd.mm.yy'});
@@ -28,17 +27,15 @@
         <button class="menu-button" onclick="logout()" type="button">Log out</button>
     </div>
     <div class="button-div">
-        <button class="menu-button" onclick="findGoals()" type="button">Find goals</button>
+        <button class="menu-button" onclick="findGoals()" type="button">Search</button>
     </div>
     <div class="button-div">
         <button class="menu-button" onclick="goToMain()" type="button">Go to Main</button>
     </div>
 </div>
-
 <br>
 <div id="form">
     <h2>Add new goal</h2>
-
     <form>
         Input your goal:<br>
         <textarea id="goal-txt" name="goal" rows="10" cols="30"
@@ -57,7 +54,6 @@
         </div>
         <input type="button" value="Submit" onclick="submitData()">
     </form>
-
 </div>
 </body>
 </html>

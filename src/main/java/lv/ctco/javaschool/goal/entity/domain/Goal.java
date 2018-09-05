@@ -9,16 +9,19 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Set;
 
 @Entity
+@Table(name = "goals")
 public class Goal {
     @Id
     @GeneratedValue
     private Long id;
     @ManyToOne
+    @JoinColumn(name = "user_id")
     private User user;
     @OneToMany
     @JoinTable(name = "goal_tags",
@@ -28,6 +31,18 @@ public class Goal {
     private String goalMessage;
     private LocalDate deadlineDate;
     private LocalDateTime registeredDate;
+
+    public Goal() {
+    }
+
+    public Goal(Long id, User user, Set<Tag> tags, String goalMessage, LocalDate deadlineDate, LocalDateTime registeredDate) {
+        this.id = id;
+        this.user = user;
+        this.tags = tags;
+        this.goalMessage = goalMessage;
+        this.deadlineDate = deadlineDate;
+        this.registeredDate = registeredDate;
+    }
 
     public Set<Tag> getTags() {
         return tags;

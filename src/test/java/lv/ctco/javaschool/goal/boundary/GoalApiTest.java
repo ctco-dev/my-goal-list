@@ -3,6 +3,7 @@ package lv.ctco.javaschool.goal.boundary;
 import lv.ctco.javaschool.auth.control.UserStore;
 import lv.ctco.javaschool.auth.entity.domain.User;
 import lv.ctco.javaschool.auth.entity.dto.UserLoginDto;
+import lv.ctco.javaschool.auth.entity.dto.UserSearchDto;
 import lv.ctco.javaschool.goal.control.DtoConverter;
 import lv.ctco.javaschool.goal.control.GoalStore;
 import lv.ctco.javaschool.goal.control.TagParser;
@@ -25,6 +26,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import javax.json.Json;
+import javax.json.JsonObject;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -32,6 +35,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.Collections;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -39,6 +43,7 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -280,5 +285,50 @@ class GoalApiTest {
             assertThat(dtoList.get(i).getTagMessage(), is(tagList.get(i).getTagMessage()));
         }
         assertThat(dtoList.get(0).getTagMessage(), is(not(tagList.get(2).getTagMessage())));
+    }
+
+    @Test
+    @DisplayName("Test getGoalsByTag(JsonObject searchDto): returns list of GoalDto by Tag")
+    void testGetGoalsByTag() {
+        List<Tag> tags = new ArrayList<>();
+        Tag tag1 = new Tag("test1");
+        Tag tag2 = new Tag("test2");
+        Collections.addAll(tags, tag1, tag2);
+        List<Goal> goals = new ArrayList<>();
+        Goal goal1 = new Goal(1L, user1, new HashSet<>(tags), "abc", LocalDate.now().plusDays(1), LocalDateTime.now());
+        Goal goal2 = new Goal(2L, user2, new HashSet<>(tags), "bcd", LocalDate.now().plusDays(1), LocalDateTime.now());
+        Collections.addAll(goals, goal1, goal2);
+        JsonObject jsonObject = Json.createObjectBuilder().build();
+        for (Tag tag : tags) {
+            Json.createObjectBuilder(jsonObject).add("tagsearch", tag.getTagMessage());
+            List<GoalDto> dtoList = goalApi.getGoalsByTag(jsonObject);
+            for (int i = 0; i < dtoList.size(); i++) {
+                assertThat(dtoList.get(i).getId(), is(goals.get(i).getId()));
+                assertThat(dtoList.get(i).getUsername(), is(goals.get(i).getUser().getUsername()));
+                assertThat(dtoList.get(i).getGoalMessage(), is(goals.get(i).getGoalMessage()));
+                assertThat(dtoList.get(i).getRegisteredDate(), is(goals.get(i).getRegisteredDate()));
+                assertThat(dtoList.get(i).getTags(), is(goals.get(i).getTags()));
+            }
+        }
+    }
+
+    @Test
+    @DisplayName("Test getUsersByUsername(JsonObject searchDto): returns list of UserSearchDto and calling userStore.getUserByUsername() method")
+    void testGetUsersByUsername() {
+        List<User> users = new ArrayList<>();
+        Collections.addAll(users, user1, user2);
+        when(userStore.getUserByUsername(anyString())).thenReturn(users);
+        JsonObject jsonObject = Json.createObjectBuilder()
+                .add("usersearch", "user")
+                .add("usersearch", "admin")
+                .build();
+        List<UserSearchDto> dtoList = goalApi.getUsersByUsername(jsonObject);
+        for (int i = 0; i < dtoList.size(); i++) {
+            assertThat(dtoList.get(i).getId(), is(users.get(i).getId()));
+            assertThat(dtoList.get(i).getUsername(), is(users.get(i).getUsername()));
+            assertThat(dtoList.get(i).getEmail(), is(users.get(i).getEmail()));
+            assertThat(dtoList.get(i).getPhone(), is(users.get(i).getPhone()));
+        }
+        verify(userStore, times(1)).getUserByUsername(anyString());
     }
 }

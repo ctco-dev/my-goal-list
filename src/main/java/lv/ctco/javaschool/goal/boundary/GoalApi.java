@@ -2,6 +2,7 @@ package lv.ctco.javaschool.goal.boundary;
 
 import lv.ctco.javaschool.auth.control.UserStore;
 import lv.ctco.javaschool.auth.entity.domain.User;
+import lv.ctco.javaschool.auth.entity.dto.UserSearchDto;
 import lv.ctco.javaschool.goal.control.DateTimeConverter;
 import lv.ctco.javaschool.goal.control.DtoConverter;
 import lv.ctco.javaschool.goal.control.GoalStore;
@@ -9,18 +10,17 @@ import lv.ctco.javaschool.goal.control.TagParser;
 import lv.ctco.javaschool.goal.entity.domain.Comment;
 import lv.ctco.javaschool.goal.entity.domain.Goal;
 import lv.ctco.javaschool.goal.entity.domain.Tag;
-import lv.ctco.javaschool.goal.entity.dto.CommentDto;
-import lv.ctco.javaschool.goal.entity.dto.GoalDto;
-import lv.ctco.javaschool.goal.entity.dto.GoalFormDto;
-import lv.ctco.javaschool.goal.entity.dto.MessageDto;
-import lv.ctco.javaschool.goal.entity.dto.TagDto;
-import lv.ctco.javaschool.goal.entity.dto.UserDto;
+import lv.ctco.javaschool.goal.entity.dto.*;
 import lv.ctco.javaschool.goal.entity.exception.InvalidGoalException;
+import lv.ctco.javaschool.goal.entity.dto.UserDto;
 import lv.ctco.javaschool.goal.entity.exception.InvalidUserException;
 
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import javax.json.JsonObject;
+import javax.json.JsonString;
+import javax.json.JsonValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -28,7 +28,9 @@ import javax.ws.rs.PathParam;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -98,7 +100,7 @@ public class GoalApi {
                     .map(DtoConverter::convertCommentToCommentDto)
                     .collect(Collectors.toList());
         }
-        return new ArrayList<CommentDto>();
+        return new ArrayList<>();
     }
 
     @POST
@@ -126,6 +128,45 @@ public class GoalApi {
                 .collect(Collectors.toList());
     }
 
+    @POST
+    @RolesAllowed({"ADMIN", "USER"})
+    @Path("/search-goals")
+    public List<GoalDto> getGoalsByTag(JsonObject searchDto) {
+        List<GoalDto> goalDtoList = new ArrayList<>();
+        for (Map.Entry<String, JsonValue> pair : searchDto.entrySet()) {
+            String adr = pair.getKey();
+            String value = ((JsonString) pair.getValue()).getString();
+            if (adr.equals("goalsearch")) {
+                List<Tag> tagList = goalStore.getTagsByMessage(value);
+                for (Tag tag : tagList) {
+                    List<Goal> goalList = goalStore.getGoalsByTag(tag);
+                    goalDtoList = goalList.stream()
+                            .map(DtoConverter::convertGoalToGoalDto)
+                            .collect(Collectors.toList());
+                }
+            }
+        }
+        return goalDtoList;
+    }
+
+    @POST
+    @RolesAllowed({"ADMIN", "USER"})
+    @Path("/search-user")
+    public List<UserSearchDto> getUsersByUsername(JsonObject searchDto) {
+        List<UserSearchDto> userDtoList = new ArrayList<>();
+        for (Map.Entry<String, JsonValue> pair : searchDto.entrySet()) {
+            String adr = pair.getKey();
+            String value = ((JsonString) pair.getValue()).getString();
+            if (adr.equals("usersearch")) {
+                List<User> userList = userStore.getUserByUsername(value);
+                userDtoList = userList.stream()
+                        .map(DtoConverter::convertUserToUserSearchDto)
+                        .collect(Collectors.toList());
+            }
+        }
+        return userDtoList;
+    }
+
     @GET
     @RolesAllowed({"ADMIN", "USER"})
     @Path("/user/{id}")
@@ -141,3 +182,4 @@ public class GoalApi {
         }
     }
 }
+

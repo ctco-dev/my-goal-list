@@ -4,11 +4,13 @@ import lv.ctco.javaschool.auth.entity.domain.User;
 import lv.ctco.javaschool.goal.entity.domain.Comment;
 import lv.ctco.javaschool.goal.entity.domain.Goal;
 import lv.ctco.javaschool.goal.entity.domain.Tag;
+import lv.ctco.javaschool.goal.entity.dto.TagDto;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -83,4 +85,25 @@ public class GoalStore {
         return tagSet;
     }
 
+    public List<Goal> getGoalsByTag(Tag tag) {
+        return em.createQuery("SELECT g FROM Goal AS g WHERE :tag MEMBER OF g.tags", Goal.class)
+                .setParameter("tag", tag)
+                .getResultList();
+    }
+
+    public Optional<Tag> getTagByMessage(String message) {
+        return em.createQuery("select t from Tag t where t.tagMessage = :message", Tag.class)
+                .setParameter("message", message)
+                .getResultStream()
+                .findFirst();
+    }
+
+    public List<Tag> getTagsByMessage(String message) {
+        return em.createQuery(
+                "select t " +
+                        "from Tag t " +
+                        "where lower(t.tagMessage) like lower(:message)", Tag.class)
+                .setParameter("message", "%" + message + "%")
+                .getResultList();
+    }
 }
