@@ -105,7 +105,7 @@ public class GoalStore {
                 .getResultList();
     }
 
-    public Optional<Goal> getCurrentUserGoalById(User user, Long goalId) {
+    public Optional<Goal> getUserGoalById(User user, Long goalId) {
         return em.createQuery("select g from Goal g where g.user=:user and g.id=:id", Goal.class)
                 .setParameter("user", user)
                 .setParameter("id", goalId)
