@@ -82,3 +82,10 @@ ul {
     margin-right: 40%;
     margin-bottom: 5%;
 }
+
+input[type=date]::-webkit-clear-button,
+input[type=date]::-webkit-inner-spin-button,
+input[type=date]::-webkit-outer-spin-button {
+    display: none;
+    -webkit-appearance: none;
+}

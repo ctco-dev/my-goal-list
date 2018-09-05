@@ -2,7 +2,6 @@ package lv.ctco.javaschool.goal.boundary;
 
 import lv.ctco.javaschool.auth.control.UserStore;
 import lv.ctco.javaschool.auth.entity.domain.User;
-import lv.ctco.javaschool.auth.entity.dto.UserLoginDto;
 import lv.ctco.javaschool.auth.entity.dto.UserSearchDto;
 import lv.ctco.javaschool.goal.control.DtoConverter;
 import lv.ctco.javaschool.goal.control.GoalStore;
@@ -31,11 +30,11 @@ import javax.json.JsonObject;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import java.util.Collections;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -50,23 +49,16 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class GoalApiTest {
-    Goal goal = new Goal();
-    Goal goal2 = new Goal();
-    Tag tag1 = new Tag();
-    Tag tag2 = new Tag();
-    Tag tag3 = new Tag();
-    User user1 = new User();
-    User user2 = new User();
-    Comment comment1 = new Comment();
-    List<Goal> goalList1 = new ArrayList<>();
-    List<GoalDto> goalDtoList = new ArrayList<>();
-    List<Comment> comments = new ArrayList<>();
-    List<CommentDto> commentDtos = new ArrayList<>();
-    List<User> userList = new ArrayList<>();
-    List<UserLoginDto> userDtoList = new ArrayList<>();
-    Set<Tag> tags = new HashSet<>();
-    List<Tag> tagList = new ArrayList<>();
-    String testLine1, expResult1, testLine2, expResult2, testLine3, expResult3, testLine4, expResult4;
+    private Goal goal;
+    private User user1;
+    private User user2;
+    private Comment comment1;
+    private List<Goal> goalList1;
+    private List<GoalDto> goalDtoList;
+    private List<Comment> comments;
+    private List<CommentDto> commentDto;
+    private Set<Tag> tags;
+    private List<Tag> tagList;
 
     @Mock
     private UserStore userStore;
@@ -80,6 +72,21 @@ class GoalApiTest {
 
     @BeforeEach
     void init() {
+        Goal goal2 = new Goal();
+        Tag tag1 = new Tag();
+        Tag tag2 = new Tag();
+        Tag tag3 = new Tag();
+        goal = new Goal();
+        user1 = new User();
+        user2 = new User();
+        comment1 = new Comment();
+        goalList1 = new ArrayList<>();
+        goalDtoList = new ArrayList<>();
+        comments = new ArrayList<>();
+        commentDto = new ArrayList<>();
+        tags = new HashSet<>();
+        tagList = new ArrayList<>();
+
         user1.setUsername("user");
         user1.setEmail("user@user.com");
         user1.setId(1L);
@@ -113,15 +120,6 @@ class GoalApiTest {
 
         goal2.setUser(user2);
         goal2.setGoalMessage("cde");
-
-        testLine1 = "I will become a programmer this year!";
-        expResult1 = "programmer";
-        testLine2 = "I WILL BECOME A PROGRAMMER THIS YEAR!";
-        expResult2 = "PROGRAMMER";
-        testLine3 = "I WILL be two years old!";
-        expResult3 = "";
-        testLine4 = "I will start to learn Java!";
-        expResult4 = "learn Java";
 
         tagList.add(new Tag("tag1"));
         tagList.add(new Tag("tag2"));
@@ -206,7 +204,7 @@ class GoalApiTest {
     @DisplayName("Test createNewGoal() : check if persists new Goal")
     void testCreateNewGoal() {
         GoalFormDto goalFormDto = new GoalFormDto();
-        goalFormDto.setDeadline("25.10.2018");
+        goalFormDto.setDeadline(LocalDate.of(2018,10,25));
         goalFormDto.setGoalMessage("hi");
         goalFormDto.setTags("qwjye|iwefyg|ksdgf");
         when(userStore.getCurrentUser())
@@ -232,7 +230,7 @@ class GoalApiTest {
     @DisplayName("Test returnAllCommentsForGoalById(): returns Comments dto of goal by id")
     void testReturnAllCommentsForGoalById() {
         comments.add(comment1);
-        when(goalStore.getGoalById(1l))
+        when(goalStore.getGoalById(1L))
                 .thenReturn(java.util.Optional.ofNullable(goal));
         when(goalStore.getCommentsForGoal(goal))
                 .thenReturn(comments);
@@ -249,7 +247,7 @@ class GoalApiTest {
         when(goalStore.getCommentsForGoal(goal))
                 .thenReturn(comments);
         assertThat(goalApi.returnAllCommentsForGoalById(1L).size(), is(0));
-        assertThat(goalApi.returnAllCommentsForGoalById(1L).getClass(), equalTo(commentDtos.getClass()));
+        assertThat(goalApi.returnAllCommentsForGoalById(1L).getClass(), equalTo(commentDto.getClass()));
     }
 
     @Test
@@ -275,6 +273,82 @@ class GoalApiTest {
         assertThrows(InvalidGoalException.class, () -> goalApi.saveNewCommentsForGoalById(1L, msg));
     }
 
+    @Test
+    @DisplayName("Test if goal is for current user is returned true")
+    void isCurrentUsersGoalTestForCurrentUser() {
+        when(userStore.getCurrentUser())
+                .thenReturn(user1);
+        when(goalStore.getUserGoalById(user1,1L))
+                .thenReturn(Optional.of(goal));
+        assertThat(goalApi.isCurrentUsersGoal(1L),is(true));
+    }
+
+    @Test
+    @DisplayName("Test if goal is for other user not current, then returned false")
+    void isCurrentUsersGoalTestForDifferentUser() {
+        when(userStore.getCurrentUser())
+                .thenReturn(user2);
+        when(goalStore.getUserGoalById(user2,1L))
+                .thenReturn(Optional.empty());
+
+        assertThat(goalApi.isCurrentUsersGoal(1L),is(false));
+    }
+
+    @Test
+    @DisplayName("Test, that goal is edited, if user created goal")
+    void testEditGoalForGoalOwner() {
+        GoalFormDto goalDto = new GoalFormDto();
+        goalDto.setGoalMessage("123");
+        goalDto.setDeadline(LocalDate.of(2018,1,1));
+
+        when(userStore.getCurrentUser())
+                .thenReturn(user1);
+        when(goalStore.getUserGoalById(user1,1L))
+                .thenReturn(Optional.of(goal));
+
+        goalApi.editGoal(1L,goalDto);
+
+        assertThat(goal.getGoalMessage(),is(goalDto.getGoalMessage()));
+        assertThat(goal.getDeadlineDate(),is(goalDto.getDeadline()));
+    }
+
+    @Test
+    @DisplayName("Test, that goal is edited, if user created goal")
+    void testEditGoalForDifferentUser() {
+        GoalFormDto goalDto = new GoalFormDto();
+        goalDto.setGoalMessage("123");
+        goalDto.setDeadline(LocalDate.of(2018,1,1));
+
+        String messageBeforeEdit = goal.getGoalMessage();
+        LocalDate deadlineDateBeforeEdit = goal.getDeadlineDate();
+
+        when(userStore.getCurrentUser())
+                .thenReturn(user2);
+        when(goalStore.getUserGoalById(user2,1L))
+                .thenReturn(Optional.empty());
+
+        goalApi.editGoal(1L,goalDto);
+
+        assertThat(goal.getGoalMessage(),is(messageBeforeEdit));
+        assertThat(goal.getDeadlineDate(),is(deadlineDateBeforeEdit));
+    }
+
+    @Test
+    @DisplayName("Test, that goal is edited, if users new goal is empty")
+    void testEditGoalWithoutInput() {
+        GoalFormDto goalDto = new GoalFormDto();
+
+        String messageBeforeEdit = goal.getGoalMessage();
+        LocalDate deadlineDateBeforeEdit = goal.getDeadlineDate();
+
+        when(userStore.getCurrentUser())
+                .thenReturn(user1);
+
+        goalApi.editGoal(1L,goalDto);
+
+        assertThat(goal.getGoalMessage(),is(messageBeforeEdit));
+        assertThat(goal.getDeadlineDate(),is(deadlineDateBeforeEdit));
+    }
     @Test
     @DisplayName("Test returnAllTags(): verify if throws exception if optional<goal> isEmpty")
     void testReturnAllTags() {

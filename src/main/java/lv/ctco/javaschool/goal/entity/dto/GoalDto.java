@@ -2,6 +2,8 @@ package lv.ctco.javaschool.goal.entity.dto;
 
 import lv.ctco.javaschool.goal.entity.domain.Tag;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 public class GoalDto {
@@ -9,8 +11,8 @@ public class GoalDto {
     private String username;
     private Long userId;
     private String goalMessage;
-    private String deadlineDate;
-    private String registeredDate;
+    private LocalDate deadlineDate;
+    private LocalDateTime registeredDate;
     private Set<Tag> tags;
     private int daysLeft;
 
@@ -62,19 +64,19 @@ public class GoalDto {
         this.goalMessage = goalMessage;
     }
 
-    public String getDeadlineDate() {
+    public LocalDate getDeadlineDate() {
         return deadlineDate;
     }
 
-    public void setDeadlineDate(String deadlineDate) {
+    public void setDeadlineDate(LocalDate deadlineDate) {
         this.deadlineDate = deadlineDate;
     }
 
-    public String getRegisteredDate() {
+    public LocalDateTime getRegisteredDate() {
         return registeredDate;
     }
 
-    public void setRegisteredDate(String registeredDate) {
+    public void setRegisteredDate(LocalDateTime registeredDate) {
         this.registeredDate = registeredDate;
     }
 }

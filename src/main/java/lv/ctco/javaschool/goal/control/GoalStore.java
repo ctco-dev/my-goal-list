@@ -4,13 +4,11 @@ import lv.ctco.javaschool.auth.entity.domain.User;
 import lv.ctco.javaschool.goal.entity.domain.Comment;
 import lv.ctco.javaschool.goal.entity.domain.Goal;
 import lv.ctco.javaschool.goal.entity.domain.Tag;
-import lv.ctco.javaschool.goal.entity.dto.TagDto;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.HashSet;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -105,5 +103,14 @@ public class GoalStore {
                         "where lower(t.tagMessage) like lower(:message)", Tag.class)
                 .setParameter("message", "%" + message + "%")
                 .getResultList();
+    }
+
+    public Optional<Goal> getUserGoalById(User user, Long goalId) {
+        return em.createQuery("select g from Goal g where g.user=:user and g.id=:id", Goal.class)
+                .setParameter("user", user)
+                .setParameter("id", goalId)
+                .setMaxResults(1)
+                .getResultStream()
+                .findFirst();
     }
 }

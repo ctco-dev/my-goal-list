@@ -14,7 +14,7 @@ function loadUser() {
             if (response.status === 200) {
                 return response.json();
             } else {
-                alert("Something went wrong! error:404");
+                alert("Something went wrong! error: "+response.status.toString());
                 history.go(-1);
                 return false;
             }
