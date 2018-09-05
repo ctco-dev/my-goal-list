@@ -116,7 +116,7 @@ function saveEditGoal() {
         "goalMessage": goalTxt.value,
         "deadline": deadlineDate.value
     };
-    fetch(path + "/api/goal/" + id + "/edit", {
+    fetch(path + "/api/goals/" + id + "/edit", {
         "method": "POST",
         headers: {
             'Accept': 'application/json',
