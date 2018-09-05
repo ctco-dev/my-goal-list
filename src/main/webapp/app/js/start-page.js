@@ -1,4 +1,5 @@
 var path = "";
+var goalList;
 
 function showUserProfile() {
     fetch(path + "/api/auth/myprofile", {
@@ -25,6 +26,8 @@ function showUserGoals() {
     }).then(function (response) {
         return response.json();
     }).then(function (goals) {
+        goalList = goals;
+        console.log(goals);
         var tabledata;
         if (goals.length > 0) {
             tabledata = {"goals": goals};

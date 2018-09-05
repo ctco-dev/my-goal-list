@@ -25,12 +25,16 @@
     <div class="button-div">
         <button id="edit-button" class="menu-button" onclick="editGoal()" type="button">Edit Goal</button>
     </div>
+    <div class="button-div" id="status-achieved">
+        <button class="menu-button" onclick="setStatusAchieved('{{id}}')" type="button">Achieved</button>
+    </div>
 </div>
 <div id="goal-fields">
     <div id="show-goal">
         <h3>Goal: {{goalMessage}}</h3>
         <h5>Author: <a onclick="redirectToUserById('{{userId}}')">{{username}}</a></h5>
-        <h5>Deadline: {{deadlineDate}} (days left: {{daysLeft}})</h5>
+        <h5>Deadline: {{deadlineDate}}</h5>
+        <h5 class="{{goalStatus}}">Goal status: {{goalStatus}}</h5>
         <div id="tags-list" w3-repeat="tags">
             <span id="{{id}}">{{tagMessage}}</span>
         </div>
@@ -61,12 +65,12 @@
             <hr>
             <ul id="sortable" class="w3-hide">
                 <li w3-repeat="comments" class="repeatable">
-                    <strong>{{username}}</strong>
+                    <strong> <a onclick="redirectToUserById('{{userId}}')">{{username}}</a></strong>
                     <small>
                         <span class="glyphicon glyphicon-time"></span>{{registeredDate}}
                     </small>
-                    <br/>
-                    <br/>
+                    </br>
+                    </br>
                     <p>{{commentMessage}}</p>
                 </li>
             </ul>

@@ -39,6 +39,7 @@ public class DtoConverter {
 
     public static CommentDto convertCommentToCommentDto(Comment comment) {
         CommentDto dto = new CommentDto();
+        dto.setUserId(comment.getUser().getId());
         dto.setUsername(comment.getUser().getUsername());
         dto.setRegisteredDate(comment.getRegisteredDate().format(DateTimeConverter.FORMATTER_DATE_TIME));
         dto.setCommentMessage(comment.getCommentMessage());

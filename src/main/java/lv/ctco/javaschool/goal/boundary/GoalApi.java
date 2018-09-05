@@ -18,6 +18,7 @@ import lv.ctco.javaschool.goal.entity.dto.TagDto;
 import lv.ctco.javaschool.goal.entity.dto.UserDto;
 import lv.ctco.javaschool.goal.entity.exception.InvalidGoalException;
 import lv.ctco.javaschool.goal.entity.exception.InvalidUserException;
+import lv.ctco.javaschool.goal.entity.exception.ValidationException;
 
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
@@ -153,7 +154,6 @@ public class GoalApi {
     }
 
     @POST
-    @RolesAllowed({"ADMIN", "USER"})
     @Path("/search-goals")
     public List<GoalDto> getGoalsByTag(JsonObject searchDto) {
         List<GoalDto> goalDtoList = new ArrayList<>();
@@ -174,7 +174,6 @@ public class GoalApi {
     }
 
     @POST
-    @RolesAllowed({"ADMIN", "USER"})
     @Path("/search-user")
     public List<UserSearchDto> getUsersByUsername(JsonObject searchDto) {
         List<UserSearchDto> userDtoList = new ArrayList<>();
@@ -192,7 +191,6 @@ public class GoalApi {
     }
 
     @GET
-    @RolesAllowed({"ADMIN", "USER"})
     @Path("/user/{id}")
     public UserDto getUserById(@PathParam("id") Long id) {
         Optional<User> user = userStore.findUserById(id);
@@ -203,6 +201,23 @@ public class GoalApi {
             return userDto;
         } else {
             throw new InvalidUserException();
+        }
+    }
+
+    @POST
+    @Path("/mygoals/{id}")
+    public void setStatusAchieved(@PathParam("id") Long goalId) {
+        User user = userStore.getCurrentUser();
+        Optional<Goal> goal = goalStore.getGoalById(goalId);
+        if (goal.isPresent()) {
+            Goal g = goal.get();
+            if (g.getUser() == user) {
+                g.setStatus(GoalStatus.ACHIEVED);
+            } else {
+                throw new ValidationException("Current Goal does not belong to you so you can not Edit Status");
+            }
+        } else {
+            throw new ValidationException("The Goal does not exist");
         }
     }
 }

@@ -16,7 +16,7 @@
         <button class="menu-button" onclick="logout()" type="button">Log out</button>
     </div>
     <div class="button-div">
-        <button class="menu-button" onclick="findGoals()" type="button">Find goals</button>
+        <button class="menu-button" onclick="findGoals()" type="button">Search</button>
     </div>
     <div class="button-div">
         <button class="menu-button" onclick="goToMain()" type="button">Go to Main</button>
@@ -42,7 +42,7 @@
         <th>Days left</th>
 
     </tr>
-    <tr w3-repeat="goals" id="{{id}}" onclick="redirectToGoalsAndComments(id)">
+    <tr w3-repeat="goals" id="{{id}}" class="{{goalStatus}}" onclick="redirectToGoalsAndComments(id)">
 
         <td>{{goalMessage}}</td>
 

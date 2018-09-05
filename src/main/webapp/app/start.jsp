@@ -37,17 +37,12 @@
         <th>Deadline</th>
         <th>Days left</th>
     </tr>
-    <tr w3-repeat="goals" id="{{id}}" class="{{goalStatus}}" onclick="redirectToGoalsAndComments(id)">
+    <tr w3-repeat="goals" class="{{goalStatus}}" onclick="redirectToGoalsAndComments('{{id}}')">
         <td>{{goalMessage}}</td>
         <td>{{deadlineDate}}</td>
-        <c:choose>
-            <c:when test="${goalStatus == 'ACHIEVED'}">
-                <td>{{goalStatus}}</td>
-            </c:when>
-            <c:otherwise>
-                <td>{{daysLeft}}</td>
-            </c:otherwise>
-        </c:choose>
+        <td>
+            <span class="{{goalStatus}}">{{daysLeft}}</span>
+        </td>
     </tr>
 </table>
 </body>
