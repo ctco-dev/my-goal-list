@@ -2,7 +2,7 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <html>
 <head>
-    <title id="title">{{username}}</title>
+    <title id="title">{{username}} | C.T.Co Goal list</title>
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <link rel="stylesheet" type="text/css" href="css/style.css">
     <script type="text/javascript" src="js/redirects.js"></script>
