@@ -32,6 +32,18 @@ public class Goal {
     private LocalDate deadlineDate;
     private LocalDateTime registeredDate;
 
+    public Goal() {
+    }
+
+    public Goal(Long id, User user, Set<Tag> tags, String goalMessage, LocalDate deadlineDate, LocalDateTime registeredDate) {
+        this.id = id;
+        this.user = user;
+        this.tags = tags;
+        this.goalMessage = goalMessage;
+        this.deadlineDate = deadlineDate;
+        this.registeredDate = registeredDate;
+    }
+
     public Set<Tag> getTags() {
         return tags;
     }

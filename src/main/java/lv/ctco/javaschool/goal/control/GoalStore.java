@@ -85,15 +85,6 @@ public class GoalStore {
         return tagSet;
     }
 
-    public List<Tag> getAllTagsForGoal(Goal goal) {
-        return em.createQuery(
-                "select t " +
-                        "from Tag t, Goal g " +
-                        "where g = :goal and t member of g.tags", Tag.class)
-                .setParameter("goal", goal)
-                .getResultList();
-    }
-
     public List<Goal> getGoalsByTag(Tag tag){
         return em.createQuery("SELECT g FROM Goal AS g WHERE :tag MEMBER OF g.tags", Goal.class)
                 .setParameter("tag", tag)
@@ -105,14 +96,6 @@ public class GoalStore {
                 .setParameter("message", message)
                 .getResultStream()
                 .findFirst();
-    }
-
-    public List<TagDto> getTagList() {
-        return new ArrayList<>( em.createQuery(
-                "SELECT new lv.ctco.javaschool.goal.entity.TagDto(t.tagMessage, COUNT(t)) " +
-                        "FROM Tag t, Goal g " +
-                        "WHERE t MEMBER OF g.tags " +
-                        "GROUP BY t.id").getResultList());
     }
 
     public List<Tag> getTagsByMessage(String message) {

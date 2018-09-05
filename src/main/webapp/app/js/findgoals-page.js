@@ -80,10 +80,10 @@ function loadTags() {
     }).then(function (response) {
         return response.json();
     }).then(function (tags) {
-        addOptions(tags, "tags");
+        optionsHtml(tags, "tags");
     });
 }
-function addOptions(tags, name) {
+function optionsHtml(tags, name) {
     var obj = "";
     for (var i = 0; i < tags.length; i++) {
         obj += "<option>" + tags[i].tagMessage + "</option>";

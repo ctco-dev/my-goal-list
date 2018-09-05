@@ -291,26 +291,12 @@ class GoalApiTest {
     @DisplayName("Test getGoalsByTag(JsonObject searchDto): returns list of GoalDto by Tag")
     void testGetGoalsByTag() {
         List<Tag> tags = new ArrayList<>();
-        Tag tag1 = new Tag();
-        tag1.setTagMessage("test1");
-        Tag tag2 = new Tag();
-        tag2.setTagMessage("test2");
-        Collections.addAll(tags, tag1);
+        Tag tag1 = new Tag("test1");
+        Tag tag2 = new Tag("test2");
+        Collections.addAll(tags, tag1, tag2);
         List<Goal> goals = new ArrayList<>();
-        Goal goal1 = new Goal();
-        goal1.setUser(user1);
-        goal1.setGoalMessage("abc");
-        goal1.setRegisteredDate(LocalDateTime.now());
-        goal1.setDeadlineDate(LocalDate.now().plusDays(1));
-        goal1.setId(1L);
-        goal1.setTags(new HashSet<>(tags));
-        Goal goal2 = new Goal();
-        goal2.setUser(user2);
-        goal2.setGoalMessage("bcd");
-        goal2.setRegisteredDate(LocalDateTime.now());
-        goal2.setDeadlineDate(LocalDate.now().plusDays(1));
-        goal2.setId(2L);
-        goal2.setTags(new HashSet<>(tags));
+        Goal goal1 = new Goal(1L, user1, new HashSet<>(tags), "abc", LocalDate.now().plusDays(1), LocalDateTime.now());
+        Goal goal2 = new Goal(2L, user2, new HashSet<>(tags), "bcd", LocalDate.now().plusDays(1), LocalDateTime.now());
         Collections.addAll(goals, goal1, goal2);
         JsonObject jsonObject = Json.createObjectBuilder().build();
         for (Tag tag : tags) {

@@ -140,13 +140,9 @@ public class GoalApi {
                 List<Tag> tagList = goalStore.getTagsByMessage(value);
                 for (Tag tag : tagList) {
                     List<Goal> goalList = goalStore.getGoalsByTag(tag);
-                    if (goalList.size() != 0) {
-                        goalDtoList = goalList.stream()
-                                .map(DtoConverter::convertGoalToGoalDto)
-                                .collect(Collectors.toList());
-                    } else {
-                        goalDtoList = Collections.emptyList();
-                    }
+                    goalDtoList = goalList.stream()
+                            .map(DtoConverter::convertGoalToGoalDto)
+                            .collect(Collectors.toList());
                 }
             }
         }
@@ -163,13 +159,9 @@ public class GoalApi {
             String value = ((JsonString) pair.getValue()).getString();
             if (adr.equals("usersearch")) {
                 List<User> userList = userStore.getUserByUsername(value);
-                if (userList.size() != 0) {
-                    userDtoList = userList.stream()
-                            .map(DtoConverter::convertUserToUserSearchDto)
-                            .collect(Collectors.toList());
-                } else {
-                    userDtoList = Collections.emptyList();
-                }
+                userDtoList = userList.stream()
+                        .map(DtoConverter::convertUserToUserSearchDto)
+                        .collect(Collectors.toList());
             }
         }
         return userDtoList;
