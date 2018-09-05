@@ -129,7 +129,7 @@ function saveEditGoal() {
         body: JSON.stringify(dto)
     }).then(function (response) {
         if (response.status === 204) {
-            // redirectToGoalsAndComments(id);
+            redirectToGoalsAndComments(id);
         } else {
             alert("Something went wrong! error: "+response.status.toString());
             return false;
