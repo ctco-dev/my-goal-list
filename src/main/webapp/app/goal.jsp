@@ -34,8 +34,8 @@
         <h5>{{goalMessage}}</h5>
     </div>
     <div id="edit-goal">
-        <label for="edit-goal-deadline">Deadline: </label>
-        <input id="edit-goal-deadline" type="date" onkeydown="return false">
+        <label for="goal-deadline">Deadline: </label>
+        <input id="goal-deadline" type="date" onkeydown="return false">
         <br>
         <label for="edit-goal-text">Goal: </label>
         <input id="edit-goal-text" type="text" value="{{goalMessage}}">

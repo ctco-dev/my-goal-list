@@ -9,7 +9,7 @@
     <script type="text/javascript" src="js/redirects.js"></script>
     <script type="text/javascript" src="js/addgoal-page.js"></script>
 </head>
-<body>
+<body onload="setMinDateInputDate()">
 <div id="menu">
     <div class="button-div">
         <button class="menu-button" onclick="logout()" type="button">Log out</button>
