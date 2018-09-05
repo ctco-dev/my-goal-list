@@ -27,23 +27,20 @@ function goToMain() {
 function redirectToUserById(id) {
     location.href = path + "/app/user.jsp?id=" + id;
 }
-
 function setMinInputDate() {
     var today = new Date();
-    var dd = today.getDate()+1;
-    var mm = today.getMonth()+1; //January is 0!
+    var dd = today.getDate() + 1;
+    var mm = today.getMonth() + 1; //January is 0!
     var yyyy = today.getFullYear();
-    if(dd<10){
-        dd='0'+dd
+    if (dd < 10) {
+        dd = '0' + dd
     }
-    if(mm<10){
-        mm='0'+mm
+    if (mm < 10) {
+        mm = '0' + mm
     }
-
-    today = yyyy+'-'+mm+'-'+dd;
+    today = yyyy + '-' + mm + '-' + dd;
     document.getElementById("goal-deadline").setAttribute("min", today);
 }
-
 function switchPersonalData() {
     var checkbox = document.getElementById("personal-data");
     var block = document.getElementById("personal-block");

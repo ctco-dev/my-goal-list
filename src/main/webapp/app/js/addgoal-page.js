@@ -26,7 +26,6 @@ function submitData() {
         location.href = path + "/app/start.jsp";
     });
 }
-
 function loadTags() {
     fetch(path + "/api/goals/tags", {
         "method": "GET",
@@ -40,7 +39,6 @@ function loadTags() {
         addOptions(tags, "tags");
     });
 }
-
 function addOptions(tags, name) {
     var obj = "";
     for (var i = 0; i < tags.length; i++) {

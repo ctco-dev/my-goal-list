@@ -46,7 +46,6 @@
             <button class="menu-button" onclick="saveEditGoal()" type="button">Save</button>
         </div>
     </div>
-
 </div>
 <div class="container">
     <div class="text-center">

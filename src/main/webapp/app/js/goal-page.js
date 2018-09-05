@@ -30,7 +30,7 @@ function onLoad() {
         if (response.status === 200) {
             return response.json();
         } else {
-            alert("Something went wrong! error: "+response.status.toString());
+            alert("Something went wrong! error: " + response.status.toString());
             return false;
         }
     }).then(function (goal) {
@@ -68,13 +68,12 @@ function addComment() {
                 document.getElementById("userComment").value = "";
                 onLoad();
             } else {
-                alert("Something went wrong! error: "+response.status.toString());
+                alert("Something went wrong! error: " + response.status.toString());
                 return false;
             }
         });
     }
 }
-
 function enableEditForGoalOwner() {
     fetch(path + "/api/goals/" + id + "/edit", {
         "method": "GET",
@@ -86,7 +85,7 @@ function enableEditForGoalOwner() {
         if (response.status === 200) {
             return response.json();
         } else {
-            alert("Something went wrong! error: "+response.status.toString());
+            alert("Something went wrong! error: " + response.status.toString());
             return false;
         }
     }).then(function (goalEdit) {
@@ -95,7 +94,6 @@ function enableEditForGoalOwner() {
         isMyGoal = goalEdit;
     });
 }
-
 function editGoal() {
     if (isMyGoal) {
         document.getElementById("show-goal").classList.add("w3-hide");
@@ -104,7 +102,6 @@ function editGoal() {
         alert("You can edit only your own goals");
     }
 }
-
 function saveEditGoal() {
     var goalTxt = document.getElementById("edit-goal-text");
     var deadlineDate = document.getElementById("goal-deadline");
@@ -127,7 +124,7 @@ function saveEditGoal() {
         if (response.status === 204) {
             redirectToGoalsAndComments(id);
         } else {
-            alert("Something went wrong! error: "+response.status.toString());
+            alert("Something went wrong! error: " + response.status.toString());
             return false;
         }
     });
