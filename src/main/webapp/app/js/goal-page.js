@@ -112,7 +112,7 @@ function editGoal() {
 
 function saveEditGoal() {
     var goalTxt = document.getElementById("edit-goal-text");
-    var deadlineDate = document.getElementById("edit-goal-deadline");
+    var deadlineDate = document.getElementById("goal-deadline");
     if (String(goalTxt.value) === "" || String(deadlineDate.value) === "") {
         alert("You can not delete your goal!");
         return false;

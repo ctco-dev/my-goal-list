@@ -44,3 +44,12 @@ function setMinDateInputDate() {
     document.getElementById("goal-deadline").setAttribute("min", today);
 }
 
+function switchPersonalData() {
+    var checkbox = document.getElementById("personal-data");
+    var block = document.getElementById("personal-block");
+    if (checkbox.checked) {
+        block.classList.remove("w3-hide");
+    } else {
+        block.classList.add("w3-hide");
+    }
+}

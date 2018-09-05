@@ -22,10 +22,10 @@ import static org.hamcrest.Matchers.nullValue;
 
 class DtoConverterTest {
 
-    Goal goal = new Goal();
-    User user = new User();
-    Comment comment = new Comment();
-    Tag tag;
+    private Goal goal = new Goal();
+    private User user = new User();
+    private Comment comment = new Comment();
+    private Tag tag;
 
     @BeforeEach
     void init() {
@@ -66,11 +66,11 @@ class DtoConverterTest {
         GoalDto dto = DtoConverter.convertGoalToGoalDto(goal);
         assertThat(dto.getUsername(), is(goal.getUser().getUsername()));
         assertThat(dto.getGoalMessage(), is(goal.getGoalMessage()));
-        assertThat(dto.getDeadlineDate(), is(DateTimeConverter.convertDate(goal.getDeadlineDate())));
+        assertThat(dto.getDeadlineDate(), is(goal.getDeadlineDate()));
         assertThat(dto.getId(), is(goal.getId()));
-        assertThat(dto.getRegisteredDate(), is(DateTimeConverter.convertDateTime(goal.getRegisteredDate())));
-        assertThat(dto.getRegisteredDate(), is(DateTimeConverter.convertDateTime(goal.getRegisteredDate())));
-        assertThat(dto.getRegisteredDate(), is(DateTimeConverter.convertDateTime(goal.getRegisteredDate())));
+        assertThat(dto.getRegisteredDate(), is(goal.getRegisteredDate()));
+        assertThat(dto.getRegisteredDate(), is(goal.getRegisteredDate()));
+        assertThat(dto.getRegisteredDate(), is(goal.getRegisteredDate()));
         assertThat(dto.getTags(), nullValue());
     }
 

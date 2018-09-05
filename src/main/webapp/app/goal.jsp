@@ -36,11 +36,12 @@
         </div>
     </div>
     <div id="edit-goal">
-        <label for="goal-deadline">Deadline: </label>
-        <input id="goal-deadline" type="date" onkeydown="return false">
-        <br>
         <label for="edit-goal-text">Goal: </label>
         <input id="edit-goal-text" type="text" value="{{goalMessage}}">
+        <br/>
+        <h5>Author: <a onclick="redirectToUserById('{{userId}}')">{{username}}</a></h5>
+        <label for="goal-deadline">Deadline: </label>
+        <input id="goal-deadline" type="date" onkeydown="return false">
         <div class="button-div">
             <button class="menu-button" onclick="saveEditGoal()" type="button">Save</button>
         </div>
