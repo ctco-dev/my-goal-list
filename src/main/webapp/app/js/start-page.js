@@ -27,7 +27,6 @@ function showUserGoals() {
         return response.json();
     }).then(function (goals) {
         goalList = goals;
-        console.log(goals);
         var tabledata;
         if (goals.length > 0) {
             tabledata = {"goals": goals};

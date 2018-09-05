@@ -33,9 +33,10 @@ public class GoalStore {
 
     private List<Goal> CheckStatus(List<Goal> goals) {
         List<Goal> goalsToReturn = new ArrayList<>();
+        LocalDate localDateNow = LocalDate.now();
         for (Goal goal : goals) {
-            if ((goal.getDeadlineDate().isBefore(LocalDate.now())
-                    || goal.getDeadlineDate().isEqual(LocalDate.now()))
+            if ((goal.getDeadlineDate().isBefore(localDateNow)
+                    || goal.getDeadlineDate().isEqual(localDateNow))
                     && goal.getStatus() != GoalStatus.ACHIEVED) {
                 goal.setStatus(GoalStatus.OVERDUE);
             }

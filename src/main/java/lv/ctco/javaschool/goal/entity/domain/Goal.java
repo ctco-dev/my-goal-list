@@ -36,14 +36,6 @@ public class Goal {
     @Enumerated(EnumType.STRING)
     private GoalStatus status;
 
-    public GoalStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(GoalStatus status) {
-        this.status = status;
-    }
-
     public Goal() {
     }
 
@@ -54,6 +46,14 @@ public class Goal {
         this.goalMessage = goalMessage;
         this.deadlineDate = deadlineDate;
         this.registeredDate = registeredDate;
+    }
+
+    public GoalStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(GoalStatus status) {
+        this.status = status;
     }
 
     public Set<Tag> getTags() {
@@ -102,5 +102,34 @@ public class Goal {
 
     public void setRegisteredDate(LocalDateTime registeredDate) {
         this.registeredDate = registeredDate;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Goal goal = (Goal) o;
+
+        if (id != null ? !id.equals(goal.id) : goal.id != null) return false;
+        if (user != null ? !user.equals(goal.user) : goal.user != null) return false;
+        if (tags != null ? !tags.equals(goal.tags) : goal.tags != null) return false;
+        if (goalMessage != null ? !goalMessage.equals(goal.goalMessage) : goal.goalMessage != null) return false;
+        if (deadlineDate != null ? !deadlineDate.equals(goal.deadlineDate) : goal.deadlineDate != null) return false;
+        if (registeredDate != null ? !registeredDate.equals(goal.registeredDate) : goal.registeredDate != null)
+            return false;
+        return status == goal.status;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (user != null ? user.hashCode() : 0);
+        result = 31 * result + (tags != null ? tags.hashCode() : 0);
+        result = 31 * result + (goalMessage != null ? goalMessage.hashCode() : 0);
+        result = 31 * result + (deadlineDate != null ? deadlineDate.hashCode() : 0);
+        result = 31 * result + (registeredDate != null ? registeredDate.hashCode() : 0);
+        result = 31 * result + (status != null ? status.hashCode() : 0);
+        return result;
     }
 }

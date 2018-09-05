@@ -211,7 +211,7 @@ public class GoalApi {
         Optional<Goal> goal = goalStore.getGoalById(goalId);
         if (goal.isPresent()) {
             Goal g = goal.get();
-            if (g.getUser() == user) {
+            if (g.getUser().equals(user)) {
                 g.setStatus(GoalStatus.ACHIEVED);
             } else {
                 throw new ValidationException("Current Goal does not belong to you so you can not Edit Status");

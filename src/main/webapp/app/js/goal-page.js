@@ -156,7 +156,6 @@ function setStatusAchieved(id) {
         if (response.status === 204) {
             onLoad();
         } else {
-            console.log(response);
             alert("Something went wrong! error: " + response.status.toString());
             return false;
         }
