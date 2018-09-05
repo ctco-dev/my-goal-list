@@ -10,7 +10,12 @@ import lv.ctco.javaschool.goal.control.TagParser;
 import lv.ctco.javaschool.goal.entity.domain.Comment;
 import lv.ctco.javaschool.goal.entity.domain.Goal;
 import lv.ctco.javaschool.goal.entity.domain.Tag;
-import lv.ctco.javaschool.goal.entity.dto.*;
+import lv.ctco.javaschool.goal.entity.dto.CommentDto;
+import lv.ctco.javaschool.goal.entity.dto.GoalDto;
+import lv.ctco.javaschool.goal.entity.dto.GoalFormDto;
+import lv.ctco.javaschool.goal.entity.dto.MessageDto;
+import lv.ctco.javaschool.goal.entity.dto.TagDto;
+import lv.ctco.javaschool.goal.entity.dto.UserDto;
 import lv.ctco.javaschool.goal.entity.exception.InvalidGoalException;
 import lv.ctco.javaschool.goal.entity.exception.InvalidUserException;
 import org.junit.jupiter.api.BeforeEach;
@@ -25,14 +30,23 @@ import javax.json.Json;
 import javax.json.JsonObject;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class GoalApiTest {
@@ -266,7 +280,7 @@ class GoalApiTest {
     void isCurrentUsersGoalTestForCurrentUsersGoal() {
         when(userStore.getCurrentUser())
                 .thenReturn(user1);
-        when(goalStore.getCurrentUserGoalById(user1,1L))
+        when(goalStore.getUserGoalById(user1,1L))
                 .thenReturn(Optional.of(goal));
         assertThat(goalApi.isCurrentUsersGoal(1L),is(true));
     }
@@ -276,7 +290,7 @@ class GoalApiTest {
     void isCurrentUsersGoalTestForOtherUsersGoal() {
         when(userStore.getCurrentUser())
                 .thenReturn(user2);
-        when(goalStore.getCurrentUserGoalById(user2,1L))
+        when(goalStore.getUserGoalById(user2,1L))
                 .thenReturn(Optional.empty());
 
         assertThat(goalApi.isCurrentUsersGoal(1L),is(false));
@@ -291,7 +305,7 @@ class GoalApiTest {
 
         when(userStore.getCurrentUser())
                 .thenReturn(user1);
-        when(goalStore.getCurrentUserGoalById(user1,1L))
+        when(goalStore.getUserGoalById(user1,1L))
                 .thenReturn(Optional.of(goal));
 
         goalApi.editGoal(1L,goalDto);
@@ -312,7 +326,7 @@ class GoalApiTest {
 
         when(userStore.getCurrentUser())
                 .thenReturn(user2);
-        when(goalStore.getCurrentUserGoalById(user2,1L))
+        when(goalStore.getUserGoalById(user2,1L))
                 .thenReturn(Optional.empty());
 
         goalApi.editGoal(1L,goalDto);

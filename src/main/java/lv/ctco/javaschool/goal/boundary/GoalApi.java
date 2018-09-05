@@ -124,7 +124,7 @@ public class GoalApi {
     @Path("{id}/edit")
     public boolean isCurrentUsersGoal(@PathParam("id") Long goalId) {
         User user = userStore.getCurrentUser();
-        Optional<Goal> goal = goalStore.getCurrentUserGoalById(user, goalId);
+        Optional<Goal> goal = goalStore.getUserGoalById(user, goalId);
         return goal.isPresent();
     }
 
@@ -134,7 +134,7 @@ public class GoalApi {
     public void editGoal(@PathParam("id") Long goalId, GoalFormDto newGoalDto) {
         User user = userStore.getCurrentUser();
         if (newGoalDto.getGoalMessage() != null && newGoalDto.getDeadline() != null) {
-            Optional<Goal> goal = goalStore.getCurrentUserGoalById(user, goalId);
+            Optional<Goal> goal = goalStore.getUserGoalById(user, goalId);
             goal.ifPresent(g -> {
                 g.setGoalMessage(newGoalDto.getGoalMessage());
                 g.setDeadlineDate(newGoalDto.getDeadline());
