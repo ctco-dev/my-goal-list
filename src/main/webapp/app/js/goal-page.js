@@ -98,8 +98,10 @@ function enableEditForGoalOwner() {
             return false;
         }
     }).then(function (goalEdit) {
-        if (!goalEdit)
+        if (!goalEdit) {
             document.getElementById("edit-button").classList.add("w3-hide");
+            document.getElementById("status-achieved").classList.add("w3-hide");
+        }
         isMyGoal = goalEdit;
     });
 }
