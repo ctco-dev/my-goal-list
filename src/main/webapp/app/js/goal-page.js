@@ -38,6 +38,7 @@ function onLoad() {
     }).then(function (goal) {
         w3.displayObject("title", goal);
         w3.displayObject("goal-fields", goal);
+        w3DisplayData("tags-list", goal);
         document.getElementById("goal-deadline").setAttribute("value",goal.deadlineDate);
         getComments();
     });

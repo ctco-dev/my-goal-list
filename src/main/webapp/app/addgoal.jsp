@@ -6,32 +6,40 @@
     <link rel="stylesheet" href="css/style.css"/>
 
     <script src="https://www.w3schools.com/lib/w3.js"></script>
+    <script src="http://www.w3schools.com/lib/w3data.js"></script>
     <script type="text/javascript" src="js/redirects.js"></script>
     <script type="text/javascript" src="js/addgoal-page.js"></script>
 </head>
-<body onload="setMinDateInputDate()">
+<body onload="setMinDateInputDate();loadTags()">
 <div id="menu">
     <div class="button-div">
         <button class="menu-button" onclick="logout()" type="button">Log out</button>
     </div>
     <div class="button-div">
-        <button class="menu-button" onclick="findGoals()" type="button">Find goals</button>
+        <button class="menu-button" onclick="findGoals()" type="button">Search</button>
     </div>
     <div class="button-div">
         <button class="menu-button" onclick="goToMain()" type="button">Go to Main</button>
     </div>
 </div>
-
 <br>
 <div id="form">
     <h2>Add new goal</h2>
-
     <form>
         Input your goal:<br>
         <textarea id="goal-txt" name="goal" rows="10" cols="30"
                   placeholder="Write here your goal..." autofocus></textarea>
         <label for="goal-deadline"><br/>Deadline Date: <br/></label>
         <input id="goal-deadline" type="date" onkeydown="return false" >
+        <br>Tags:(Max:3)
+        <br>
+        <div id="tag-list-holder">
+            <input id="tags-field-1" type="text" list="tags"/>
+            <input id="tags-field-2" type="text" list="tags"/>
+            <input id="tags-field-3" type="text" list="tags"/>
+            <datalist id="tags">
+            </datalist>
+        </div>
         <input type="button" value="Submit" onclick="submitData()">
     </form>
 </div>

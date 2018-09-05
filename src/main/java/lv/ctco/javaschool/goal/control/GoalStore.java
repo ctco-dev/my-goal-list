@@ -8,8 +8,10 @@ import lv.ctco.javaschool.goal.entity.domain.Tag;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Stateless
 public class GoalStore {
@@ -29,20 +31,20 @@ public class GoalStore {
         em.persist(goal);
     }
 
-    public Tag addTag( String tagMsg ){
+    public Tag addTagIfNotExists(String tagMsg) {
         if (tagMsg.equals("")) return null;
-        Optional<Tag> tagFromDB= em.createQuery("select t from Tag t " +
+        Optional<Tag> tagFromDB = em.createQuery("select t from Tag t " +
                 "where upper(t.tagMessage) = :tagMsg ", Tag.class)
-                .setParameter("tagMsg", tagMsg.toUpperCase() )
+                .setParameter("tagMsg", tagMsg.toUpperCase())
                 .getResultStream()
                 .findFirst();
-        if (tagFromDB.isPresent()) return tagFromDB.get();
-        else {
-            Tag tag = new Tag();
-            tag.setTagMessage(tagMsg);
-            em.persist(tag);
-            return tag;
+        if (tagFromDB.isPresent()) {
+            return tagFromDB.get();
         }
+        Tag tag = new Tag();
+        tag.setTagMessage(tagMsg);
+        em.persist(tag);
+        return tag;
     }
 
     public Optional<Goal> getGoalById(Long goalId) {
@@ -62,6 +64,45 @@ public class GoalStore {
 
     public void addComment(Comment comment) {
         em.persist(comment);
+    }
+
+    public List<Tag> getAllTagList() {
+        return em.createQuery("SELECT t FROM Tag t " +
+                "order by t.tagMessage", Tag.class)
+                .getResultList();
+    }
+
+    public Set<Tag> checkIfTagExistsOrPersist(List<Tag> tags) {
+        Set<Tag> tagSet = new HashSet<>();
+        for (Tag t : tags) {
+            Tag tag = this.addTagIfNotExists(t.getTagMessage());
+            if (tag != null) {
+                tagSet.add(tag);
+            }
+        }
+        return tagSet;
+    }
+
+    public List<Goal> getGoalsByTag(Tag tag) {
+        return em.createQuery("SELECT g FROM Goal AS g WHERE :tag MEMBER OF g.tags", Goal.class)
+                .setParameter("tag", tag)
+                .getResultList();
+    }
+
+    public Optional<Tag> getTagByMessage(String message) {
+        return em.createQuery("select t from Tag t where t.tagMessage = :message", Tag.class)
+                .setParameter("message", message)
+                .getResultStream()
+                .findFirst();
+    }
+
+    public List<Tag> getTagsByMessage(String message) {
+        return em.createQuery(
+                "select t " +
+                        "from Tag t " +
+                        "where lower(t.tagMessage) like lower(:message)", Tag.class)
+                .setParameter("message", "%" + message + "%")
+                .getResultList();
     }
 
     public Optional<Goal> getCurrentUserGoalById(User user, Long goalId) {

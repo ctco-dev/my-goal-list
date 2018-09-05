@@ -119,7 +119,7 @@
         var pwd1 = password1Txt.value;
         var pwd2 = password2Txt.value;
         if (pwd1 !== pwd2) {
-            showError("Passwords doesn't match!")
+            showError("Passwords doesn't match!");
             return;
         }
         var dto = {
@@ -142,23 +142,27 @@
             } else if (response.status === 401) {
                 showError("Something is wrong!");
             } else {
-                response.json().then(function(json) {
-                    switch(json.errorCode) {
-                        case "CONFLICT":
-                            showError("A user with the same username already exists!");
-                            break;
-                        case "BAD_USERNAME":
-                            showError("Username is invalid!");
-                            break;
-                        case "BAD_PASSWORD":
-                            showError("Password is invalid!");
-                            break;
-                        default:
-                            showError("Something is wrong!");
-                    }
+                response.json().then(function (json) {
+                    registerErrors(json);
                 })
             }
         })
+    }
+
+    function registerErrors(json) {
+        switch (json.errorCode) {
+            case "CONFLICT":
+                showError("A user with the same username already exists!");
+                break;
+            case "BAD_USERNAME":
+                showError("Username is invalid!");
+                break;
+            case "BAD_PASSWORD":
+                showError("Password is invalid!");
+                break;
+            default:
+                showError("Something is wrong!");
+        }
     }
 
     function hideError() {
@@ -168,7 +172,7 @@
     function showError(msg) {
         var errorPanel = document.getElementById("error-panel");
         errorPanel.classList.remove("w3-hide");
-        w3DisplayData("error-panel", {"message" : msg});
+        w3DisplayData("error-panel", {"message": msg});
     }
 </script>
 </body>

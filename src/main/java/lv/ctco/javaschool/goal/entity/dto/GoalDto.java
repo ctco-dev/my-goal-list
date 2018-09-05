@@ -1,18 +1,28 @@
 package lv.ctco.javaschool.goal.entity.dto;
 
+import lv.ctco.javaschool.goal.entity.domain.Tag;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.Set;
 
 public class GoalDto {
     private Long id;
     private String username;
+    private Long userId;
     private String goalMessage;
     private LocalDate deadlineDate;
     private LocalDateTime registeredDate;
-    private List <String> tagList;
+    private Set<Tag> tags;
     private int daysLeft;
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userID) {
+        this.userId = userID;
+    }
 
     public Long getId() {
         return id;
@@ -30,12 +40,12 @@ public class GoalDto {
         this.daysLeft = daysLeft;
     }
 
-    public List<String> getTagList() {
-        return tagList;
+    public Set<Tag> getTags() {
+        return tags;
     }
 
-    public void setTagList(List<String> tagList) {
-        this.tagList = tagList;
+    public void setTags(Set<Tag> tags) {
+        this.tags = tags;
     }
 
     public String getUsername() {

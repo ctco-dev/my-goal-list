@@ -17,7 +17,7 @@
         <button class="menu-button" onclick="logout()" type="button">Log out</button>
     </div>
     <div class="button-div">
-        <button class="menu-button" onclick="findGoals()" type="button">Find goals</button>
+        <button class="menu-button" onclick="findGoals()" type="button">Search</button>
     </div>
     <div class="button-div">
         <button class="menu-button" onclick="goToMain()" type="button">Go to Main</button>
@@ -26,12 +26,14 @@
         <button id="edit-button" class="menu-button" onclick="editGoal()" type="button">Edit Goal</button>
     </div>
 </div>
-
 <div id="goal-fields">
-    <h5>Author: {{username}}</h5>
     <div id="show-goal">
-        <p>Deadline: {{deadlineDate}} (days left: {{daysLeft}})</p>
-        <h5>{{goalMessage}}</h5>
+        <h3>Goal: {{goalMessage}}</h3>
+        <h5>Author: <a onclick="redirectToUserById('{{userId}}')">{{username}}</a></h5>
+        <h5>Deadline: {{deadlineDate}} (days left: {{daysLeft}})</h5>
+        <div id="tags-list" w3-repeat="tags">
+            <span id="{{id}}">{{tagMessage}}</span>
+        </div>
     </div>
     <div id="edit-goal">
         <label for="goal-deadline">Deadline: </label>
@@ -45,8 +47,6 @@
     </div>
 
 </div>
-
-
 <div class="container">
     <div class="text-center">
         <div class="well">

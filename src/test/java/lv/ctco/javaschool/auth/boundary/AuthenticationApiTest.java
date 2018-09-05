@@ -3,7 +3,6 @@ package lv.ctco.javaschool.auth.boundary;
 import lv.ctco.javaschool.auth.control.UserStore;
 import lv.ctco.javaschool.auth.entity.domain.User;
 import lv.ctco.javaschool.auth.entity.dto.UserLoginDto;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -35,9 +34,9 @@ class AuthenticationApiTest {
         Mockito.when(userStore.getCurrentUser()).thenReturn(user);
 
         UserLoginDto resultDto = authenticationApi.returnUserDto();
-        assertThat( resultDto.getUsername(), is(user.getUsername()));
-        assertThat( resultDto.getEmail(), is(user.getEmail()));
-        assertThat( resultDto.getPhone(), is(user.getPhone()));
+        assertThat(resultDto.getUsername(), is(user.getUsername()));
+        assertThat(resultDto.getEmail(), is(user.getEmail()));
+        assertThat(resultDto.getPhone(), is(user.getPhone()));
     }
 
 }
