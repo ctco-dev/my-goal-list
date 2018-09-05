@@ -1,5 +1,4 @@
 var path = "";
-
 function submitData() {
     var goalTxt = document.getElementById("goal-txt");
     var deadlineTxt = document.getElementById("datepicker");
@@ -16,7 +15,7 @@ function submitData() {
         "deadline": deadlineTxt.value,
         "tags": tags
     };
-    fetch(path + "/api/goal/newgoal", {
+    fetch(path + "/api/goals/add", {
         "method": "POST",
         headers: {
             'Accept': 'application/json',
@@ -29,7 +28,7 @@ function submitData() {
 }
 
 function loadTags() {
-    fetch(path + "/api/goal/tags", {
+    fetch(path + "/api/goals/tags", {
         "method": "GET",
         headers: {
             'Accept': 'application/json',

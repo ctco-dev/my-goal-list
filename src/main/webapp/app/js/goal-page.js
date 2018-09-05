@@ -1,8 +1,7 @@
 var path = "";
 var id = getQueryVariable("id");
-
 function getComments() {
-    fetch(path + "/api/goal/" + id + "/comments", {
+    fetch(path + "/api/goals/" + id + "/comments", {
         "method": "GET",
         headers: {
             'Accept': 'application/json',
@@ -19,9 +18,8 @@ function getComments() {
 
     });
 }
-
 function onLoad() {
-    fetch(path + "/api/goal/mygoals/" + id, {
+    fetch(path + "/api/goals/" + id, {
         "method": "GET",
         headers: {
             'Accept': 'application/json',
@@ -35,14 +33,12 @@ function onLoad() {
             return false;
         }
     }).then(function (goal) {
-        console;
         w3.displayObject("title", goal);
         w3.displayObject("goal-fields", goal);
         w3DisplayData("tags-list", goal);
         getComments();
     });
 }
-
 function getQueryVariable(variable) {
     var query = window.location.search.substring(1);
     var vars = query.split("&");
@@ -54,11 +50,10 @@ function getQueryVariable(variable) {
     }
     return (false);
 }
-
 function addComment() {
     var data = {'message': document.getElementById("userComment").value};
     if (document.getElementById("userComment").value) {
-        fetch(path + "/api/goal/" + id + "/comments", {
+        fetch(path + "/api/goals/" + id + "/comments", {
             "method": "POST",
             headers: {
                 'Accept': 'application/json',
@@ -69,7 +64,7 @@ function addComment() {
                 document.getElementById("userComment").value = "";
                 onLoad();
             } else {
-                alert("Sompthing went wrong! error:404");
+                alert("Something went wrong! error:404");
                 return false;
             }
         });

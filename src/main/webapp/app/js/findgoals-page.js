@@ -24,7 +24,7 @@ function findUserByName() {
         "usersearch": username.value
     };
     console.log(JSON.stringify(dto));
-    fetch("/api/goal/search-user", {
+    fetch("/api/goals/search-users", {
         "method": "POST",
         headers: {
             'Accept': 'application/json',
@@ -50,7 +50,7 @@ function findGoalsByTag() {
         "goalsearch": tag.value
     };
     console.log(JSON.stringify(dto));
-    fetch("/api/goal/search-goals", {
+    fetch("/api/goals/search-goals", {
         "method": "POST",
         headers: {
             'Accept': 'application/json',
@@ -71,7 +71,7 @@ function findGoalsByTag() {
     });
 }
 function loadTags() {
-    fetch("/api/goal/tags", {
+    fetch("/api/goals/tags", {
         "method": "GET",
         headers: {
             'Accept': 'application/json',

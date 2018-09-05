@@ -10,7 +10,11 @@ import lv.ctco.javaschool.goal.control.TagParser;
 import lv.ctco.javaschool.goal.entity.domain.Comment;
 import lv.ctco.javaschool.goal.entity.domain.Goal;
 import lv.ctco.javaschool.goal.entity.domain.Tag;
-import lv.ctco.javaschool.goal.entity.dto.*;
+import lv.ctco.javaschool.goal.entity.dto.CommentDto;
+import lv.ctco.javaschool.goal.entity.dto.GoalDto;
+import lv.ctco.javaschool.goal.entity.dto.GoalFormDto;
+import lv.ctco.javaschool.goal.entity.dto.MessageDto;
+import lv.ctco.javaschool.goal.entity.dto.TagDto;
 import lv.ctco.javaschool.goal.entity.exception.InvalidGoalException;
 import lv.ctco.javaschool.goal.entity.dto.UserDto;
 import lv.ctco.javaschool.goal.entity.exception.InvalidUserException;
@@ -28,14 +32,13 @@ import javax.ws.rs.PathParam;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@Path("/goal")
+@Path("/goals")
 @RolesAllowed({"ADMIN", "USER"})
 @Stateless
 public class GoalApi {
@@ -47,18 +50,18 @@ public class GoalApi {
     private TagParser tagParser;
 
     @GET
-    @Path("/mygoals")
-    public List<GoalDto> getMyGoals() {
+    @Path("/")
+    public List<GoalDto> findGoalsForCurrentUser() {
         User currentUser = userStore.getCurrentUser();
-        List<Goal> goalsList = goalStore.getGoalsListFor(currentUser);
+        List<Goal> goalsList = goalStore.getGoalsByUser(currentUser);
         return goalsList.stream()
                 .map(DtoConverter::convertGoalToGoalDto)
                 .collect(Collectors.toList());
     }
 
     @GET
-    @Path("/mygoals/{id}")
-    public GoalDto getGoalDtoByGoalId(@PathParam("id") Long goalId) {
+    @Path("/{id}")
+    public GoalDto findGoalDtoByGoalId(@PathParam("id") Long goalId) {
         Optional<Goal> goal = goalStore.getGoalById(goalId);
         if (goal.isPresent()) {
             Goal g = goal.get();
@@ -69,8 +72,8 @@ public class GoalApi {
     }
 
     @POST
-    @Path("/newgoal")
-    public void createNewGoal(GoalFormDto goalDto) {
+    @Path("/add")
+    public void saveGoal(GoalFormDto goalDto) {
         User user = userStore.getCurrentUser();
         Goal goal = new Goal();
         if (goalDto.getGoalMessage() != null && goalDto.getDeadline() != null) {
@@ -78,10 +81,8 @@ public class GoalApi {
             List<Tag> tags = tagParser.parseStringToTags(goalDto.getTags());
             Set<Tag> tagSet = goalStore.checkIfTagExistsOrPersist(tags);
             goal.setTags(tagSet);
-
             LocalDate localDate = LocalDate.parse(goalDto.getDeadline(), DateTimeConverter.FORMATTER_DATE);
             goal.setDeadlineDate(localDate);
-
             goal.setUser(user);
             goal.setRegisteredDate(LocalDateTime.now());
             goalStore.addGoal(goal);
@@ -91,8 +92,8 @@ public class GoalApi {
     }
 
     @GET
-    @Path("{id}/comments")
-    public List<CommentDto> returnAllCommentsForGoalById(@PathParam("id") Long goalId) {
+    @Path("/{id}/comments")
+    public List<CommentDto> findCommentsForGoalById(@PathParam("id") Long goalId) {
         Optional<Goal> goal = goalStore.getGoalById(goalId);
         if (goal.isPresent()) {
             List<Comment> comments = goalStore.getCommentsForGoal(goal.get());
@@ -104,8 +105,8 @@ public class GoalApi {
     }
 
     @POST
-    @Path("{id}/comments")
-    public void saveNewCommentsForGoalById(@PathParam("id") Long goalId, MessageDto msg) {
+    @Path("/{id}/comments")
+    public void saveCommentsForGoalById(@PathParam("id") Long goalId, MessageDto msg) {
         Optional<Goal> goal = goalStore.getGoalById(goalId);
         if (goal.isPresent()) {
             Comment comment = new Comment();
@@ -121,8 +122,8 @@ public class GoalApi {
 
     @GET
     @Path("/tags")
-    public List<TagDto> returnAllTags() {
-        List<Tag> tagList = goalStore.getAllTagList();
+    public List<TagDto> findAllTags() {
+        List<Tag> tagList = goalStore.getAllTags();
         return tagList.stream()
                 .map(DtoConverter::convertTagToTagDto)
                 .collect(Collectors.toList());
@@ -151,14 +152,14 @@ public class GoalApi {
 
     @POST
     @RolesAllowed({"ADMIN", "USER"})
-    @Path("/search-user")
+    @Path("/search-users")
     public List<UserSearchDto> getUsersByUsername(JsonObject searchDto) {
         List<UserSearchDto> userDtoList = new ArrayList<>();
         for (Map.Entry<String, JsonValue> pair : searchDto.entrySet()) {
             String adr = pair.getKey();
             String value = ((JsonString) pair.getValue()).getString();
             if (adr.equals("usersearch")) {
-                List<User> userList = userStore.getUserByUsername(value);
+                List<User> userList = userStore.getUsersByUsername(value);
                 userDtoList = userList.stream()
                         .map(DtoConverter::convertUserToUserSearchDto)
                         .collect(Collectors.toList());
@@ -171,12 +172,11 @@ public class GoalApi {
     @RolesAllowed({"ADMIN", "USER"})
     @Path("/user/{id}")
     public UserDto getUserById(@PathParam("id") Long id) {
-        Optional<User> user = userStore.findUserById(id);
+        Optional<User> user = userStore.getUserById(id);
         if (user.isPresent()) {
             User u = user.get();
-            List<Goal> goalList = goalStore.getGoalsListFor(u);
-            UserDto userDto = DtoConverter.convertToUserDto(u, goalList);
-            return userDto;
+            List<Goal> goalList = goalStore.getGoalsByUser(u);
+            return DtoConverter.convertToUserDto(u, goalList);
         } else {
             throw new InvalidUserException();
         }

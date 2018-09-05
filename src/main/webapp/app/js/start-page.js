@@ -1,5 +1,4 @@
 var path = "";
-
 function switchPersonalData() {
     var checkbox = document.getElementById("personal-data");
     var block = document.getElementById("personal-block");
@@ -9,7 +8,6 @@ function switchPersonalData() {
         block.classList.add("w3-hide");
     }
 }
-
 function showUserProfile() {
     fetch(path + "/api/auth/myprofile", {
         "method": "GET",
@@ -21,12 +19,11 @@ function showUserProfile() {
         return response.json();
     }).then(function (user) {
         document.getElementById("name").innerHTML = user.username;
-        document.getElementById("phone_email").innerHTML = "Phone: " + user.phone + " |  E-mail: " + user.email;
+        document.getElementById("phone_email").innerHTML = "Phone: " + user.phone + " | E-mail: " + user.email;
     });
 }
-
 function showUserGoals() {
-    fetch(path + "/api/goal/mygoals", {
+    fetch(path + "/api/goals", {
         "method": "GET",
         headers: {
             'Accept': 'application/json',

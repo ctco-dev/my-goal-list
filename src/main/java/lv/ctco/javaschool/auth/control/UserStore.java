@@ -78,19 +78,16 @@ public class UserStore {
         }
     }
 
-    public List<User> getUserByUsername(String user) {
-        return em.createQuery(
-                "select u " +
-                        "from User u " +
-                        "where lower(u.username) like lower(:user)", User.class)
+    public List<User> getUsersByUsername(String user) {
+        return em.createQuery( "select u from User u " +
+                "where lower(u.username) like lower(:user)", User.class)
                 .setParameter("user", "%" + user + "%")
                 .getResultList();
     }
 
-    public Optional<User> findUserById(Long id) {
-        List<User> user = em.createQuery(
-                "select u from User u " +
-                        "where u.id = :userId", User.class)
+    public Optional<User> getUserById(Long id) {
+        List<User> user = em.createQuery("select u from User u " +
+                "where u.id = :userId", User.class)
                 .setParameter("userId", id)
                 .getResultList();
         return user.isEmpty() ? Optional.empty() : Optional.of(user.get(0));
