@@ -82,7 +82,8 @@ public class UserStore {
         return em.createQuery(
                 "select u " +
                         "from User u " +
-                        "where u.username like '%" + user + "%'", User.class)
+                        "where lower(u.username) like lower(:user)", User.class)
+                .setParameter("user", "%" + user + "%")
                 .getResultList();
     }
 

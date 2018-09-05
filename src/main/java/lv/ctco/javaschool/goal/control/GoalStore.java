@@ -85,13 +85,13 @@ public class GoalStore {
         return tagSet;
     }
 
-    public List<Goal> getGoalsByTag(Tag tag){
+    public List<Goal> getGoalsByTag(Tag tag) {
         return em.createQuery("SELECT g FROM Goal AS g WHERE :tag MEMBER OF g.tags", Goal.class)
                 .setParameter("tag", tag)
                 .getResultList();
     }
 
-    public Optional<Tag> getTagByMessage(String message){
+    public Optional<Tag> getTagByMessage(String message) {
         return em.createQuery("select t from Tag t where t.tagMessage = :message", Tag.class)
                 .setParameter("message", message)
                 .getResultStream()
@@ -102,7 +102,8 @@ public class GoalStore {
         return em.createQuery(
                 "select t " +
                         "from Tag t " +
-                        "where t.tagMessage like '%" + message + "%'", Tag.class)
+                        "where lower(t.tagMessage) like lower(:message)", Tag.class)
+                .setParameter("message", "%" + message + "%")
                 .getResultList();
     }
 }
