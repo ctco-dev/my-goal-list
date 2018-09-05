@@ -28,7 +28,7 @@ function redirectToUserById(id) {
     location.href = path + "/app/user.jsp?id=" + id;
 }
 
-function setMinDateInputDate() {
+function setMinInputDate() {
     var today = new Date();
     var dd = today.getDate()+1;
     var mm = today.getMonth()+1; //January is 0!

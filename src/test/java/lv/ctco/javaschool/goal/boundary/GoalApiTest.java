@@ -2,7 +2,6 @@ package lv.ctco.javaschool.goal.boundary;
 
 import lv.ctco.javaschool.auth.control.UserStore;
 import lv.ctco.javaschool.auth.entity.domain.User;
-import lv.ctco.javaschool.auth.entity.dto.UserLoginDto;
 import lv.ctco.javaschool.auth.entity.dto.UserSearchDto;
 import lv.ctco.javaschool.goal.control.DtoConverter;
 import lv.ctco.javaschool.goal.control.GoalStore;
@@ -50,23 +49,16 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class GoalApiTest {
-    private Goal goal = new Goal();
-    private Goal goal2 = new Goal();
-    private Tag tag1 = new Tag();
-    private Tag tag2 = new Tag();
-    private Tag tag3 = new Tag();
-    private User user1 = new User();
-    private User user2 = new User();
-    private Comment comment1 = new Comment();
-    private List<Goal> goalList1 = new ArrayList<>();
-    private List<GoalDto> goalDtoList = new ArrayList<>();
-    private List<Comment> comments = new ArrayList<>();
-    private List<CommentDto> commentDtos = new ArrayList<>();
-    private List<User> userList = new ArrayList<>();
-    private List<UserLoginDto> userDtoList = new ArrayList<>();
-    private Set<Tag> tags = new HashSet<>();
-    private List<Tag> tagList = new ArrayList<>();
-    private String testLine1, expResult1, testLine2, expResult2, testLine3, expResult3, testLine4, expResult4;
+    private Goal goal;
+    private User user1;
+    private User user2;
+    private Comment comment1;
+    private List<Goal> goalList1;
+    private List<GoalDto> goalDtoList;
+    private List<Comment> comments;
+    private List<CommentDto> commentDto;
+    private Set<Tag> tags;
+    private List<Tag> tagList;
 
     @Mock
     private UserStore userStore;
@@ -80,6 +72,21 @@ class GoalApiTest {
 
     @BeforeEach
     void init() {
+        Goal goal2 = new Goal();
+        Tag tag1 = new Tag();
+        Tag tag2 = new Tag();
+        Tag tag3 = new Tag();
+        goal = new Goal();
+        user1 = new User();
+        user2 = new User();
+        comment1 = new Comment();
+        goalList1 = new ArrayList<>();
+        goalDtoList = new ArrayList<>();
+        comments = new ArrayList<>();
+        commentDto = new ArrayList<>();
+        tags = new HashSet<>();
+        tagList = new ArrayList<>();
+
         user1.setUsername("user");
         user1.setEmail("user@user.com");
         user1.setId(1L);
@@ -113,15 +120,6 @@ class GoalApiTest {
 
         goal2.setUser(user2);
         goal2.setGoalMessage("cde");
-
-        testLine1 = "I will become a programmer this year!";
-        expResult1 = "programmer";
-        testLine2 = "I WILL BECOME A PROGRAMMER THIS YEAR!";
-        expResult2 = "PROGRAMMER";
-        testLine3 = "I WILL be two years old!";
-        expResult3 = "";
-        testLine4 = "I will start to learn Java!";
-        expResult4 = "learn Java";
 
         tagList.add(new Tag("tag1"));
         tagList.add(new Tag("tag2"));
@@ -249,7 +247,7 @@ class GoalApiTest {
         when(goalStore.getCommentsForGoal(goal))
                 .thenReturn(comments);
         assertThat(goalApi.returnAllCommentsForGoalById(1L).size(), is(0));
-        assertThat(goalApi.returnAllCommentsForGoalById(1L).getClass(), equalTo(commentDtos.getClass()));
+        assertThat(goalApi.returnAllCommentsForGoalById(1L).getClass(), equalTo(commentDto.getClass()));
     }
 
     @Test

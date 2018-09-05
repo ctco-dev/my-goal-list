@@ -22,13 +22,16 @@ import static org.hamcrest.Matchers.nullValue;
 
 class DtoConverterTest {
 
-    private Goal goal = new Goal();
-    private User user = new User();
-    private Comment comment = new Comment();
+    private Goal goal;
+    private User user;
+    private Comment comment;
     private Tag tag;
 
     @BeforeEach
     void init() {
+        goal = new Goal();
+        user = new User();
+        comment = new Comment();
         user.setUsername("user");
         user.setEmail("user@user.com");
         user.setId(1L);

@@ -32,7 +32,7 @@ function onLoad() {
         if (response.status === 200) {
             return response.json();
         } else {
-            alert("Something went wrong! error:404");
+            alert("Something went wrong! error: "+response.status.toString());
             return false;
         }
     }).then(function (goal) {
@@ -43,7 +43,7 @@ function onLoad() {
         getComments();
     });
     isGoalEditable();
-    setMinDateInputDate();
+    setMinInputDate();
 }
 
 function getQueryVariable(variable) {
@@ -72,7 +72,7 @@ function addComment() {
                 document.getElementById("userComment").value = "";
                 onLoad();
             } else {
-                alert("Something went wrong! error:404");
+                alert("Something went wrong! error: "+response.status.toString());
                 return false;
             }
         });
@@ -90,7 +90,7 @@ function isGoalEditable() {
         if (response.status === 200) {
             return response.json();
         } else {
-            alert("Something went wrong! error:404");
+            alert("Something went wrong! error: "+response.status.toString());
             return false;
         }
     }).then(function (goalEdit) {
@@ -129,9 +129,9 @@ function saveEditGoal() {
         body: JSON.stringify(dto)
     }).then(function (response) {
         if (response.status === 204) {
-            redirectToGoalsAndComments(id);
+            // redirectToGoalsAndComments(id);
         } else {
-            alert("Something went wrong! error:404");
+            alert("Something went wrong! error: "+response.status.toString());
             return false;
         }
     });
