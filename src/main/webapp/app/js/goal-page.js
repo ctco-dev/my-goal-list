@@ -76,7 +76,7 @@ function addComment() {
 }
 
 function enableEditForGoalOwner() {
-    fetch(path + "/api/goal/" + id + "/edit", {
+    fetch(path + "/api/goals/" + id + "/edit", {
         "method": "GET",
         headers: {
             'Accept': 'application/json',
