@@ -42,7 +42,7 @@ function onLoad() {
         document.getElementById("goal-deadline").setAttribute("value", goal.deadlineDate);
         getComments();
     });
-    isGoalEditable();
+    enableEditForGoalOwner();
     setMinInputDate();
 }
 
@@ -79,7 +79,7 @@ function addComment() {
     }
 }
 
-function isGoalEditable() {
+function enableEditForGoalOwner() {
     fetch(path + "/api/goal/" + id + "/edit", {
         "method": "GET",
         headers: {

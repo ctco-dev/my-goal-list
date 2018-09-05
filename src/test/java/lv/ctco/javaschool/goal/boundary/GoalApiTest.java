@@ -275,7 +275,7 @@ class GoalApiTest {
 
     @Test
     @DisplayName("Test if goal is for current user is returned true")
-    void isCurrentUsersGoalTestForCurrentUsersGoal() {
+    void isCurrentUsersGoalTestForCurrentUser() {
         when(userStore.getCurrentUser())
                 .thenReturn(user1);
         when(goalStore.getUserGoalById(user1,1L))
@@ -285,7 +285,7 @@ class GoalApiTest {
 
     @Test
     @DisplayName("Test if goal is for other user not current, then returned false")
-    void isCurrentUsersGoalTestForOtherUsersGoal() {
+    void isCurrentUsersGoalTestForDifferentUser() {
         when(userStore.getCurrentUser())
                 .thenReturn(user2);
         when(goalStore.getUserGoalById(user2,1L))
@@ -296,7 +296,7 @@ class GoalApiTest {
 
     @Test
     @DisplayName("Test, that goal is edited, if user created goal")
-    void editGoalTestForGoalOwner() {
+    void testEditGoalForGoalOwner() {
         GoalFormDto goalDto = new GoalFormDto();
         goalDto.setGoalMessage("123");
         goalDto.setDeadline(LocalDate.of(2018,1,1));
@@ -314,7 +314,7 @@ class GoalApiTest {
 
     @Test
     @DisplayName("Test, that goal is edited, if user created goal")
-    void editGoalTestForUserThatIsNotGoalOwner() {
+    void testEditGoalForDifferentUser() {
         GoalFormDto goalDto = new GoalFormDto();
         goalDto.setGoalMessage("123");
         goalDto.setDeadline(LocalDate.of(2018,1,1));
@@ -335,7 +335,7 @@ class GoalApiTest {
 
     @Test
     @DisplayName("Test, that goal is edited, if users new goal is empty")
-    void editGoalTestWithEmptyNewGoalInformation() {
+    void testEditGoalWithoutInput() {
         GoalFormDto goalDto = new GoalFormDto();
 
         String messageBeforeEdit = goal.getGoalMessage();
