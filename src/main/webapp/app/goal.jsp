@@ -9,7 +9,6 @@
     <script type="text/javascript" src="js/goal-page.js"></script>
     <script src="https://www.w3schools.com/lib/w3.js"></script>
     <script src="http://www.w3schools.com/lib/w3data.js"></script>
-    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
 </head>
 <body onload="onLoad()">
 <div id="menu">
