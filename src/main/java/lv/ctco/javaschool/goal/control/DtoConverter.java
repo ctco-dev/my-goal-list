@@ -20,8 +20,8 @@ public class DtoConverter {
         dto.setUserId(goal.getUser().getId());
         dto.setUsername(goal.getUser().getUsername());
         dto.setGoalMessage(goal.getGoalMessage());
-        dto.setDeadlineDate(DateTimeConverter.convertDate(goal.getDeadlineDate()));
-        dto.setRegisteredDate(DateTimeConverter.convertDateTime(goal.getRegisteredDate()));
+        dto.setDeadlineDate(goal.getDeadlineDate());
+        dto.setRegisteredDate(goal.getRegisteredDate());
         dto.setDaysLeft(DateTimeConverter.countDaysLeft(goal.getDeadlineDate()));
         dto.setId(goal.getId());
         dto.setTags(goal.getTags());

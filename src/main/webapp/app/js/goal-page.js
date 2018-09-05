@@ -1,5 +1,6 @@
 var path = "";
 var id = getQueryVariable("id");
+var isMyGoal;
 function getComments() {
     fetch(path + "/api/goals/" + id + "/comments", {
         "method": "GET",
@@ -15,10 +16,10 @@ function getComments() {
             document.getElementById("sortable").classList.remove("w3-hide");
             w3DisplayData("sortable", tabledata);
         }
-
     });
 }
 function onLoad() {
+    document.getElementById("edit-goal").classList.add("w3-hide");
     fetch(path + "/api/goals/" + id, {
         "method": "GET",
         headers: {
@@ -29,15 +30,18 @@ function onLoad() {
         if (response.status === 200) {
             return response.json();
         } else {
-            alert("Something went wrong! error:404");
+            alert("Something went wrong! error: "+response.status.toString());
             return false;
         }
     }).then(function (goal) {
         w3.displayObject("title", goal);
         w3.displayObject("goal-fields", goal);
         w3DisplayData("tags-list", goal);
+        document.getElementById("goal-deadline").setAttribute("value", goal.deadlineDate);
         getComments();
     });
+    enableEditForGoalOwner();
+    setMinInputDate();
 }
 function getQueryVariable(variable) {
     var query = window.location.search.substring(1);
@@ -64,9 +68,67 @@ function addComment() {
                 document.getElementById("userComment").value = "";
                 onLoad();
             } else {
-                alert("Something went wrong! error:404");
+                alert("Something went wrong! error: "+response.status.toString());
                 return false;
             }
         });
     }
+}
+
+function enableEditForGoalOwner() {
+    fetch(path + "/api/goal/" + id + "/edit", {
+        "method": "GET",
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        }
+    }).then(function (response) {
+        if (response.status === 200) {
+            return response.json();
+        } else {
+            alert("Something went wrong! error: "+response.status.toString());
+            return false;
+        }
+    }).then(function (goalEdit) {
+        if (!goalEdit)
+            document.getElementById("edit-button").classList.add("w3-hide");
+        isMyGoal = goalEdit;
+    });
+}
+
+function editGoal() {
+    if (isMyGoal) {
+        document.getElementById("show-goal").classList.add("w3-hide");
+        document.getElementById("edit-goal").classList.remove("w3-hide");
+    } else {
+        alert("You can edit only your own goals");
+    }
+}
+
+function saveEditGoal() {
+    var goalTxt = document.getElementById("edit-goal-text");
+    var deadlineDate = document.getElementById("goal-deadline");
+    if (String(goalTxt.value) === "" || String(deadlineDate.value) === "") {
+        alert("You can not delete your goal!");
+        return false;
+    }
+    var dto = {
+        "goalMessage": goalTxt.value,
+        "deadline": deadlineDate.value
+    };
+    fetch(path + "/api/goal/" + id + "/edit", {
+        "method": "POST",
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(dto)
+    }).then(function (response) {
+        if (response.status === 204) {
+            redirectToGoalsAndComments(id);
+        } else {
+            alert("Something went wrong! error: "+response.status.toString());
+            return false;
+        }
+    });
 }

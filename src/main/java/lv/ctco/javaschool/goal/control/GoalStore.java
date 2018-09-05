@@ -102,4 +102,13 @@ public class GoalStore {
                 .setParameter("message", "%" + message + "%")
                 .getResultList();
     }
+
+    public Optional<Goal> getUserGoalById(User user, Long goalId) {
+        return em.createQuery("select g from Goal g where g.user=:user and g.id=:id", Goal.class)
+                .setParameter("user", user)
+                .setParameter("id", goalId)
+                .setMaxResults(1)
+                .getResultStream()
+                .findFirst();
+    }
 }
