@@ -23,6 +23,7 @@ function submitData() {
         },
         body: JSON.stringify(dto)
     }).then(function (response) {
+        displayError(response, 204);
         location.href = path + "/app/start.jsp";
     });
 }
