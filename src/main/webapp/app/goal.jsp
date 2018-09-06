@@ -25,16 +25,17 @@
         <div class="button-div">
             <button id="edit-button" class="menu-button w3-button w3-blue w3-round" onclick="editGoal()" type="button">Edit Goal</button>
         </div>
-        <div class="button-div">
+        <div class="button-div" id="status-achieved">
             <button class="menu-button w3-button w3-blue w3-round" onclick="setStatusAchieved('{{id}}')" type="button">Achieved</button>
         </div>
     </div>
-    <div id="goal-fields">
+    <div id="goal-fields" class="w3-panel w3-light-grey w3-leftbar w3-border w3-round-large">
         <div id="show-goal">
             <h3>Goal: {{goalMessage}}</h3>
             <h5>Author: <a onclick="redirectToUserById('{{userId}}')">{{username}}</a></h5>
             <h5>Deadline: {{deadlineDate}}</h5>
             <h5 class="{{goalStatus}}">Goal status: {{goalStatus}}</h5>
+            <h5>Tags:</h5>
             <div id="tags-list" w3-repeat="tags">
                 <span id="{{id}}">{{tagMessage}}</span>
             </div>
@@ -51,7 +52,7 @@
             </div>
         </div>
     </div>
-    <div class="container">
+    <div class="container w3-panel w3-leftbar w3-border w3-light-grey w3-round-large">
         <div class="text-center">
             <div class="well">
                 <h4>What do you think about this Goal?</h4>
