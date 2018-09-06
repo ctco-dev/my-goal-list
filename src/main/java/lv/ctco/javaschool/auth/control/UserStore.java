@@ -79,7 +79,7 @@ public class UserStore {
     }
 
     public List<User> getUsersByUsername(String user) {
-        return em.createQuery( "select u from User u " +
+        return em.createQuery("select u from User u " +
                 "where lower(u.username) like lower(:user)", User.class)
                 .setParameter("user", "%" + user + "%")
                 .getResultList();
