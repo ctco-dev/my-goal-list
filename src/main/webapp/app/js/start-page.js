@@ -39,5 +39,34 @@ function showUserGoals() {
             };
         }
         w3DisplayData("goals-list", tabledata);
+        generateMetrics(goals);
     });
 }
+
+function generateMetrics(goals) {
+    var completed = 0;
+    var overdue = 0;
+    var open = 0;
+    for (var i = 0; i < goals.length; i++) {
+        var goal = goals[i];
+        switch (goal.goalStatus) {
+            case "ACHIEVED":
+                completed++;
+                break;
+            case "OVERDUE":
+                overdue++;
+                break;
+            default:
+                open++;
+        }
+    }
+    var obj = "<table><tr>Metrics</tr>";
+    obj += "<tr>" + "Goals Total: " + goals.length + "</tr>";
+    obj += "<tr>" + "Goals Achieved: " + completed + "</tr>";
+    obj += "<tr>" + "Goals Overdue: " + overdue + "</tr>";
+    obj += "<tr>" + "Goals Open: " + open + "</tr>";
+    obj += "</table>";
+
+    document.getElementById("metrics").innerHTML = obj;
+}
+
