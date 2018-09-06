@@ -2,14 +2,13 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <html>
 <head>
-    <title id="title">{{goalMessage}}</title>
+    <title id="title">{{goalMessage}} | C.T.Co Goal list</title>
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <link rel="stylesheet" type="text/css" href="css/style.css">
-    <script type="text/javascript" src="js/redirects.js"></script>
+    <script type="text/javascript" src="js/commons.js"></script>
     <script type="text/javascript" src="js/goal-page.js"></script>
     <script src="https://www.w3schools.com/lib/w3.js"></script>
     <script src="http://www.w3schools.com/lib/w3data.js"></script>
-    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
 </head>
 <body onload="onLoad()">
 <div id="menu">
@@ -50,7 +49,6 @@
             <button class="menu-button" onclick="saveEditGoal()" type="button">Save</button>
         </div>
     </div>
-
 </div>
 <div class="container">
     <div class="text-center">

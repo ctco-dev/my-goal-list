@@ -1,9 +1,8 @@
 var path = "";
 var id = getQueryVariable("id");
 var isMyGoal;
-
 function getComments() {
-    fetch(path + "/api/goal/" + id + "/comments", {
+    fetch(path + "/api/goals/" + id + "/comments", {
         "method": "GET",
         headers: {
             'Accept': 'application/json',
@@ -19,10 +18,9 @@ function getComments() {
         }
     });
 }
-
 function onLoad() {
     document.getElementById("edit-goal").classList.add("w3-hide");
-    fetch(path + "/api/goal/mygoals/" + id, {
+    fetch(path + "/api/goals/" + id, {
         "method": "GET",
         headers: {
             'Accept': 'application/json',
@@ -45,7 +43,6 @@ function onLoad() {
     enableEditForGoalOwner();
     setMinInputDate();
 }
-
 function getQueryVariable(variable) {
     var query = window.location.search.substring(1);
     var vars = query.split("&");
@@ -57,11 +54,10 @@ function getQueryVariable(variable) {
     }
     return (false);
 }
-
 function addComment() {
     var data = {'message': document.getElementById("userComment").value};
     if (document.getElementById("userComment").value) {
-        fetch(path + "/api/goal/" + id + "/comments", {
+        fetch(path + "/api/goals/" + id + "/comments", {
             "method": "POST",
             headers: {
                 'Accept': 'application/json',
@@ -75,9 +71,8 @@ function addComment() {
         })
     }
 }
-
 function enableEditForGoalOwner() {
-    fetch(path + "/api/goal/" + id + "/edit", {
+    fetch(path + "/api/goals/" + id + "/edit", {
         "method": "GET",
         headers: {
             'Accept': 'application/json',
@@ -94,7 +89,6 @@ function enableEditForGoalOwner() {
         isMyGoal = goalEdit;
     });
 }
-
 function editGoal() {
     if (isMyGoal) {
         document.getElementById("show-goal").classList.add("w3-hide");
@@ -105,7 +99,6 @@ function editGoal() {
         alert("You can edit only your own goals");
     }
 }
-
 function saveEditGoal() {
     var goalTxt = document.getElementById("edit-goal-text");
     var deadlineDate = document.getElementById("goal-deadline");
@@ -117,7 +110,7 @@ function saveEditGoal() {
         "goalMessage": goalTxt.value,
         "deadline": deadlineDate.value
     };
-    fetch(path + "/api/goal/" + id + "/edit", {
+    fetch(path + "/api/goals/" + id + "/edit", {
         "method": "POST",
         headers: {
             'Accept': 'application/json',
@@ -130,9 +123,8 @@ function saveEditGoal() {
         redirectToGoalsAndComments(id);
     })
 }
-
 function setStatusAchieved(id) {
-    fetch(path + "/api/goal/mygoals/" + id, {
+    fetch(path + "/api/goals/" + id, {
         "method": "POST",
         headers: {
             'Accept': 'application/json',

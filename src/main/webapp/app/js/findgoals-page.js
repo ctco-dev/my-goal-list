@@ -23,7 +23,7 @@ function findUserByName() {
     var dto = {
         "usersearch": username.value
     };
-    fetch("/api/goal/search-user", {
+    fetch("/api/goals/search-users", {
         "method": "POST",
         headers: {
             'Accept': 'application/json',
@@ -47,7 +47,7 @@ function findGoalsByTag() {
     var dto = {
         "goalsearch": tag.value
     };
-    fetch("/api/goal/search-goals", {
+    fetch("/api/goals/search-goals", {
         "method": "POST",
         headers: {
             'Accept': 'application/json',
@@ -67,7 +67,7 @@ function findGoalsByTag() {
     });
 }
 function loadTags() {
-    fetch("/api/goal/tags", {
+    fetch("/api/goals/tags", {
         "method": "GET",
         headers: {
             'Accept': 'application/json',

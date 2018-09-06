@@ -1,7 +1,7 @@
 var userid = getQueryVariable("id");
 var path;
 function loadUser() {
-    var userPath = "/api/goal/user";
+    var userPath = "/api/goals/user";
     if (userid) {
         userPath = path + userPath + "/" + userid;
         fetch(userPath, {
@@ -23,9 +23,7 @@ function loadUser() {
     } else {
         location.href = path + "/app/start.jsp";
     }
-
 }
-
 function setDataToFields(userDto) {
     var list = userDto.goalList;
     var tabledata;
@@ -40,8 +38,6 @@ function setDataToFields(userDto) {
         document.getElementById("goals-list").classList.add("w3-hide");
     }
 }
-
-
 function getQueryVariable(variable) {
     var query = window.location.search.substring(1);
     var vars = query.split("&");

@@ -21,17 +21,15 @@ public class GoalStore {
     @PersistenceContext
     private EntityManager em;
 
-    public List<Goal> getGoalsListFor(User user) {
-        List<Goal> goals = em.createQuery(
-                "select g " +
-                        "from Goal g " +
-                        "where g.user = :user ", Goal.class)
+    public List<Goal> getGoalsByUser(User user) {
+        List<Goal> goals = em.createQuery("select g from Goal g " +
+                "where g.user = :user ", Goal.class)
                 .setParameter("user", user)
                 .getResultList();
-        return CheckStatus(goals);
+        return changeGoalStatus(goals);
     }
 
-    private List<Goal> CheckStatus(List<Goal> goals) {
+    private List<Goal> changeGoalStatus(List<Goal> goals) {
         List<Goal> goalsToReturn = new ArrayList<>();
         LocalDate localDateNow = LocalDate.now();
         for (Goal goal : goals) {
@@ -84,8 +82,8 @@ public class GoalStore {
         em.persist(comment);
     }
 
-    public List<Tag> getAllTagList() {
-        return em.createQuery("SELECT t FROM Tag t " +
+    public List<Tag> getAllTags() {
+        return em.createQuery("select t from Tag t " +
                 "order by t.tagMessage", Tag.class)
                 .getResultList();
     }
@@ -102,23 +100,23 @@ public class GoalStore {
     }
 
     public List<Goal> getGoalsByTag(Tag tag) {
-        return em.createQuery("SELECT g FROM Goal AS g WHERE :tag MEMBER OF g.tags", Goal.class)
+        return em.createQuery("select g from Goal as g " +
+                "where :tag member of g.tags", Goal.class)
                 .setParameter("tag", tag)
                 .getResultList();
     }
 
     public Optional<Tag> getTagByMessage(String message) {
-        return em.createQuery("select t from Tag t where t.tagMessage = :message", Tag.class)
+        return em.createQuery("select t from Tag t " +
+                "where t.tagMessage = :message", Tag.class)
                 .setParameter("message", message)
                 .getResultStream()
                 .findFirst();
     }
 
     public List<Tag> getTagsByMessage(String message) {
-        return em.createQuery(
-                "select t " +
-                        "from Tag t " +
-                        "where lower(t.tagMessage) like lower(:message)", Tag.class)
+        return em.createQuery("select t from Tag t " +
+                "where lower(t.tagMessage) like lower(:message)", Tag.class)
                 .setParameter("message", "%" + message + "%")
                 .getResultList();
     }
