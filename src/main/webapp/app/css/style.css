@@ -1,8 +1,13 @@
 /*Overall CSS */
 body {
-    text-align: right;
     background-color: #e6e6e6;
     margin: 3px;
+    text-align: center;
+}
+#wrapper {
+    text-align: right;
+    max-width: 1200px;
+    margin: auto;
 }
 h1 {
     color: black;

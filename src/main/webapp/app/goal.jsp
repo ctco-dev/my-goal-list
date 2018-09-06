@@ -11,67 +11,69 @@
     <script src="http://www.w3schools.com/lib/w3data.js"></script>
 </head>
 <body onload="onLoad()">
-<div id="menu">
-    <div class="button-div">
-        <button class="menu-button" onclick="logout()" type="button">Log out</button>
-    </div>
-    <div class="button-div">
-        <button class="menu-button" onclick="findGoals()" type="button">Search</button>
-    </div>
-    <div class="button-div">
-        <button class="menu-button" onclick="goToMain()" type="button">Go to Main</button>
-    </div>
-    <div class="button-div">
-        <button id="edit-button" class="menu-button" onclick="editGoal()" type="button">Edit Goal</button>
-    </div>
-    <div class="button-div" id="status-achieved">
-        <button class="menu-button" onclick="setStatusAchieved('{{id}}')" type="button">Achieved</button>
-    </div>
-</div>
-<div id="goal-fields">
-    <div id="show-goal">
-        <h3>Goal: {{goalMessage}}</h3>
-        <h5>Author: <a onclick="redirectToUserById('{{userId}}')">{{username}}</a></h5>
-        <h5>Deadline: {{deadlineDate}}</h5>
-        <h5 class="{{goalStatus}}">Goal status: {{goalStatus}}</h5>
-        <div id="tags-list" w3-repeat="tags">
-            <span id="{{id}}">{{tagMessage}}</span>
-        </div>
-    </div>
-    <div id="edit-goal">
-        <label for="edit-goal-text">Goal: </label>
-        <input id="edit-goal-text" type="text" value="{{goalMessage}}">
-        <br/>
-        <h5>Author: <a onclick="redirectToUserById('{{userId}}')">{{username}}</a></h5>
-        <label for="goal-deadline">Deadline: </label>
-        <input id="goal-deadline" type="date" onkeydown="return false">
+<div id="wrapper">
+    <div id="menu">
         <div class="button-div">
-            <button class="menu-button" onclick="saveEditGoal()" type="button">Save</button>
+            <button class="menu-button" onclick="logout()" type="button">Log out</button>
+        </div>
+        <div class="button-div">
+            <button class="menu-button" onclick="findGoals()" type="button">Search</button>
+        </div>
+        <div class="button-div">
+            <button class="menu-button" onclick="goToMain()" type="button">Go to Main</button>
+        </div>
+        <div class="button-div">
+            <button id="edit-button" class="menu-button" onclick="editGoal()" type="button">Edit Goal</button>
+        </div>
+        <div class="button-div" id="status-achieved">
+            <button class="menu-button" onclick="setStatusAchieved('{{id}}')" type="button">Achieved</button>
         </div>
     </div>
-</div>
-<div class="container">
-    <div class="text-center">
-        <div class="well">
-            <h4>What do you think about this Goal?</h4>
-            <div class="input-group">
-                <input type="text" id="userComment" placeholder="Write your message here..."/>
-                <span>
+    <div id="goal-fields">
+        <div id="show-goal">
+            <h3>Goal: {{goalMessage}}</h3>
+            <h5>Author: <a onclick="redirectToUserById('{{userId}}')">{{username}}</a></h5>
+            <h5>Deadline: {{deadlineDate}}</h5>
+            <h5 class="{{goalStatus}}">Goal status: {{goalStatus}}</h5>
+            <div id="tags-list" w3-repeat="tags">
+                <span id="{{id}}">{{tagMessage}}</span>
+            </div>
+        </div>
+        <div id="edit-goal">
+            <label for="edit-goal-text">Goal: </label>
+            <input id="edit-goal-text" type="text" value="{{goalMessage}}">
+            <br/>
+            <h5>Author: <a onclick="redirectToUserById('{{userId}}')">{{username}}</a></h5>
+            <label for="goal-deadline">Deadline: </label>
+            <input id="goal-deadline" type="date" onkeydown="return false">
+            <div class="button-div">
+                <button class="menu-button" onclick="saveEditGoal()" type="button">Save</button>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="text-center">
+            <div class="well">
+                <h4>What do you think about this Goal?</h4>
+                <div class="input-group">
+                    <input type="text" id="userComment" placeholder="Write your message here..."/>
+                    <span>
                     <a onclick="addComment()" class="btn"> Add Comment</a>
                 </span>
+                </div>
+                <hr>
+                <ul id="sortable" class="w3-hide">
+                    <li w3-repeat="comments" class="repeatable">
+                        <strong> <a onclick="redirectToUserById('{{userId}}')">{{username}}</a></strong>
+                        <small>
+                            <span class="glyphicon glyphicon-time"></span>{{registeredDate}}
+                        </small>
+                        </br>
+                        </br>
+                        <p>{{commentMessage}}</p>
+                    </li>
+                </ul>
             </div>
-            <hr>
-            <ul id="sortable" class="w3-hide">
-                <li w3-repeat="comments" class="repeatable">
-                    <strong> <a onclick="redirectToUserById('{{userId}}')">{{username}}</a></strong>
-                    <small>
-                        <span class="glyphicon glyphicon-time"></span>{{registeredDate}}
-                    </small>
-                    </br>
-                    </br>
-                    <p>{{commentMessage}}</p>
-                </li>
-            </ul>
         </div>
     </div>
 </div>
