@@ -5,6 +5,7 @@
     <title>Search | C.T.Co Goal list</title>
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <link rel="stylesheet" href="css/style.css"/>
+    <link rel="shortcut icon" type="image/x-icon" href="../images/favicon.ico" />
     <script src="https://www.w3schools.com/lib/w3.js"></script>
     <script src="http://www.w3schools.com/lib/w3data.js"></script>
     <script type="text/javascript" src="js/commons.js"></script>
