@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="css/style.css"/>
     <script src="https://www.w3schools.com/lib/w3.js"></script>
     <script src="http://www.w3schools.com/lib/w3data.js"></script>
-    <script type="text/javascript" src="js/redirects.js"></script>
+    <script type="text/javascript" src="js/commons.js"></script>
     <script type="text/javascript" src="js/findgoals-page.js"></script>
     <title>Search</title>
 </head>

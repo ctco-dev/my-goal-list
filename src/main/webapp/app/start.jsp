@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <link rel="stylesheet" type="text/css" href="css/style.css">
-    <script type="text/javascript" src="js/redirects.js"></script>
+    <script type="text/javascript" src="js/commons.js"></script>
     <script type="text/javascript" src="js/start-page.js"></script>
     <script src="http://www.w3schools.com/lib/w3data.js"></script>
     <title>My Goals</title>
