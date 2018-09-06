@@ -29,6 +29,7 @@
     <div id="personal">
         <input id="personal-data" class="w3-check" type="checkbox" onchange="switchPersonalData();">
         <label for="personal-data">Personal Data</label>
+        <div id="metrics"></div>
     </div>
     <div id="personal-block" class="w3-hide">
         <h3 id="phone_email"></h3>
