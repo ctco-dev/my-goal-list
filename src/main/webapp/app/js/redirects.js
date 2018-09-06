@@ -55,8 +55,7 @@ function switchPersonalData() {
 }
 
 function displayError(response, expected) {
-    if (response.status === expected) {
-    } else {
+    if (response.status !== expected) {
         alert("Something went wrong! error: " + response.status.toString());
         history.go(-1);
     }
