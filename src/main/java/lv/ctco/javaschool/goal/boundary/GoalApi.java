@@ -15,8 +15,8 @@ import lv.ctco.javaschool.goal.entity.dto.GoalDto;
 import lv.ctco.javaschool.goal.entity.dto.GoalFormDto;
 import lv.ctco.javaschool.goal.entity.dto.MessageDto;
 import lv.ctco.javaschool.goal.entity.dto.TagDto;
-import lv.ctco.javaschool.goal.entity.exception.InvalidGoalException;
 import lv.ctco.javaschool.goal.entity.dto.UserDto;
+import lv.ctco.javaschool.goal.entity.exception.InvalidGoalException;
 import lv.ctco.javaschool.goal.entity.exception.InvalidUserException;
 import lv.ctco.javaschool.goal.entity.exception.ValidationException;
 

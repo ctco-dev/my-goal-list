@@ -41,12 +41,13 @@
 
 <script>
     function addDatLeft() {
+        var line;
         var today = new Date();
         var deadline = new Date("2018-09-07");
         if (deadline.getDate() < today.getDate()) {
             var daysLeftOfMonth = new Date(today.getYear(), today.getMonth() + 1, 0).getDate();
-            var line = ((daysLeftOfMonth - today.getDate() + 1) + deadline.getDate()).toString() + " days left"
-        } else var line = ((deadline.getDate() + 1) - today.getDate()).toString() + " days left";
+            line = ((daysLeftOfMonth - today.getDate() + 1) + deadline.getDate()).toString() + " days left"
+        } else line = ((deadline.getDate() + 1) - today.getDate()).toString() + " days left";
         document.getElementById('days-left').innerHTML = line;
     }
 

@@ -229,7 +229,7 @@ class GoalApiTest {
         when(userStore.getCurrentUser())
                 .thenReturn(user1);
 
-        assertThrows(InvalidGoalException.class, () -> goalApi.createNewGoal(goalFormDto));
+        assertThrows(InvalidGoalException.class, () -> goalApi.saveGoal(goalFormDto));
     }
 
     @Test
@@ -334,7 +334,7 @@ class GoalApiTest {
     }
 
     @Test
-    @DisplayName("Test, that goal is not edited, if goal is achieved")
+    @DisplayName("Test editGoal(Long goalId, GoalFormDto newGoalDto): verify that goal is not edited, if goal is achieved")
     void testEditGoalForAchievedGoal() {
         goal.setStatus(GoalStatus.ACHIEVED);
         GoalFormDto goalDto = new GoalFormDto();
@@ -353,22 +353,19 @@ class GoalApiTest {
     }
 
     @Test
-    @DisplayName("Test, that goal status is changed, if overdue goal deadline date is edited")
+    @DisplayName("Test editGoal(Long goalId, GoalFormDto newGoalDto): verify that goal status is changed, if overdue goal deadline date is edited")
     void testEditGoalForOverdueGoal() {
         goal.setStatus(GoalStatus.OVERDUE);
         GoalFormDto goalDto = new GoalFormDto();
         goalDto.setGoalMessage("123");
         goalDto.setDeadline(LocalDate.of(2918,1,1));
-
         when(userStore.getCurrentUser())
                 .thenReturn(user1);
         when(goalStore.getUnachievedUserGoalById(user1,1L))
                 .thenReturn(Optional.of(goal));
-
         goalApi.editGoal(1L,goalDto);
-
-        assertThat(goal.getGoalMessage(),is(goalDto.getGoalMessage()));
-        assertThat(goal.getDeadlineDate(),is(goalDto.getDeadline()));
+        assertThat(goal.getGoalMessage(), is(goalDto.getGoalMessage()));
+        assertThat(goal.getDeadlineDate(), is(goalDto.getDeadline()));
         assertThat(goal.getStatus(), is(GoalStatus.OPEN));
     }
 
@@ -382,13 +379,12 @@ class GoalApiTest {
     }
 
     @Test
-    @DisplayName("Test, that goal is edited, if user input invalid deadline date")
+    @DisplayName("Test editGoal(Long goalId, GoalFormDto newGoalDto): verify that goal is edited, if user input invalid deadline date")
     void testEditGoalInvalidDeadline() {
         goal.setStatus(GoalStatus.OPEN);
         GoalFormDto goalDto = new GoalFormDto();
         goalDto.setGoalMessage("123");
         goalDto.setDeadline(LocalDate.of(1,1,1));
-
         assertThrows(ValidationException.class, () -> goalApi.editGoal(1L, goalDto));
     }
 
