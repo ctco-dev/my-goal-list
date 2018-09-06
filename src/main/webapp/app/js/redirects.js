@@ -6,7 +6,7 @@ function logout() {
         });
 }
 function redirectToGoalsAndComments(id) {
-    if (id === "-9999") {
+    if (id === "") {
         addNewGoal();
     } else {
         location.href = path + "/app/goal.jsp?id=" + id;
