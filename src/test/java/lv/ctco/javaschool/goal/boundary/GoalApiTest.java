@@ -86,7 +86,6 @@ class GoalApiTest {
         commentDtoList = new ArrayList<>();
         tags = new HashSet<>();
         tagList = new ArrayList<>();
-
         user1.setUsername("user");
         user1.setEmail("user@user.com");
         user1.setId(1L);
@@ -98,38 +97,31 @@ class GoalApiTest {
         tag1.setTagMessage("qwer");
         tag2.setTagMessage("qwkeughsdf");
         tag3.setTagMessage("asdlgn");
-
         user2.setUsername("admin");
         user2.setEmail("admin@admin.com");
         user2.setId(2L);
         user2.setPassword("12345");
         user2.setPhone("87654321");
-
         comment1.setGoal(goal);
         comment1.setUser(user1);
         comment1.setCommentMessage("hi");
         comment1.setRegisteredDate(LocalDateTime.now());
         comment1.setId(1L);
-
         goal.setUser(user1);
         goal.setGoalMessage("abc");
         goal.setRegisteredDate(LocalDateTime.now());
         goal.setDeadlineDate(LocalDate.now().plusDays(1));
         goal.setId(1L);
         goal.setTags(null);
-
         goal2.setUser(user2);
         goal2.setGoalMessage("cde");
-
         tagList.add(new Tag("tag1"));
         tagList.add(new Tag("tag2"));
         tagList.add(new Tag("tag3"));
         tagList.add(new Tag("tag4"));
-
         tags.add(tag1);
         tags.add(tag2);
         tags.add(tag3);
-
         tagList.add(tag1);
         tagList.add(tag2);
         tagList.add(tag3);
@@ -201,10 +193,10 @@ class GoalApiTest {
     }
 
     @Test
-    @DisplayName("Test saveGoal() : check if persists new Goal")
+    @DisplayName("Test saveGoal(): check if persists new Goal")
     void testSaveGoal() {
         GoalFormDto goalFormDto = new GoalFormDto();
-        goalFormDto.setDeadline(LocalDate.of(2018,10,25));
+        goalFormDto.setDeadline(LocalDate.of(2018, 10, 25));
         goalFormDto.setGoalMessage("hi");
         goalFormDto.setTags("qwjye|iwefyg|ksdgf");
         when(userStore.getCurrentUser())
@@ -218,7 +210,7 @@ class GoalApiTest {
     }
 
     @Test
-    @DisplayName("Test saveGoal() : check if throws exception if empty fields of dto object")
+    @DisplayName("Test saveGoal(): check if throws exception if empty fields of dto object")
     void testSaveGoalException() {
         GoalFormDto goalFormDto = new GoalFormDto();
         when(userStore.getCurrentUser())
@@ -274,81 +266,70 @@ class GoalApiTest {
     }
 
     @Test
-    @DisplayName("Test if goal is for current user is returned true")
+    @DisplayName("Test isCurrentUsersGoal(Long goalId): verify if goal is for current user is returned true")
     void isCurrentUsersGoalTestForCurrentUser() {
         when(userStore.getCurrentUser())
                 .thenReturn(user1);
-        when(goalStore.getUserGoalById(user1,1L))
+        when(goalStore.getUserGoalById(user1, 1L))
                 .thenReturn(Optional.of(goal));
-        assertThat(goalApi.isCurrentUsersGoal(1L),is(true));
+        assertThat(goalApi.isCurrentUsersGoal(1L), is(true));
     }
 
     @Test
-    @DisplayName("Test if goal is for other user not current, then returned false")
+    @DisplayName("Test isCurrentUsersGoal(Long goalId): verify if goal is for other user not current, then returned false")
     void isCurrentUsersGoalTestForDifferentUser() {
         when(userStore.getCurrentUser())
                 .thenReturn(user2);
-        when(goalStore.getUserGoalById(user2,1L))
+        when(goalStore.getUserGoalById(user2, 1L))
                 .thenReturn(Optional.empty());
-
-        assertThat(goalApi.isCurrentUsersGoal(1L),is(false));
+        assertThat(goalApi.isCurrentUsersGoal(1L), is(false));
     }
 
     @Test
-    @DisplayName("Test, that goal is edited, if user created goal")
+    @DisplayName("Test editGoal(Long goalId, GoalFormDto newGoalDto): verify that goal is edited, if user created goal")
     void testEditGoalForGoalOwner() {
         GoalFormDto goalDto = new GoalFormDto();
         goalDto.setGoalMessage("123");
-        goalDto.setDeadline(LocalDate.of(2018,1,1));
-
+        goalDto.setDeadline(LocalDate.of(2018, 1, 1));
         when(userStore.getCurrentUser())
                 .thenReturn(user1);
-        when(goalStore.getUserGoalById(user1,1L))
+        when(goalStore.getUserGoalById(user1, 1L))
                 .thenReturn(Optional.of(goal));
-
-        goalApi.editGoal(1L,goalDto);
-
-        assertThat(goal.getGoalMessage(),is(goalDto.getGoalMessage()));
-        assertThat(goal.getDeadlineDate(),is(goalDto.getDeadline()));
+        goalApi.editGoal(1L, goalDto);
+        assertThat(goal.getGoalMessage(), is(goalDto.getGoalMessage()));
+        assertThat(goal.getDeadlineDate(), is(goalDto.getDeadline()));
     }
 
     @Test
-    @DisplayName("Test, that goal is edited, if user created goal")
+    @DisplayName("Test editGoal(Long goalId, GoalFormDto newGoalDto): verify that goal is not edited, if user did not create goal")
     void testEditGoalForDifferentUser() {
         GoalFormDto goalDto = new GoalFormDto();
         goalDto.setGoalMessage("123");
-        goalDto.setDeadline(LocalDate.of(2018,1,1));
-
+        goalDto.setDeadline(LocalDate.of(2018, 1, 1));
         String messageBeforeEdit = goal.getGoalMessage();
         LocalDate deadlineDateBeforeEdit = goal.getDeadlineDate();
-
         when(userStore.getCurrentUser())
                 .thenReturn(user2);
-        when(goalStore.getUserGoalById(user2,1L))
+        when(goalStore.getUserGoalById(user2, 1L))
                 .thenReturn(Optional.empty());
-
-        goalApi.editGoal(1L,goalDto);
-
-        assertThat(goal.getGoalMessage(),is(messageBeforeEdit));
-        assertThat(goal.getDeadlineDate(),is(deadlineDateBeforeEdit));
+        goalApi.editGoal(1L, goalDto);
+        assertThat(goal.getGoalMessage(), is(messageBeforeEdit));
+        assertThat(goal.getDeadlineDate(), is(deadlineDateBeforeEdit));
     }
 
     @Test
-    @DisplayName("Test, that goal is edited, if users new goal is empty")
+    @DisplayName("Test editGoal(Long goalId, GoalFormDto newGoalDto): verify that goal is edited, if users new goal is empty")
     void testEditGoalWithoutInput() {
         GoalFormDto goalDto = new GoalFormDto();
-
         String messageBeforeEdit = goal.getGoalMessage();
         LocalDate deadlineDateBeforeEdit = goal.getDeadlineDate();
-
         when(userStore.getCurrentUser())
                 .thenReturn(user1);
-
-        goalApi.editGoal(1L,goalDto);
-
-        assertThat(goal.getGoalMessage(),is(messageBeforeEdit));
-        assertThat(goal.getDeadlineDate(),is(deadlineDateBeforeEdit));
+        goalApi.editGoal(1L, goalDto);
+        assertThat(goal.getGoalMessage(), is(messageBeforeEdit));
+        assertThat(goal.getDeadlineDate(), is(deadlineDateBeforeEdit));
     }
+
     @Test
     @DisplayName("Test findAllTags(): verify if throws exception if optional<goal> isEmpty")
     void testFindAllTags() {
