@@ -33,7 +33,7 @@ function showUserGoals() {
         } else {
             tabledata = {
                 "goals": [{
-                    "id": "-1",
+                    "id": "",
                     "daysLeft": "",
                     "deadlineDate": "",
                     "goalMessage": "You need to create new Goals"

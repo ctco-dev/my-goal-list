@@ -29,12 +29,8 @@ function onLoad() {
             'Content-Type': 'application/json'
         }
     }).then(function (response) {
-        if (response.status === 200) {
-            return response.json();
-        } else {
-            alert("Something went wrong! error: "+response.status.toString());
-            return false;
-        }
+        displayError(response, 200);
+        return response.json();
     }).then(function (goal) {
         w3.displayObject("title", goal);
         w3.displayObject("goal-fields", goal);
@@ -69,14 +65,11 @@ function addComment() {
                 'Content-Type': 'application/json'
             }, body: JSON.stringify(data)
         }).then(function (response) {
-            if (response.status === 204) {
-                document.getElementById("userComment").value = "";
-                onLoad();
-            } else {
-                alert("Something went wrong! error: "+response.status.toString());
-                return false;
-            }
-        });
+            displayError(response, 204);
+        }).then(function () {
+            document.getElementById("userComment").value = "";
+            onLoad();
+        })
     }
 }
 
@@ -88,12 +81,8 @@ function enableEditForGoalOwner() {
             'Content-Type': 'application/json'
         }
     }).then(function (response) {
-        if (response.status === 200) {
-            return response.json();
-        } else {
-            alert("Something went wrong! error: "+response.status.toString());
-            return false;
-        }
+        displayError(response, 200);
+        return response.json();
     }).then(function (goalEdit) {
         if (!goalEdit) {
             document.getElementById("edit-button").classList.add("w3-hide");
@@ -133,13 +122,10 @@ function saveEditGoal() {
         },
         body: JSON.stringify(dto)
     }).then(function (response) {
-        if (response.status === 204) {
-            redirectToGoalsAndComments(id);
-        } else {
-            alert("Something went wrong! error: "+response.status.toString());
-            return false;
-        }
-    });
+        displayError(response, 204);
+    }).then(function () {
+        redirectToGoalsAndComments(id);
+    })
 }
 
 function setStatusAchieved(id) {
@@ -150,11 +136,8 @@ function setStatusAchieved(id) {
             'Content-Type': 'application/json'
         }
     }).then(function (response) {
-        if (response.status === 204) {
-            onLoad();
-        } else {
-            alert("Something went wrong! error: " + response.status.toString());
-            return false;
-        }
-    });
+        displayError(response, 204);
+    }).then(function () {
+        onLoad();
+    })
 }

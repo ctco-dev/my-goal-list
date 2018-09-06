@@ -11,13 +11,8 @@ function loadUser() {
                 'Content-Type': 'application/json'
             }
         }).then(function (response) {
-            if (response.status === 200) {
-                return response.json();
-            } else {
-                alert("Something went wrong! error: "+response.status.toString());
-                history.go(-1);
-                return false;
-            }
+            displayError(response, 200);
+            return response.json();
         }).then(function (userDto) {
             if (userDto.username !== "undefined") {
                 setDataToFields(userDto);
@@ -46,13 +41,6 @@ function setDataToFields(userDto) {
     }
 }
 
-function redirectToGoalsAndComments(id) {
-    if (id >= 0) {
-        location.href = path + "/app/goal.jsp?id=" + id;
-    } else {
-        addNewGoal()
-    }
-}
 
 function getQueryVariable(variable) {
     var query = window.location.search.substring(1);
