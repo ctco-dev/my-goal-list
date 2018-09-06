@@ -23,7 +23,6 @@ function findUserByName() {
     var dto = {
         "usersearch": username.value
     };
-    console.log(JSON.stringify(dto));
     fetch("/api/goals/search-users", {
         "method": "POST",
         headers: {
@@ -48,7 +47,6 @@ function findGoalsByTag() {
     var dto = {
         "goalsearch": tag.value
     };
-    console.log(JSON.stringify(dto));
     fetch("/api/goals/search-goals", {
         "method": "POST",
         headers: {
