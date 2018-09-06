@@ -95,4 +95,13 @@ input[type=date]::-webkit-outer-spin-button {
 #search-block {
     min-height: 170px;
 }
+#edit-goal {
+    margin-top: 20px;
+}
+#show-goal {
+    margin-bottom: 10px;
+}
+a {
+    text-decoration: underline;
+}
 
