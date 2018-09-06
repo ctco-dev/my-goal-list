@@ -26,10 +26,10 @@ public class GoalStore {
                 "where g.user = :user ", Goal.class)
                 .setParameter("user", user)
                 .getResultList();
-        return CheckStatus(goals);
+        return changeGoalStatus(goals);
     }
 
-    private List<Goal> CheckStatus(List<Goal> goals) {
+    private List<Goal> changeGoalStatus(List<Goal> goals) {
         List<Goal> goalsToReturn = new ArrayList<>();
         LocalDate localDateNow = LocalDate.now();
         for (Goal goal : goals) {
