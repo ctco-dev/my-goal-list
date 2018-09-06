@@ -27,17 +27,17 @@ function onLoad() {
             'Content-Type': 'application/json'
         }
     }).then(function (response) {
-        if (response.status === 200) {
-            return response.json();
-        } else {
-            alert("Something went wrong! error: " + response.status.toString());
-            return false;
-        }
+        displayError(response, 200);
+        return response.json();
     }).then(function (goal) {
         w3.displayObject("title", goal);
         w3.displayObject("goal-fields", goal);
+        w3.displayObject("status-achieved", goal);
         w3DisplayData("tags-list", goal);
         document.getElementById("goal-deadline").setAttribute("value", goal.deadlineDate);
+        if (goal.goalStatus === "ACHIEVED") {
+            document.getElementById("status-achieved").classList.add("w3-hide");
+        }
         getComments();
     });
     enableEditForGoalOwner();
@@ -64,14 +64,11 @@ function addComment() {
                 'Content-Type': 'application/json'
             }, body: JSON.stringify(data)
         }).then(function (response) {
-            if (response.status === 204) {
-                document.getElementById("userComment").value = "";
-                onLoad();
-            } else {
-                alert("Something went wrong! error: " + response.status.toString());
-                return false;
-            }
-        });
+            displayError(response, 204);
+        }).then(function () {
+            document.getElementById("userComment").value = "";
+            onLoad();
+        })
     }
 }
 function enableEditForGoalOwner() {
@@ -82,15 +79,13 @@ function enableEditForGoalOwner() {
             'Content-Type': 'application/json'
         }
     }).then(function (response) {
-        if (response.status === 200) {
-            return response.json();
-        } else {
-            alert("Something went wrong! error: " + response.status.toString());
-            return false;
-        }
+        displayError(response, 200);
+        return response.json();
     }).then(function (goalEdit) {
-        if (!goalEdit)
+        if (!goalEdit) {
             document.getElementById("edit-button").classList.add("w3-hide");
+            document.getElementById("status-achieved").classList.add("w3-hide");
+        }
         isMyGoal = goalEdit;
     });
 }
@@ -98,6 +93,8 @@ function editGoal() {
     if (isMyGoal) {
         document.getElementById("show-goal").classList.add("w3-hide");
         document.getElementById("edit-goal").classList.remove("w3-hide");
+        document.getElementById("edit-button").classList.add("w3-hide");
+        document.getElementById("status-achieved").classList.add("w3-hide");
     } else {
         alert("You can edit only your own goals");
     }
@@ -121,11 +118,21 @@ function saveEditGoal() {
         },
         body: JSON.stringify(dto)
     }).then(function (response) {
-        if (response.status === 204) {
-            redirectToGoalsAndComments(id);
-        } else {
-            alert("Something went wrong! error: " + response.status.toString());
-            return false;
+        displayError(response, 204);
+    }).then(function () {
+        redirectToGoalsAndComments(id);
+    })
+}
+function setStatusAchieved(id) {
+    fetch(path + "/api/goals/" + id, {
+        "method": "POST",
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
         }
-    });
+    }).then(function (response) {
+        displayError(response, 204);
+    }).then(function () {
+        onLoad();
+    })
 }

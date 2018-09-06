@@ -1,4 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
+<%@ taglib prefix='c' uri='http://java.sun.com/jsp/jstl/core' %>
 <html>
 <head>
     <title>Main | C.T.Co Goal list</title>
@@ -10,6 +11,7 @@
     <script src="http://www.w3schools.com/lib/w3data.js"></script>
     <title>My Goals</title>
 </head>
+
 <body onload="showUserProfile();showUserGoals();switchPersonalData();">
 <div id="menu">
     <div class="button-div">
@@ -36,10 +38,12 @@
         <th>Deadline</th>
         <th>Days left</th>
     </tr>
-    <tr w3-repeat="goals" id="{{id}}" onclick="redirectToGoalsAndComments(id)">
+    <tr w3-repeat="goals" class="{{goalStatus}}" onclick="redirectToGoalsAndComments('{{id}}')">
         <td>{{goalMessage}}</td>
         <td>{{deadlineDate}}</td>
-        <td>{{daysLeft}}</td>
+        <td>
+            <span class="{{goalStatus}}">{{daysLeft}}</span>
+        </td>
     </tr>
 </table>
 </body>

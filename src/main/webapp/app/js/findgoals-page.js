@@ -34,7 +34,6 @@ function findUserByName() {
     }).then(function (response) {
         return response.json();
     }).then(function (users) {
-        console.log(users);
         if (users.length > 0) {
             var tabledata = {'users': users};
             document.getElementById("Users-List").classList.remove("w3-hide");
@@ -60,7 +59,6 @@ function findGoalsByTag() {
     }).then(function (response) {
         return response.json();
     }).then(function (goals) {
-        console.log(goals);
         if (goals.length > 0) {
             var tabledata = {'goals': goals};
             document.getElementById("Goals-List").classList.remove("w3-hide");

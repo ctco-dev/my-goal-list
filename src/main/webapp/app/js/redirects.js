@@ -6,10 +6,10 @@ function logout() {
         });
 }
 function redirectToGoalsAndComments(id) {
-    if (id >= 0) {
-        location.href = path + "/app/goal.jsp?id=" + id;
+    if (id === "") {
+        addNewGoal();
     } else {
-        addNewGoal()
+        location.href = path + "/app/goal.jsp?id=" + id;
     }
 }
 function redirectToUserPage(id) {
@@ -48,5 +48,12 @@ function switchPersonalData() {
         block.classList.remove("w3-hide");
     } else {
         block.classList.add("w3-hide");
+    }
+}
+
+function displayError(response, expected) {
+    if (response.status !== expected) {
+        alert("Something went wrong! error: " + response.status.toString());
+        history.go(-1);
     }
 }
