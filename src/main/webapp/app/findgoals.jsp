@@ -24,9 +24,10 @@
             <button class="menu-button w3-button w3-brown w3-round" onclick="goToMain()" type="button">Go to Main</button>
         </div>
     </div>
-    <h2>Search for:<br/>
-        <input type="radio" name="colors" id="rbtnUser" onclick="switchSearch();">Goal's Creator by Name<br>
-        <input type="radio" name="colors" id="rbtnGoal" onclick="switchSearch();">Goals by Tag</h2>
+    <div id="search-block" class="w3-panel w3-light-grey w3-leftbar w3-border w3-round-large">
+    <h2>Search for:</h2>
+        <center><input type="radio" name="colors" id="rbtnUser" onclick="switchSearch();">Goal's Creator by Name
+        <input type="radio" name="colors" id="rbtnGoal" onclick="switchSearch();">Goals by Tag</center>
     <div id="search-by-Username" class="w3-hide">
         <input id="username" type="text"/>
         <input type="button" class="findButton w3-button w3-brown w3-round" value="Find" onclick="findUserByName();">
@@ -49,6 +50,7 @@
             <td>{{phone}}</td>
         </tr>
     </table>
+    </div>
     <table id="Goals-List" class="w3-table-all w3-hoverable w3-hide">
         <tr class="w3-brown">
             <th>Goal</th>
@@ -61,6 +63,7 @@
             <td>{{daysLeft}}</td>
         </tr>
     </table>
+
 </div>
 </body>
 </html>

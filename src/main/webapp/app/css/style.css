@@ -86,4 +86,13 @@ input[type=date]::-webkit-outer-spin-button {
     display: none;
     -webkit-appearance: none;
 }
+#search-by-Username {
+    margin-top: 20px;
+}
+#search-by-Tags {
+    margin-top: 20px;
+}
+#search-block {
+    min-height: 170px;
+}
 
