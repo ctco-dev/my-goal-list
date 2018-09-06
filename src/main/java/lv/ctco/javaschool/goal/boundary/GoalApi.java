@@ -26,7 +26,6 @@ import javax.inject.Inject;
 import javax.json.JsonObject;
 import javax.json.JsonString;
 import javax.json.JsonValue;
-import javax.ws.rs.BadRequestException;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -78,7 +77,8 @@ public class GoalApi {
     public void createNewGoal(GoalFormDto goalDto) {
         User user = userStore.getCurrentUser();
         Goal goal = new Goal();
-        if (goalDto.getGoalMessage() != null && goalDto.getDeadline() != null) {
+        if (goalDto.getGoalMessage() != null && goalDto.getDeadline() != null
+                && goalDto.getDeadline().isAfter(LocalDate.now())) {
             goal.setGoalMessage(goalDto.getGoalMessage());
             List<Tag> tags = tagParser.parseStringToTags(goalDto.getTags());
             Set<Tag> tagSet = goalStore.checkIfTagExistsOrPersist(tags);
@@ -137,18 +137,17 @@ public class GoalApi {
     @Path("{id}/edit")
     public void editGoal(@PathParam("id") Long goalId, GoalFormDto newGoalDto) {
         User user = userStore.getCurrentUser();
-        if (newGoalDto.getGoalMessage() != null && newGoalDto.getDeadline() != null) {
-            if (newGoalDto.getDeadline().isBefore(LocalDate.now()))
-                throw new BadRequestException();
+        if (newGoalDto.getGoalMessage() != null
+                && newGoalDto.getDeadline() != null
+                && newGoalDto.getDeadline().isAfter(LocalDate.now())) {
             Optional<Goal> goal = goalStore.getUnachievedUserGoalById(user, goalId);
             goal.ifPresent(g -> {
                 g.setGoalMessage(newGoalDto.getGoalMessage());
                 g.setDeadlineDate(newGoalDto.getDeadline());
-                if ((g.getDeadlineDate().isAfter(LocalDate.now())
-                        || g.getDeadlineDate().isEqual(LocalDate.now())))
+                if (g.getStatus().equals(GoalStatus.OVERDUE))
                     g.setStatus(GoalStatus.OPEN);
             });
-        }
+        } else throw new ValidationException("Goal cannot be deleted");
     }
 
     @GET
