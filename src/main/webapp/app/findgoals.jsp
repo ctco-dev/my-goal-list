@@ -38,6 +38,7 @@
         </datalist>
         <input type="button" class="findButton w3-button w3-brown w3-round" value="Find" onclick="findGoalsByTag();">
     </div>
+    </div>
     <table id="Users-List" class="w3-table-all w3-hoverable w3-hide">
         <tr class="w3-brown">
             <th>User</th>
@@ -50,7 +51,6 @@
             <td>{{phone}}</td>
         </tr>
     </table>
-    </div>
     <table id="Goals-List" class="w3-table-all w3-hoverable w3-hide">
         <tr class="w3-brown">
             <th>Goal</th>

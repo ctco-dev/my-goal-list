@@ -40,7 +40,7 @@
                 <datalist id="tags">
                 </datalist>
             </div>
-            <input type="button" class="w3-button w3-brown w3-round" value="Submit" onclick="submitData()">
+            <input type="button" class="w3-button w3-brown w3-round w3-margin" value="Submit" onclick="submitData()">
         </form>
     </div>
 </div>
