@@ -2,17 +2,26 @@ package lv.ctco.javaschool.goal.entity.dto;
 
 public class CommentDto {
     private String username;
-
+    private Long userId;
     private String registeredDate;
     private String commentMessage;
 
     public CommentDto() {
     }
 
-    public CommentDto(String username, String localDateTime, String msg) {
+    public CommentDto(String username, String localDateTime, String msg, Long id) {
         this.username = username;
         this.registeredDate = localDateTime;
         this.commentMessage = msg;
+        this.userId = id;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     public String getUsername() {

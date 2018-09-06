@@ -54,7 +54,7 @@
         <th>Deadline</th>
         <th>Days left</th>
     </tr>
-    <tr w3-repeat="goals" id="{{id}}" onclick="redirectToGoalsAndComments(id)">
+    <tr w3-repeat="goals" id="{{id}}" class="{{goalStatus}}" onclick="redirectToGoalsAndComments(id)">
         <td>{{goalMessage}}</td>
         <td>{{deadlineDate}}</td>
         <td>{{daysLeft}}</td>

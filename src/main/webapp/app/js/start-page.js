@@ -1,4 +1,5 @@
 var path = "";
+var goalList;
 
 function showUserProfile() {
     fetch(path + "/api/auth/myprofile", {
@@ -25,13 +26,14 @@ function showUserGoals() {
     }).then(function (response) {
         return response.json();
     }).then(function (goals) {
+        goalList = goals;
         var tabledata;
         if (goals.length > 0) {
             tabledata = {"goals": goals};
         } else {
             tabledata = {
                 "goals": [{
-                    "id": "-1",
+                    "id": "",
                     "daysLeft": "",
                     "deadlineDate": "",
                     "goalMessage": "You need to create new Goals"

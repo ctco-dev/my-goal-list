@@ -83,9 +83,21 @@ ul {
     margin-bottom: 5%;
 }
 
+.ACHIEVED {
+    background-color: #27ff5a !important;
+}
+
+.OVERDUE {
+    background-color: #ff5953 !important;
+}
+
 input[type=date]::-webkit-clear-button,
 input[type=date]::-webkit-inner-spin-button,
 input[type=date]::-webkit-outer-spin-button {
     display: none;
     -webkit-appearance: none;
+}
+
+span.ACHIEVED {
+    visibility: hidden !important;
 }

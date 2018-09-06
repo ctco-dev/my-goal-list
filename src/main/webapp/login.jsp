@@ -7,7 +7,6 @@
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 <script src="http://www.w3schools.com/lib/w3data.js"></script>
 <body>
-
 <header class="w3-container w3-teal">
     <h1>Login or Register</h1>
 </header>
@@ -174,6 +173,7 @@
         errorPanel.classList.remove("w3-hide");
         w3DisplayData("error-panel", {"message": msg});
     }
+
 </script>
 </body>
 </html>

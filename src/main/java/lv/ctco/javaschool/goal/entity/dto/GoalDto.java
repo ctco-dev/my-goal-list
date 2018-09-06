@@ -1,5 +1,6 @@
 package lv.ctco.javaschool.goal.entity.dto;
 
+import lv.ctco.javaschool.goal.entity.domain.GoalStatus;
 import lv.ctco.javaschool.goal.entity.domain.Tag;
 
 import java.time.LocalDate;
@@ -15,6 +16,15 @@ public class GoalDto {
     private LocalDateTime registeredDate;
     private Set<Tag> tags;
     private int daysLeft;
+    private GoalStatus goalStatus;
+
+    public GoalStatus getGoalStatus() {
+        return goalStatus;
+    }
+
+    public void setGoalStatus(GoalStatus goalStatus) {
+        this.goalStatus = goalStatus;
+    }
 
     public Long getUserId() {
         return userId;
