@@ -14,13 +14,13 @@
 <div id="wrapper">
     <div id="menu">
         <div class="button-div">
-            <button class="menu-button w3-button w3-blue w3-round" onclick="logout()" type="button">Log out</button>
+            <button class="menu-button w3-button w3-brown w3-round" onclick="logout()" type="button">Log out</button>
         </div>
         <div class="button-div">
-            <button class="menu-button w3-button w3-blue w3-round" onclick="findGoals()" type="button">Search</button>
+            <button class="menu-button w3-button w3-brown w3-round" onclick="findGoals()" type="button">Search</button>
         </div>
         <div class="button-div">
-            <button class="menu-button w3-button w3-blue w3-round" onclick="goToMain()" type="button">Go to Main</button>
+            <button class="menu-button w3-button w3-brown w3-round" onclick="goToMain()" type="button">Go to Main</button>
         </div>
     </div>
     <h1 id="username">{{username}}</h1>
@@ -33,7 +33,7 @@
     </div>
     <h4 id="hidden" class="w3-hide">!!Current User has no goals Set for now!!</h4>
     <table id="goals-list" class="w3-table-all w3-hoverable">
-        <tr class="w3-blue">
+        <tr class="w3-brown">
             <th>My goals</th>
             <th>Deadline</th>
             <th>Days left</th>

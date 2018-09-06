@@ -7,7 +7,7 @@
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 <script src="http://www.w3schools.com/lib/w3data.js"></script>
 <body>
-<header class="w3-container w3-blue">
+<header class="w3-container w3-brown">
     <h1>Login or Register</h1>
 </header>
 <div class="w3-container w3-half w3-margin-top w3-display-middle">
@@ -42,10 +42,10 @@
             <label for="password2-txt">Repeat Password</label>
         </p>
         <p>
-            <button id="login-btn" type="button" class="w3-button w3-section w3-blue w3-ripple w3-round" onclick="login()">Log
+            <button id="login-btn" type="button" class="w3-button w3-section w3-brown w3-ripple w3-round" onclick="login()">Log
                 in
             </button>
-            <button id="register-btn" type="button" class="w3-button w3-section w3-blue w3-ripple w3-hide w3-round"
+            <button id="register-btn" type="button" class="w3-button w3-section w3-brown w3-ripple w3-hide w3-round"
                     onclick="register()">Register
             </button>
         </p>
