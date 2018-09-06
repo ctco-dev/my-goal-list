@@ -278,7 +278,7 @@ class GoalApiTest {
     void isCurrentUsersGoalTestForCurrentUser() {
         when(userStore.getCurrentUser())
                 .thenReturn(user1);
-        when(goalStore.getUserGoalById(user1,1L))
+        when(goalStore.getUnachievedUserGoalById(user1,1L))
                 .thenReturn(Optional.of(goal));
         assertThat(goalApi.isCurrentUsersGoal(1L),is(true));
     }
@@ -288,7 +288,7 @@ class GoalApiTest {
     void isCurrentUsersGoalTestForDifferentUser() {
         when(userStore.getCurrentUser())
                 .thenReturn(user2);
-        when(goalStore.getUserGoalById(user2,1L))
+        when(goalStore.getUnachievedUserGoalById(user2,1L))
                 .thenReturn(Optional.empty());
 
         assertThat(goalApi.isCurrentUsersGoal(1L),is(false));
@@ -303,7 +303,7 @@ class GoalApiTest {
 
         when(userStore.getCurrentUser())
                 .thenReturn(user1);
-        when(goalStore.getUserGoalById(user1,1L))
+        when(goalStore.getUnachievedUserGoalById(user1,1L))
                 .thenReturn(Optional.of(goal));
 
         goalApi.editGoal(1L,goalDto);
@@ -324,7 +324,7 @@ class GoalApiTest {
 
         when(userStore.getCurrentUser())
                 .thenReturn(user2);
-        when(goalStore.getUserGoalById(user2,1L))
+        when(goalStore.getUnachievedUserGoalById(user2,1L))
                 .thenReturn(Optional.empty());
 
         goalApi.editGoal(1L,goalDto);
