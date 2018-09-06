@@ -15,13 +15,13 @@
 <div id="wrapper">
     <div id="menu">
         <div class="button-div">
-            <button class="menu-button" onclick="logout()" type="button">Log out</button>
+            <button class="menu-button w3-button w3-blue w3-round" onclick="logout()" type="button">Log out</button>
         </div>
         <div class="button-div">
-            <button class="menu-button" onclick="findGoals()" type="button">Search</button>
+            <button class="menu-button w3-button w3-blue w3-round" onclick="findGoals()" type="button">Search</button>
         </div>
         <div class="button-div">
-            <button class="menu-button" onclick="addNewGoal()" type="button">Add new goal</button>
+            <button class="menu-button w3-button w3-blue w3-round" onclick="addNewGoal()" type="button">Add new goal</button>
         </div>
     </div>
     <h1 id="name">name</h1>

@@ -14,19 +14,19 @@
 <div id="wrapper">
     <div id="menu">
         <div class="button-div">
-            <button class="menu-button" onclick="logout()" type="button">Log out</button>
+            <button class="menu-button w3-button w3-blue w3-round" onclick="logout()" type="button">Log out</button>
         </div>
         <div class="button-div">
-            <button class="menu-button" onclick="findGoals()" type="button">Search</button>
+            <button class="menu-button w3-button w3-blue w3-round" onclick="findGoals()" type="button">Search</button>
         </div>
         <div class="button-div">
-            <button class="menu-button" onclick="goToMain()" type="button">Go to Main</button>
+            <button class="menu-button w3-button w3-blue w3-round" onclick="goToMain()" type="button">Go to Main</button>
         </div>
         <div class="button-div">
-            <button id="edit-button" class="menu-button" onclick="editGoal()" type="button">Edit Goal</button>
+            <button id="edit-button" class="menu-button w3-button w3-blue w3-round" onclick="editGoal()" type="button">Edit Goal</button>
         </div>
-        <div class="button-div" id="status-achieved">
-            <button class="menu-button" onclick="setStatusAchieved('{{id}}')" type="button">Achieved</button>
+        <div class="button-div">
+            <button class="menu-button w3-button w3-blue w3-round" onclick="setStatusAchieved('{{id}}')" type="button">Achieved</button>
         </div>
     </div>
     <div id="goal-fields">
@@ -47,7 +47,7 @@
             <label for="goal-deadline">Deadline: </label>
             <input id="goal-deadline" type="date" onkeydown="return false">
             <div class="button-div">
-                <button class="menu-button" onclick="saveEditGoal()" type="button">Save</button>
+                <button class="menu-button w3-button w3-blue w3-round" onclick="saveEditGoal()" type="button">Save</button>
             </div>
         </div>
     </div>
@@ -58,7 +58,7 @@
                 <div class="input-group">
                     <input type="text" id="userComment" placeholder="Write your message here..."/>
                     <span>
-                    <a onclick="addComment()" class="btn"> Add Comment</a>
+                    <a onclick="addComment()" class="w3-button w3-blue w3-round"> Add Comment</a>
                 </span>
                 </div>
                 <hr>

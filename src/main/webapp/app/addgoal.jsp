@@ -13,13 +13,13 @@
 <div id="wrapper">
     <div id="menu">
         <div class="button-div">
-            <button class="menu-button" onclick="logout()" type="button">Log out</button>
+            <button class="menu-button w3-button w3-blue w3-round" onclick="logout()" type="button">Log out</button>
         </div>
         <div class="button-div">
-            <button class="menu-button" onclick="findGoals()" type="button">Search</button>
+            <button class="menu-button w3-button w3-blue w3-round" onclick="findGoals()" type="button">Search</button>
         </div>
         <div class="button-div">
-            <button class="menu-button" onclick="goToMain()" type="button">Go to Main</button>
+            <button class="menu-button w3-button w3-blue w3-round" onclick="goToMain()" type="button">Go to Main</button>
         </div>
     </div>
     <br>
@@ -40,7 +40,7 @@
                 <datalist id="tags">
                 </datalist>
             </div>
-            <input type="button" value="Submit" onclick="submitData()">
+            <input type="button" class="w3-button w3-blue w3-round" value="Submit" onclick="submitData()">
         </form>
     </div>
 </div>

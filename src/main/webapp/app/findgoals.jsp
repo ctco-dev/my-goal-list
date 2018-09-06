@@ -15,13 +15,13 @@
 <div id="wrapper">
     <div id="menu">
         <div class="button-div">
-            <button class="menu-button" onclick="logout()" type="button">Log out</button>
+            <button class="menu-button w3-button w3-blue w3-round" onclick="logout()" type="button">Log out</button>
         </div>
         <div class="button-div">
-            <button class="menu-button" onclick="findGoals()" type="button">Search</button>
+            <button class="menu-button w3-button w3-blue w3-round" onclick="findGoals()" type="button">Search</button>
         </div>
         <div class="button-div">
-            <button class="menu-button" onclick="goToMain()" type="button">Go to Main</button>
+            <button class="menu-button w3-button w3-blue w3-round" onclick="goToMain()" type="button">Go to Main</button>
         </div>
     </div>
     <h2>Search for:<br/>
@@ -29,13 +29,13 @@
         <input type="radio" name="colors" id="rbtnGoal" onclick="switchSearch();">Goals by Tag</h2>
     <div id="search-by-Username" class="w3-hide">
         <input id="username" type="text"/>
-        <input type="button" class="findButton" value="Find" onclick="findUserByName();">
+        <input type="button" class="findButton w3-button w3-blue w3-round" value="Find" onclick="findUserByName();">
     </div>
     <div id="search-by-Tags" class="w3-hide">
         <input id="tag" type="text" list="tags"/>
         <datalist id="tags">
         </datalist>
-        <input type="button" class="findButton" value="Find" onclick="findGoalsByTag();">
+        <input type="button" class="findButton w3-button w3-blue w3-round" value="Find" onclick="findGoalsByTag();">
     </div>
     <table id="Users-List" class="w3-table-all w3-hoverable w3-hide">
         <tr class="w3-blue">

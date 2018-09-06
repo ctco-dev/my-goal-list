@@ -42,10 +42,10 @@
             <label for="password2-txt">Repeat Password</label>
         </p>
         <p>
-            <button id="login-btn" type="button" class="w3-button w3-section w3-blue w3-ripple" onclick="login()">Log
+            <button id="login-btn" type="button" class="w3-button w3-section w3-blue w3-ripple w3-round" onclick="login()">Log
                 in
             </button>
-            <button id="register-btn" type="button" class="w3-button w3-section w3-blue w3-ripple w3-hide"
+            <button id="register-btn" type="button" class="w3-button w3-section w3-blue w3-ripple w3-hide w3-round"
                     onclick="register()">Register
             </button>
         </p>
