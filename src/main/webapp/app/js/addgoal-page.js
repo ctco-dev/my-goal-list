@@ -1,5 +1,4 @@
 var path = "";
-
 function submitData() {
     var goalTxt = document.getElementById("goal-txt");
     var deadlineDate = document.getElementById("goal-deadline");
@@ -16,7 +15,7 @@ function submitData() {
         "deadline": deadlineDate.value,
         "tags": tags
     };
-    fetch(path + "/api/goal/newgoal", {
+    fetch(path + "/api/goals/add", {
         "method": "POST",
         headers: {
             'Accept': 'application/json',
@@ -27,9 +26,8 @@ function submitData() {
         location.href = path + "/app/start.jsp";
     });
 }
-
 function loadTags() {
-    fetch(path + "/api/goal/tags", {
+    fetch(path + "/api/goals/tags", {
         "method": "GET",
         headers: {
             'Accept': 'application/json',
@@ -41,7 +39,6 @@ function loadTags() {
         addOptions(tags, "tags");
     });
 }
-
 function addOptions(tags, name) {
     var obj = "";
     for (var i = 0; i < tags.length; i++) {

@@ -4,27 +4,22 @@ body {
     background-color: #e6e6e6;
     margin: 3px;
 }
-
 h1 {
     color: black;
     display: block;
     text-align: center;
 }
-
 h2 {
     color: black;
     display: block;
     text-align: center;
 }
-
 #menu {
     display: inline-block;
 }
-
 .button-div {
     float: right;
 }
-
 .menu-button {
     background-color: deepskyblue;
     border-radius: 4px;
@@ -35,25 +30,20 @@ h2 {
     text-align: center;
     text-decoration: none;
 }
-
 #personal {
     display: inline-block;
     float: left;
 }
-
 #form {
     text-align: center;
 }
-
 form {
     display: inline-block;
 }
-
 #goal-fields {
     position: static;
     text-align: left;
 }
-
 .container {
     text-align: center;
     float: none;
@@ -63,34 +53,30 @@ form {
     border-radius: 10px;
     background-color: white;
 }
-
 ul {
     list-style: none;
     text-align: center;
 }
-
 .repeatable {
     border-radius: 10px;
     background-color: lightgray;
 }
-
 #tags-field-1, #tags-field-2, #tags-field-3 {
     width: 200px;
 }
-
 .findButton {
     margin-right: 40%;
     margin-bottom: 5%;
 }
-
 .ACHIEVED {
     background-color: #27ff5a !important;
 }
-
 .OVERDUE {
     background-color: #ff5953 !important;
 }
-
+span.ACHIEVED {
+    visibility: hidden !important;
+}
 input[type=date]::-webkit-clear-button,
 input[type=date]::-webkit-inner-spin-button,
 input[type=date]::-webkit-outer-spin-button {
@@ -98,6 +84,3 @@ input[type=date]::-webkit-outer-spin-button {
     -webkit-appearance: none;
 }
 
-span.ACHIEVED {
-    visibility: hidden !important;
-}

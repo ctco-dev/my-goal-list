@@ -1,6 +1,5 @@
 var path = "";
 var goalList;
-
 function showUserProfile() {
     fetch(path + "/api/auth/myprofile", {
         "method": "GET",
@@ -12,12 +11,11 @@ function showUserProfile() {
         return response.json();
     }).then(function (user) {
         document.getElementById("name").innerHTML = user.username;
-        document.getElementById("phone_email").innerHTML = "Phone: " + user.phone + " |  E-mail: " + user.email;
+        document.getElementById("phone_email").innerHTML = "Phone: " + user.phone + " | E-mail: " + user.email;
     });
 }
-
 function showUserGoals() {
-    fetch(path + "/api/goal/mygoals", {
+    fetch(path + "/api/goals", {
         "method": "GET",
         headers: {
             'Accept': 'application/json',

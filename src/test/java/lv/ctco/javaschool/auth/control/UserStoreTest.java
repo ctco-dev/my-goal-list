@@ -18,7 +18,6 @@ class UserStoreTest {
         Executable emptyName2 = () -> uc.validateUsername("    ");
         Executable goodName1 = () -> uc.validateUsername("goodName");
         Executable goodName2 = () -> uc.validateUsername(" good Name  ");
-
         assertThrows(InvalidUsernameException.class, nullName);
         assertThrows(InvalidUsernameException.class, emptyName1);
         assertThrows(InvalidUsernameException.class, emptyName2);
@@ -41,7 +40,6 @@ class UserStoreTest {
         Executable spacePass3 = () -> uc.validatePassword("    123");
         Executable spacePass4 = () -> uc.validatePassword("   ");
         Executable goodPass1 = () -> uc.validatePassword("12345");
-
         assertThrows(InvalidPasswordException.class, nullPass);
         assertThrows(InvalidPasswordException.class, emptyPass1);
         assertThrows(InvalidPasswordException.class, shortPass1);
