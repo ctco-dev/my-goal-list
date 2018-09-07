@@ -29,6 +29,7 @@
 </div>
 <div id="personal-block" class="w3-hide">
     <H3 id="email-and-phone">{{email}} | {{phone}}</H3>
+    <div id="pie-chart" style="width: 900px; height: 500px;"></div>
 </div>
 <h4 id="hidden" class="w3-hide">!!Current User has no goals Set for now!!</h4>
 <table id="goals-list" class="w3-table-all w3-hoverable">

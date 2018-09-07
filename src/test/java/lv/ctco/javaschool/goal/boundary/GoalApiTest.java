@@ -8,6 +8,7 @@ import lv.ctco.javaschool.goal.control.GoalStore;
 import lv.ctco.javaschool.goal.control.TagParser;
 import lv.ctco.javaschool.goal.entity.domain.Comment;
 import lv.ctco.javaschool.goal.entity.domain.Goal;
+import lv.ctco.javaschool.goal.entity.domain.GoalStatus;
 import lv.ctco.javaschool.goal.entity.domain.Tag;
 import lv.ctco.javaschool.goal.entity.dto.CommentDto;
 import lv.ctco.javaschool.goal.entity.dto.GoalDto;
@@ -17,6 +18,7 @@ import lv.ctco.javaschool.goal.entity.dto.TagDto;
 import lv.ctco.javaschool.goal.entity.dto.UserDto;
 import lv.ctco.javaschool.goal.entity.exception.InvalidGoalException;
 import lv.ctco.javaschool.goal.entity.exception.InvalidUserException;
+import lv.ctco.javaschool.goal.entity.exception.ValidationException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -385,5 +387,42 @@ class GoalApiTest {
             assertThat(dtoList.get(i).getPhone(), is(users.get(i).getPhone()));
         }
         verify(userStore, times(1)).getUsersByUsername(anyString());
+    }
+
+    @Test
+    @DisplayName("test setStatusAchieved: changes status")
+    void testSetStatusAchieved() {
+        Long id = goal.getId();
+        goal.setStatus(GoalStatus.OVERDUE);
+        when(userStore.getCurrentUser())
+                .thenReturn(user1);
+        when(goalStore.getGoalById(id))
+                .thenReturn(Optional.of(goal));
+        goalApi.setStatusAchieved(id);
+        assertThat(goal.getStatus(), is(GoalStatus.ACHIEVED));
+    }
+
+    @Test
+    @DisplayName("test setStatusAchieved: throws ValidationException wrong user")
+    void testSetStatusAchievedThrowsExceptionIfWrongUser() {
+        Long id = goal.getId();
+        goal.setStatus(GoalStatus.OVERDUE);
+        when(userStore.getCurrentUser())
+                .thenReturn(user2);
+        when(goalStore.getGoalById(id))
+                .thenReturn(Optional.of(goal));
+        assertThrows(ValidationException.class, () -> goalApi.setStatusAchieved(id));
+    }
+
+    @Test
+    @DisplayName("test setStatusAchieved: throws ValidationException no goal")
+    void testSetStatusAchievedThrowsExceptionIfNoGoal() {
+        Long id = goal.getId();
+        goal.setStatus(GoalStatus.OPEN);
+        when(userStore.getCurrentUser())
+                .thenReturn(user2);
+        when(goalStore.getGoalById(id))
+                .thenReturn(Optional.empty());
+        assertThrows(ValidationException.class, () -> goalApi.setStatusAchieved(id));
     }
 }
