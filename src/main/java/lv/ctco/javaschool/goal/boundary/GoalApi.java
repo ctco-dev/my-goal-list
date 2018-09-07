@@ -77,9 +77,10 @@ public class GoalApi {
     public void saveGoal(GoalFormDto goalDto) {
         User user = userStore.getCurrentUser();
         Goal goal = new Goal();
-        if (goalDto.getGoalMessage() != null && goalDto.getDeadline() != null
+        if (goalDto.getGoalMessage() != null && !goalDto.getGoalMessage().trim().isEmpty()
+                && goalDto.getDeadline() != null
                 && goalDto.getDeadline().isAfter(LocalDate.now())) {
-            goal.setGoalMessage(goalDto.getGoalMessage());
+            goal.setGoalMessage(goalDto.getGoalMessage().trim());
             List<Tag> tags = tagParser.parseStringToTags(goalDto.getTags());
             Set<Tag> tagSet = goalStore.checkIfTagExistsOrPersist(tags);
             goal.setTags(tagSet);
@@ -137,16 +138,19 @@ public class GoalApi {
     public void editGoal(@PathParam("id") Long goalId, GoalFormDto newGoalDto) {
         User user = userStore.getCurrentUser();
         if (newGoalDto.getGoalMessage() != null
+                && !newGoalDto.getGoalMessage().trim().isEmpty()
                 && newGoalDto.getDeadline() != null
                 && newGoalDto.getDeadline().isAfter(LocalDate.now())) {
             Optional<Goal> goal = goalStore.getUnachievedUserGoalById(user, goalId);
             goal.ifPresent(g -> {
-                g.setGoalMessage(newGoalDto.getGoalMessage());
+                g.setGoalMessage(newGoalDto.getGoalMessage().trim());
                 g.setDeadlineDate(newGoalDto.getDeadline());
                 if (g.getStatus().equals(GoalStatus.OVERDUE))
                     g.setStatus(GoalStatus.OPEN);
             });
-        } else throw new ValidationException("Goal cannot be deleted");
+        } else {
+            throw new ValidationException("Goal cannot be deleted");
+        }
     }
 
     @GET
