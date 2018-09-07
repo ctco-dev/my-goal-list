@@ -5,7 +5,7 @@
     <title id="title">{{username}} | C.T.Co Goal list</title>
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <link rel="stylesheet" type="text/css" href="css/style.css">
-    <link rel="shortcut icon" type="image/x-icon" href="../images/favicon.ico" />
+    <link rel="shortcut icon" type="image/x-icon" href="../images/favicon.ico"/>
     <script type="text/javascript" src="js/commons.js"></script>
     <script src="https://www.w3schools.com/lib/w3.js"></script>
     <script src="http://www.w3schools.com/lib/w3data.js"></script>
@@ -21,7 +21,8 @@
             <button class="menu-button w3-button w3-brown w3-round" onclick="findGoals()" type="button">Search</button>
         </div>
         <div class="button-div">
-            <button class="menu-button w3-button w3-brown w3-round" onclick="goToMain()" type="button">Go to Main</button>
+            <button class="menu-button w3-button w3-brown w3-round" onclick="goToMain()" type="button">Go to Main
+            </button>
         </div>
     </div>
     <h1 id="username">{{username}}</h1>
@@ -42,7 +43,7 @@
         <tr w3-repeat="goals" id="{{id}}" class="{{goalStatus}}" onclick="redirectToGoalsAndComments(id)">
             <td>{{goalMessage}}</td>
             <td>{{deadlineDate}}</td>
-            <td>{{daysLeft}}</td>
+            <td><span class="{{goalStatus}}">{{daysLeft}}</span></td>
         </tr>
     </table>
 </div>
