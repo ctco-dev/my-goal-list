@@ -77,7 +77,7 @@ function generateMetrics(goals) {
         }
     }
     var obj = "<table>" +
-        "<tr><td>Metrics</td></tr>" +
+        "<tr><td><h4>Statistics</h4></td></tr>" +
         "<tr><td>" + "Goals Total: " + goals.length + "</td></tr>" +
         "<tr><td>" + "Goals Achieved: " + completed + "</td></tr>" +
         "<tr><td>" + "Goals Overdue: " + overdue + "</td></tr>" +

@@ -36,7 +36,7 @@ h2 {
     height: 30px;
 }
 #personal-block {
-    height: 10px;
+    height: 180px;
 }
 #form {
     text-align: center;
@@ -111,5 +111,12 @@ a {
 }
 #rbtnUser {
     margin-right: 100px;
+}
+
+div#metrics {
+    float: right;
+    margin-right: 40px;
+    font-family: "Segoe UI", Arial, sans-serif;
+    margin-bottom: 10px;
 }
 
