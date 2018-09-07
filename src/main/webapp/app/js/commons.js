@@ -56,7 +56,6 @@ function displayError(response, expected) {
         history.go(-1);
     }
 }
-
 function generateMetrics(goals) {
     var completed = 0;
     var overdue = 0;
