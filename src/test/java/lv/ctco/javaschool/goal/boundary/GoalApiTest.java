@@ -137,7 +137,7 @@ class GoalApiTest {
 
     @Test
     @DisplayName("Test getUserById(): returns user if User exists")
-    void testGetUserByIdReturnsUserDtoIfUserExists() {
+    void test_GetUserById_ReturnsUserDto_IfUserExists() {
         goalList1.add(goal);
         UserDto userDto = DtoConverter.convertToUserDto(user1, goalList1);
         when(userStore.getUserById(1L))
@@ -153,7 +153,7 @@ class GoalApiTest {
 
     @Test
     @DisplayName("Test getUserById(): throws InvalidUserException if user does not exists(wrong id)")
-    void testGetUserByIdThrowsError() {
+    void test_GetUserById_ThrowsError() {
         when(userStore.getUserById(1L))
                 .thenReturn(Optional.empty());
         assertThrows(InvalidUserException.class, () -> goalApi.getUserById(1L));
@@ -161,7 +161,7 @@ class GoalApiTest {
 
     @Test
     @DisplayName("Test findGoalsForCurrentUser(): Current user has No goals returns empty list of dto's")
-    void testFindGoalsForCurrentUser() {
+    void test_FindGoalsForCurrentUser() {
         when(userStore.getCurrentUser())
                 .thenReturn(user1);
         when(goalStore.getGoalsByUser(user1))
@@ -171,7 +171,7 @@ class GoalApiTest {
 
     @Test
     @DisplayName("Test findGoalsForCurrentUser(): Current user has goals returns list of dto's")
-    void testFindGoalsForCurrentUserToReturnListOfDto() {
+    void test_FindGoalsForCurrentUser_ToReturnListOfDto() {
         goalList1.add(goal);
         when(userStore.getCurrentUser())
                 .thenReturn(user1);
@@ -184,7 +184,7 @@ class GoalApiTest {
 
     @Test
     @DisplayName("Test getGoalById(): returns dto of goal by id")
-    void testGetGoalById() {
+    void test_GetGoalById() {
         when(goalStore.getGoalById(1L))
                 .thenReturn(java.util.Optional.ofNullable(goal));
         assertThat(goalApi.findGoalDtoByGoalId(1L).getId(), is(1L));
@@ -194,7 +194,7 @@ class GoalApiTest {
 
     @Test
     @DisplayName("Test getGoalById(): throws InvalidGoalException")
-    void testGetGoalByIdException() {
+    void test_GetGoalById_Exception() {
         when(goalStore.getGoalById(1L))
                 .thenReturn(java.util.Optional.empty());
         assertThrows(InvalidGoalException.class, () -> goalApi.findGoalDtoByGoalId(1L));
@@ -202,7 +202,7 @@ class GoalApiTest {
 
     @Test
     @DisplayName("Test saveGoal(): check if persists new Goal")
-    void testSaveGoal() {
+    void test_SaveGoal() {
         goalFormDto.setDeadline(LocalDate.of(9018, 10, 25));
         goalFormDto.setGoalMessage("hi");
         goalFormDto.setTags("qwjye|iwefyg|ksdgf");
@@ -218,7 +218,7 @@ class GoalApiTest {
 
     @Test
     @DisplayName("Test saveGoal(): check if throws exception if empty fields of dto object")
-    void testSaveGoalException() {
+    void test_SaveGoal_Exception() {
         when(userStore.getCurrentUser())
                 .thenReturn(user1);
         assertThrows(InvalidGoalException.class, () -> goalApi.saveGoal(new GoalFormDto()));
@@ -226,7 +226,7 @@ class GoalApiTest {
 
     @Test
     @DisplayName("Test saveGoal(): check if throws exception if empty message inserted")
-    void testSaveGoalEmptyMessage() {
+    void test_SaveGoal_EmptyMessage() {
         GoalFormDto testGoalFormDto = new GoalFormDto();
         when(userStore.getCurrentUser())
                 .thenReturn(user1);
@@ -241,7 +241,7 @@ class GoalApiTest {
 
     @Test
     @DisplayName("Test saveGoal(): check if throws exception if there is invalid deadline date of dto object")
-    void testSaveGoalInvalidDeadline() {
+    void test_SaveGoal_InvalidDeadline() {
         goalFormDto.setDeadline(LocalDate.of(1,1,1));
         goalFormDto.setGoalMessage("hi");
         goalFormDto.setTags("qwjye|iwefyg|ksdgf");
@@ -253,7 +253,7 @@ class GoalApiTest {
 
     @Test
     @DisplayName("Test findCommentsForGoalById(): returns Comments dto of goal by id")
-    void testFindCommentsForGoalById() {
+    void test_FindCommentsForGoalById() {
         comments.add(comment1);
         when(goalStore.getGoalById(1L))
                 .thenReturn(java.util.Optional.ofNullable(goal));
@@ -266,7 +266,7 @@ class GoalApiTest {
 
     @Test
     @DisplayName("Test findCommentsForGoalById(): returns empty Comments dto of goal")
-    void testFindCommentsForGoalByIdEmptyCommentsDto() {
+    void test_FindCommentsForGoalById_EmptyCommentsDto() {
         when(goalStore.getGoalById(1L))
                 .thenReturn(java.util.Optional.ofNullable(goal));
         when(goalStore.getCommentsForGoal(goal))
@@ -277,7 +277,7 @@ class GoalApiTest {
 
     @Test
     @DisplayName("Test saveCommentsForGoalById(): verify if persists Comments")
-    void testSaveCommentsForGoalById() {
+    void test_SaveCommentsForGoalById() {
         when(userStore.getCurrentUser())
                 .thenReturn(user1);
         when(goalStore.getGoalById(1L))
@@ -288,7 +288,7 @@ class GoalApiTest {
 
     @Test
     @DisplayName("Test saveCommentsForGoalById(): verify if throws exception if optional<goal> isEmpty")
-    void testSaveCommentsForGoalByIdException() {
+    void test_SaveCommentsForGoalById_Exception() {
         when(goalStore.getGoalById(1L))
                 .thenReturn(Optional.empty());
         assertThrows(InvalidGoalException.class, () -> goalApi.saveCommentsForGoalById(1L, msg));
@@ -296,7 +296,7 @@ class GoalApiTest {
 
     @Test
     @DisplayName("Test isCurrentUsersGoal(Long goalId): verify if goal is for current user is returned true")
-    void testIsCurrentUsersGoalForCurrentUser() {
+    void test_IsCurrentUsersGoal_ForCurrentUser() {
         when(userStore.getCurrentUser())
                 .thenReturn(user1);
         when(goalStore.getUnachievedUserGoalById(user1, 1L))
@@ -306,7 +306,7 @@ class GoalApiTest {
 
     @Test
     @DisplayName("Test isCurrentUsersGoal(Long goalId): verify if goal is for other user not current, then returned false")
-    void testIsCurrentUsersGoalForDifferentUser() {
+    void test_IsCurrentUsersGoal_ForDifferentUser() {
         when(userStore.getCurrentUser())
                 .thenReturn(user2);
         when(goalStore.getUnachievedUserGoalById(user2, 1L))
@@ -329,7 +329,7 @@ class GoalApiTest {
 
     @Test
     @DisplayName("Test editGoal(Long goalId, GoalFormDto newGoalDto): verify that goal is not edited, if user did not create goal")
-    void testEditGoalForDifferentUser() {
+    void test_EditGoal_ForDifferentUser() {
         String messageBeforeEdit = goal.getGoalMessage();
         LocalDate deadlineDateBeforeEdit = goal.getDeadlineDate();
         when(userStore.getCurrentUser())
@@ -344,7 +344,7 @@ class GoalApiTest {
 
     @Test
     @DisplayName("Test editGoal(Long goalId, GoalFormDto newGoalDto): verify that goal is not edited, if goal is achieved")
-    void testEditGoalForAchievedGoal() {
+    void test_EditGoal_ForAchievedGoal() {
         goal.setStatus(GoalStatus.ACHIEVED);
         String messageBeforeEdit = goal.getGoalMessage();
         LocalDate deadlineDateBeforeEdit = goal.getDeadlineDate();
@@ -360,7 +360,7 @@ class GoalApiTest {
 
     @Test
     @DisplayName("Test editGoal(Long goalId, GoalFormDto newGoalDto): verify that goal status is changed, if overdue goal deadline date is edited")
-    void testEditGoalForOverdueGoal() {
+    void test_EditGoal_ForOverdueGoal() {
         goal.setStatus(GoalStatus.OVERDUE);
         when(userStore.getCurrentUser())
                 .thenReturn(user1);
@@ -374,7 +374,7 @@ class GoalApiTest {
 
     @Test
     @DisplayName("Test editGoal(Long goalId, GoalFormDto newGoalDto): verify that goal is edited, if users new goal is empty")
-    void testEditGoalWithoutInput() {
+    void test_EditGoal_WithoutInput() {
 
         when(userStore.getCurrentUser())
                 .thenReturn(user1);
@@ -383,7 +383,7 @@ class GoalApiTest {
 
     @Test
     @DisplayName("Test editGoal(Long goalId, GoalFormDto newGoalDto): verify that goal is edited, if user input invalid deadline date")
-    void testEditGoalInvalidDeadline() {
+    void test_EditGoal_InvalidDeadline() {
         goalFormDto.setGoalMessage("123");
         goalFormDto.setDeadline(LocalDate.of(1, 1, 1));
         assertThrows(ValidationException.class, () -> goalApi.editGoal(1L, goalFormDto));
@@ -391,7 +391,7 @@ class GoalApiTest {
 
     @Test
     @DisplayName("Test findAllTags(): verify if throws exception if optional<goal> isEmpty")
-    void testFindAllTags() {
+    void test_FindAllTags() {
         when(goalStore.getAllTags()).thenReturn(tagList);
         List<TagDto> dtoList = goalApi.findAllTags();
         assertThat(dtoList.size(), is(tagList.size()));
@@ -403,7 +403,7 @@ class GoalApiTest {
 
     @Test
     @DisplayName("Test getGoalsByTag(JsonObject searchDto): returns list of GoalDto by Tag")
-    void testGetGoalsByTag() {
+    void test_GetGoalsByTag() {
         List<Tag> tags = new ArrayList<>();
         Tag tag1 = new Tag("test1");
         Tag tag2 = new Tag("test2");
@@ -428,7 +428,7 @@ class GoalApiTest {
 
     @Test
     @DisplayName("Test getUsersByUsername(JsonObject searchDto): returns list of UserSearchDto and calling userStore.getUsersByUsername() method")
-    void testGetUsersByUsername() {
+    void test_GetUsersByUsername() {
         List<User> users = new ArrayList<>();
         Collections.addAll(users, user1, user2);
         when(userStore.getUsersByUsername(anyString())).thenReturn(users);
@@ -451,5 +451,42 @@ class GoalApiTest {
         result.setGoalMessage("123");
         result.setDeadline(LocalDate.of(2918, 1, 1));
         return result;
+    }
+
+    @Test
+    @DisplayName("test setStatusAchieved: changes status")
+    void test_SetStatusAchieved() {
+        Long id = goal.getId();
+        goal.setStatus(GoalStatus.OVERDUE);
+        when(userStore.getCurrentUser())
+                .thenReturn(user1);
+        when(goalStore.getGoalById(id))
+                .thenReturn(Optional.of(goal));
+        goalApi.setStatusAchieved(id);
+        assertThat(goal.getStatus(), is(GoalStatus.ACHIEVED));
+    }
+
+    @Test
+    @DisplayName("test setStatusAchieved: throws ValidationException wrong user")
+    void test_SetStatusAchieved_ThrowsException_IfWrongUser() {
+        Long id = goal.getId();
+        goal.setStatus(GoalStatus.OVERDUE);
+        when(userStore.getCurrentUser())
+                .thenReturn(user2);
+        when(goalStore.getGoalById(id))
+                .thenReturn(Optional.of(goal));
+        assertThrows(ValidationException.class, () -> goalApi.setStatusAchieved(id));
+    }
+
+    @Test
+    @DisplayName("test setStatusAchieved: throws ValidationException no goal")
+    void test_SetStatusAchieved_ThrowsException_IfNoGoal() {
+        Long id = goal.getId();
+        goal.setStatus(GoalStatus.OPEN);
+        when(userStore.getCurrentUser())
+                .thenReturn(user2);
+        when(goalStore.getGoalById(id))
+                .thenReturn(Optional.empty());
+        assertThrows(ValidationException.class, () -> goalApi.setStatusAchieved(id));
     }
 }

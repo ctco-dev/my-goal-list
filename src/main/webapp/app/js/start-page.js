@@ -39,5 +39,6 @@ function showUserGoals() {
             };
         }
         w3DisplayData("goals-list", tabledata);
+        generateMetrics(goals);
     });
 }

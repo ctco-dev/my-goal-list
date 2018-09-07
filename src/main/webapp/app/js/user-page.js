@@ -33,6 +33,7 @@ function setDataToFields(userDto) {
     if (list.length > 0) {
         tabledata = {"goals": list};
         w3DisplayData("goals-list", tabledata);
+        generateMetrics(list);
     } else {
         document.getElementById("hidden").classList.remove("w3-hide");
         document.getElementById("goals-list").classList.add("w3-hide");

@@ -32,6 +32,7 @@
     </div>
     <div id="personal-block" class="w3-hide">
         <h3 id="phone_email"></h3>
+        <div id="metrics"></div>
     </div>
     <table id="goals-list" class="w3-table-all w3-hoverable">
         <tr class="w3-brown">
