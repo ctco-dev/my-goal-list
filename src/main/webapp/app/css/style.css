@@ -72,10 +72,16 @@ ul {
     margin-right: 40%;
 }
 .ACHIEVED {
-    background-color: #27ff5a !important;
+    background-color: #abffba !important;
+}
+tr.ACHIEVED:hover {
+    background-color: #96e6a8 !important;
 }
 .OVERDUE {
-    background-color: #ff5953 !important;
+    background-color: #ff9389 !important;
+}
+tr.OVERDUE:hover {
+    background-color: #e17a71 !important;
 }
 span.ACHIEVED {
     visibility: hidden !important;
@@ -103,5 +109,8 @@ input[type=date]::-webkit-outer-spin-button {
 }
 a {
     text-decoration: underline;
+}
+#rbtnGoal {
+    margin-left: 100px;
 }
 

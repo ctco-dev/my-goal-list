@@ -27,8 +27,8 @@
     </div>
     <div id="search-block" class="w3-panel w3-light-grey w3-leftbar w3-border w3-round-large">
     <h2>Search for:</h2>
-        <center><input type="radio" name="colors" id="rbtnUser" onclick="switchSearch();">Goal's Creator by Name
-        <input type="radio" name="colors" id="rbtnGoal" onclick="switchSearch();">Goals by Tag</center>
+        <center><input type="radio" name="colors" id="rbtnUser" onclick="switchSearch();">Users by username
+        <input type="radio" name="colors" id="rbtnGoal" onclick="switchSearch();">Goals by tag</center>
     <div id="search-by-Username" class="w3-hide">
         <input id="username" type="text"/>
         <input type="button" class="findButton w3-button w3-brown w3-round" value="Find" onclick="findUserByName();">

@@ -30,12 +30,12 @@
             <button class="menu-button w3-button w3-brown w3-round" onclick="setStatusAchieved('{{id}}')" type="button">Achieved</button>
         </div>
     </div>
-    <div id="goal-fields" class="w3-panel w3-light-grey w3-leftbar w3-border w3-round-large">
+    <div id="goal-fields" class="w3-panel w3-light-grey w3-leftbar w3-border w3-round-large {{goalStatus}}">
         <div id="show-goal">
             <h3>Goal: {{goalMessage}}</h3>
             <h5>Author: <a onclick="redirectToUserById('{{userId}}')">{{username}}</a></h5>
             <h5>Deadline: {{deadlineDate}}</h5>
-            <h5 class="{{goalStatus}}">Goal status: {{goalStatus}}</h5>
+            <h5>Goal status: {{goalStatus}}</h5>
             <h5>Tags:</h5>
             <div id="tags-list" w3-repeat="tags">
                 <span id="{{id}}">{{tagMessage}}</span>
