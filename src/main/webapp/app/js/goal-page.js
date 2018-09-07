@@ -35,9 +35,6 @@ function onLoad() {
         w3.displayObject("status-achieved", goal);
         w3DisplayData("tags-list", goal);
         document.getElementById("goal-deadline").setAttribute("value", goal.deadlineDate);
-        if (goal.goalStatus === "ACHIEVED") {
-            document.getElementById("status-achieved").classList.add("w3-hide");
-        }
         getComments();
     });
     enableEditForGoalOwner();

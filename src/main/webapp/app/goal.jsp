@@ -70,8 +70,8 @@
                         <small>
                             <span class="glyphicon glyphicon-time"></span>{{registeredDate}}
                         </small>
-                        </br>
-                        </br>
+                        <br/>
+                        <br/>
                         <p>{{commentMessage}}</p>
                     </li>
                 </ul>
