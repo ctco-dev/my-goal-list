@@ -15,8 +15,8 @@ import lv.ctco.javaschool.goal.entity.dto.GoalDto;
 import lv.ctco.javaschool.goal.entity.dto.GoalFormDto;
 import lv.ctco.javaschool.goal.entity.dto.MessageDto;
 import lv.ctco.javaschool.goal.entity.dto.TagDto;
-import lv.ctco.javaschool.goal.entity.exception.InvalidGoalException;
 import lv.ctco.javaschool.goal.entity.dto.UserDto;
+import lv.ctco.javaschool.goal.entity.exception.InvalidGoalException;
 import lv.ctco.javaschool.goal.entity.exception.InvalidUserException;
 import lv.ctco.javaschool.goal.entity.exception.ValidationException;
 
@@ -30,6 +30,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -76,8 +77,10 @@ public class GoalApi {
     public void saveGoal(GoalFormDto goalDto) {
         User user = userStore.getCurrentUser();
         Goal goal = new Goal();
-        if (goalDto.getGoalMessage() != null && goalDto.getDeadline() != null) {
-            goal.setGoalMessage(goalDto.getGoalMessage());
+        if (goalDto.getGoalMessage() != null && !goalDto.getGoalMessage().trim().isEmpty()
+                && goalDto.getDeadline() != null
+                && goalDto.getDeadline().isAfter(LocalDate.now())) {
+            goal.setGoalMessage(goalDto.getGoalMessage().trim());
             List<Tag> tags = tagParser.parseStringToTags(goalDto.getTags());
             Set<Tag> tagSet = goalStore.checkIfTagExistsOrPersist(tags);
             goal.setTags(tagSet);
@@ -125,7 +128,7 @@ public class GoalApi {
     @Path("/{id}/edit")
     public boolean isCurrentUsersGoal(@PathParam("id") Long goalId) {
         User user = userStore.getCurrentUser();
-        Optional<Goal> goal = goalStore.getUserGoalById(user, goalId);
+        Optional<Goal> goal = goalStore.getUnachievedUserGoalById(user, goalId);
         return goal.isPresent();
     }
 
@@ -134,12 +137,20 @@ public class GoalApi {
     @Path("/{id}/edit")
     public void editGoal(@PathParam("id") Long goalId, GoalFormDto newGoalDto) {
         User user = userStore.getCurrentUser();
-        if (newGoalDto.getGoalMessage() != null && newGoalDto.getDeadline() != null) {
-            Optional<Goal> goal = goalStore.getUserGoalById(user, goalId);
+        if (newGoalDto.getGoalMessage() != null
+                && !newGoalDto.getGoalMessage().trim().isEmpty()
+                && newGoalDto.getDeadline() != null
+                && newGoalDto.getDeadline().isAfter(LocalDate.now())) {
+            Optional<Goal> goal = goalStore.getUnachievedUserGoalById(user, goalId);
             goal.ifPresent(g -> {
-                g.setGoalMessage(newGoalDto.getGoalMessage());
+                g.setGoalMessage(newGoalDto.getGoalMessage().trim());
                 g.setDeadlineDate(newGoalDto.getDeadline());
+                if (g.getStatus().equals(GoalStatus.OVERDUE)) {
+                    g.setStatus(GoalStatus.OPEN);
+                }
             });
+        } else {
+            throw new ValidationException("Goal cannot be deleted");
         }
     }
 

@@ -23,9 +23,14 @@
         <button class="menu-button" onclick="goToMain()" type="button">Go to Main</button>
     </div>
 </div>
-<h2>Search for:<br/>
-    <input type="radio" name="colors" id="rbtnUser" onclick="switchSearch();">Goal's Creator by Name<br>
-    <input type="radio" name="colors" id="rbtnGoal" onclick="switchSearch();">Goals by Tag</h2>
+<h2>
+    Search for:<br/>
+    <label for="rbtnUser">Goal's Creator by Name</label>
+    <input type="radio" name="colors" id="rbtnUser" onclick="switchSearch();">
+    <br/>
+    <label for="rbtnGoal">Goals by Tag</label>
+    <input type="radio" name="colors" id="rbtnGoal" onclick="switchSearch();">
+</h2>
 <div id="search-by-Username" class="w3-hide">
     <input id="username" type="text"/>
     <input type="button" class="findButton" value="Find" onclick="findUserByName();">
