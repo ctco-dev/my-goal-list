@@ -145,8 +145,9 @@ public class GoalApi {
             goal.ifPresent(g -> {
                 g.setGoalMessage(newGoalDto.getGoalMessage().trim());
                 g.setDeadlineDate(newGoalDto.getDeadline());
-                if (g.getStatus().equals(GoalStatus.OVERDUE))
+                if (g.getStatus().equals(GoalStatus.OVERDUE)) {
                     g.setStatus(GoalStatus.OPEN);
+                }
             });
         } else {
             throw new ValidationException("Goal cannot be deleted");

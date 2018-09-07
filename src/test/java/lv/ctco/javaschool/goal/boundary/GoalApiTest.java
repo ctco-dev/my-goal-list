@@ -90,7 +90,7 @@ class GoalApiTest {
         commentDtoList = new ArrayList<>();
         tags = new HashSet<>();
         tagList = new ArrayList<>();
-        goalFormDto = new GoalFormDto();
+        goalFormDto = setupGoalFormDto();
         msg = new MessageDto();
         user1.setUsername("user");
         user1.setEmail("user@user.com");
@@ -221,21 +221,22 @@ class GoalApiTest {
     void testSaveGoalException() {
         when(userStore.getCurrentUser())
                 .thenReturn(user1);
-        assertThrows(InvalidGoalException.class, () -> goalApi.saveGoal(goalFormDto));
+        assertThrows(InvalidGoalException.class, () -> goalApi.saveGoal(new GoalFormDto()));
     }
 
     @Test
     @DisplayName("Test saveGoal(): check if throws exception if empty message inserted")
     void testSaveGoalEmptyMessage() {
+        GoalFormDto testGoalFormDto = new GoalFormDto();
         when(userStore.getCurrentUser())
                 .thenReturn(user1);
-        assertThrows(InvalidGoalException.class, () -> goalApi.saveGoal(goalFormDto));
+        assertThrows(InvalidGoalException.class, () -> goalApi.saveGoal(testGoalFormDto));
         goalFormDto.setGoalMessage("");
-        assertThrows(InvalidGoalException.class, () -> goalApi.saveGoal(goalFormDto));
+        assertThrows(InvalidGoalException.class, () -> goalApi.saveGoal(testGoalFormDto));
         goalFormDto.setGoalMessage(" ");
-        assertThrows(InvalidGoalException.class, () -> goalApi.saveGoal(goalFormDto));
+        assertThrows(InvalidGoalException.class, () -> goalApi.saveGoal(testGoalFormDto));
         goalFormDto.setGoalMessage("  ");
-        assertThrows(InvalidGoalException.class, () -> goalApi.saveGoal(goalFormDto));
+        assertThrows(InvalidGoalException.class, () -> goalApi.saveGoal(testGoalFormDto));
     }
 
     @Test
@@ -316,8 +317,6 @@ class GoalApiTest {
     @Test
     @DisplayName("Test editGoal(Long goalId, GoalFormDto newGoalDto): verify that goal is edited, if user created goal")
     void testEditGoalForGoalOwner() {
-        goalFormDto.setGoalMessage("123");
-        goalFormDto.setDeadline(LocalDate.of(2918, 1, 1));
         when(userStore.getCurrentUser())
                 .thenReturn(user1);
         when(goalStore.getUnachievedUserGoalById(user1, 1L))
@@ -331,8 +330,6 @@ class GoalApiTest {
     @Test
     @DisplayName("Test editGoal(Long goalId, GoalFormDto newGoalDto): verify that goal is not edited, if user did not create goal")
     void testEditGoalForDifferentUser() {
-        goalFormDto.setGoalMessage("123");
-        goalFormDto.setDeadline(LocalDate.of(2918, 1, 1));
         String messageBeforeEdit = goal.getGoalMessage();
         LocalDate deadlineDateBeforeEdit = goal.getDeadlineDate();
         when(userStore.getCurrentUser())
@@ -344,12 +341,11 @@ class GoalApiTest {
         assertThat(goal.getDeadlineDate(), is(deadlineDateBeforeEdit));
     }
 
+
     @Test
     @DisplayName("Test editGoal(Long goalId, GoalFormDto newGoalDto): verify that goal is not edited, if goal is achieved")
     void testEditGoalForAchievedGoal() {
         goal.setStatus(GoalStatus.ACHIEVED);
-        goalFormDto.setGoalMessage("123");
-        goalFormDto.setDeadline(LocalDate.of(2918, 1, 1));
         String messageBeforeEdit = goal.getGoalMessage();
         LocalDate deadlineDateBeforeEdit = goal.getDeadlineDate();
         when(userStore.getCurrentUser())
@@ -366,8 +362,6 @@ class GoalApiTest {
     @DisplayName("Test editGoal(Long goalId, GoalFormDto newGoalDto): verify that goal status is changed, if overdue goal deadline date is edited")
     void testEditGoalForOverdueGoal() {
         goal.setStatus(GoalStatus.OVERDUE);
-        goalFormDto.setGoalMessage("123");
-        goalFormDto.setDeadline(LocalDate.of(2918, 1, 1));
         when(userStore.getCurrentUser())
                 .thenReturn(user1);
         when(goalStore.getUnachievedUserGoalById(user1,1L))
@@ -381,9 +375,10 @@ class GoalApiTest {
     @Test
     @DisplayName("Test editGoal(Long goalId, GoalFormDto newGoalDto): verify that goal is edited, if users new goal is empty")
     void testEditGoalWithoutInput() {
+
         when(userStore.getCurrentUser())
                 .thenReturn(user1);
-        assertThrows(ValidationException.class, () -> goalApi.editGoal(1L, goalFormDto));
+        assertThrows(ValidationException.class, () -> goalApi.editGoal(1L, new GoalFormDto()));
     }
 
     @Test
@@ -449,5 +444,12 @@ class GoalApiTest {
             assertThat(dtoList.get(i).getPhone(), is(users.get(i).getPhone()));
         }
         verify(userStore, times(1)).getUsersByUsername(anyString());
+    }
+
+    private GoalFormDto setupGoalFormDto() {
+        GoalFormDto result = new GoalFormDto();
+        result.setGoalMessage("123");
+        result.setDeadline(LocalDate.of(2918, 1, 1));
+        return result;
     }
 }

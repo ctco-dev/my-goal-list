@@ -47,7 +47,9 @@
         if (deadline.getDate() < today.getDate()) {
             var daysLeftOfMonth = new Date(today.getYear(), today.getMonth() + 1, 0).getDate();
             line = ((daysLeftOfMonth - today.getDate() + 1) + deadline.getDate()).toString() + " days left"
-        } else line = ((deadline.getDate() + 1) - today.getDate()).toString() + " days left";
+        } else {
+            line = ((deadline.getDate() + 1) - today.getDate()).toString() + " days left";
+        }
         document.getElementById('days-left').innerHTML = line;
     }
 
