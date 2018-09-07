@@ -61,12 +61,11 @@ function generateMetrics(goals) {
         }
     }
     var obj = "<table><tr>Metrics</tr>";
-    obj += "<tr>" + "Goals Total: " + goals.length + "</tr>";
-    obj += "<tr>" + "Goals Achieved: " + completed + "</tr>";
-    obj += "<tr>" + "Goals Overdue: " + overdue + "</tr>";
-    obj += "<tr>" + "Goals Open: " + open + "</tr>";
+    obj += "<td>" + "Goals Total: " + goals.length + "</td>";
+    obj += "<td>" + "Goals Achieved: " + completed + "</td>";
+    obj += "<td>" + "Goals Overdue: " + overdue + "</td>";
+    obj += "<td>" + "Goals Open: " + open + "</td>";
     obj += "</table>";
 
     document.getElementById("metrics").innerHTML = obj;
 }
-

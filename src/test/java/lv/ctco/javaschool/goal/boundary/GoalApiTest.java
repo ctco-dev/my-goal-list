@@ -452,4 +452,41 @@ class GoalApiTest {
         result.setDeadline(LocalDate.of(2918, 1, 1));
         return result;
     }
+
+    @Test
+    @DisplayName("test setStatusAchieved: changes status")
+    void testSetStatusAchieved() {
+        Long id = goal.getId();
+        goal.setStatus(GoalStatus.OVERDUE);
+        when(userStore.getCurrentUser())
+                .thenReturn(user1);
+        when(goalStore.getGoalById(id))
+                .thenReturn(Optional.of(goal));
+        goalApi.setStatusAchieved(id);
+        assertThat(goal.getStatus(), is(GoalStatus.ACHIEVED));
+    }
+
+    @Test
+    @DisplayName("test setStatusAchieved: throws ValidationException wrong user")
+    void testSetStatusAchievedThrowsExceptionIfWrongUser() {
+        Long id = goal.getId();
+        goal.setStatus(GoalStatus.OVERDUE);
+        when(userStore.getCurrentUser())
+                .thenReturn(user2);
+        when(goalStore.getGoalById(id))
+                .thenReturn(Optional.of(goal));
+        assertThrows(ValidationException.class, () -> goalApi.setStatusAchieved(id));
+    }
+
+    @Test
+    @DisplayName("test setStatusAchieved: throws ValidationException no goal")
+    void testSetStatusAchievedThrowsExceptionIfNoGoal() {
+        Long id = goal.getId();
+        goal.setStatus(GoalStatus.OPEN);
+        when(userStore.getCurrentUser())
+                .thenReturn(user2);
+        when(goalStore.getGoalById(id))
+                .thenReturn(Optional.empty());
+        assertThrows(ValidationException.class, () -> goalApi.setStatusAchieved(id));
+    }
 }
