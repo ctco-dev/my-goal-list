@@ -32,6 +32,7 @@
     </div>
     <div id="personal-block" class="w3-hide">
         <h3 id="email-and-phone">{{email}} | {{phone}}</h3>
+        <div id="metrics"></div>
     </div>
     <p id="hidden" class="w3-hide w3-display-middle w3-xlarge">At the moment this user has no goals.</p>
     <table id="goals-list" class="w3-table-all w3-hoverable">

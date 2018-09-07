@@ -42,30 +42,3 @@ function showUserGoals() {
         generateMetrics(goals);
     });
 }
-
-function generateMetrics(goals) {
-    var completed = 0;
-    var overdue = 0;
-    var open = 0;
-    for (var i = 0; i < goals.length; i++) {
-        var goal = goals[i];
-        switch (goal.goalStatus) {
-            case "ACHIEVED":
-                completed++;
-                break;
-            case "OVERDUE":
-                overdue++;
-                break;
-            default:
-                open++;
-        }
-    }
-    var obj = "<table><tr>Metrics</tr>";
-    obj += "<td>" + "Goals Total: " + goals.length + "</td>";
-    obj += "<td>" + "Goals Achieved: " + completed + "</td>";
-    obj += "<td>" + "Goals Overdue: " + overdue + "</td>";
-    obj += "<td>" + "Goals Open: " + open + "</td>";
-    obj += "</table>";
-
-    document.getElementById("metrics").innerHTML = obj;
-}
