@@ -38,7 +38,6 @@ function setDataToFields(userDto) {
         document.getElementById("hidden").classList.remove("w3-hide");
         document.getElementById("goals-list").classList.add("w3-hide");
     }
-
 }
 function getQueryVariable(variable) {
     var query = window.location.search.substring(1);
