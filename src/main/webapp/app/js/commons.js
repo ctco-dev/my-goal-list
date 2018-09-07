@@ -73,12 +73,12 @@ function generateMetrics(goals) {
                 open++;
         }
     }
-    var obj = "<table>" +
+    var statisticsTable = "<table>" +
         "<tr><td><h4>Statistics</h4></td></tr>" +
         "<tr><td>" + "Goals Total: " + goals.length + "</td></tr>" +
         "<tr><td>" + "Goals Achieved: " + completed + "</td></tr>" +
         "<tr><td>" + "Goals Overdue: " + overdue + "</td></tr>" +
         "<tr><td>" + "Goals Open: " + open + "</td></tr>" +
         "</table>";
-    document.getElementById("metrics").innerHTML = obj;
+    document.getElementById("metrics").innerHTML = statisticsTable;
 }
