@@ -64,7 +64,6 @@
             <td>{{daysLeft}}</td>
         </tr>
     </table>
-
 </div>
 </body>
 </html>

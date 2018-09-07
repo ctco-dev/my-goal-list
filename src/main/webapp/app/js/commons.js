@@ -50,14 +50,12 @@ function switchPersonalData() {
         block.classList.add("w3-hide");
     }
 }
-
 function displayError(response, expected) {
     if (response.status !== expected) {
         alert("Something went wrong! error: " + response.status.toString());
         history.go(-1);
     }
 }
-
 
 function generateMetrics(goals) {
     var completed = 0;
