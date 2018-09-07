@@ -1,8 +1,13 @@
 /*Overall CSS */
 body {
-    text-align: right;
     background-color: #e6e6e6;
     margin: 3px;
+    text-align: center;
+}
+#wrapper {
+    text-align: right;
+    max-width: 1200px;
+    margin: auto;
 }
 h1 {
     color: black;
@@ -21,18 +26,17 @@ h2 {
     float: right;
 }
 .menu-button {
-    background-color: deepskyblue;
-    border-radius: 4px;
-    color: white;
-    display: inline-block;
-    font-size: 100%;
-    padding: 15px 32px;
-    text-align: center;
-    text-decoration: none;
+    margin: 5px
 }
 #personal {
     display: inline-block;
     float: left;
+}
+#personal-data {
+    height: 30px;
+}
+#personal-block {
+    height: 10px;
 }
 #form {
     text-align: center;
@@ -40,6 +44,7 @@ h2 {
 form {
     display: inline-block;
 }
+
 #goal-fields {
     position: static;
     text-align: left;
@@ -47,7 +52,6 @@ form {
 .container {
     text-align: center;
     float: none;
-    margin: 40px;
     padding: 10px;
     border: groove;
     border-radius: 10px;
@@ -66,13 +70,18 @@ ul {
 }
 .findButton {
     margin-right: 40%;
-    margin-bottom: 5%;
 }
 .ACHIEVED {
-    background-color: #27ff5a !important;
+    background-color: #abffba !important;
+}
+tr.ACHIEVED:hover {
+    background-color: #96e6a8 !important;
 }
 .OVERDUE {
-    background-color: #ff5953 !important;
+    background-color: #ff9389 !important;
+}
+tr.OVERDUE:hover {
+    background-color: #e17a71 !important;
 }
 span.ACHIEVED {
     visibility: hidden !important;
@@ -82,5 +91,26 @@ input[type=date]::-webkit-inner-spin-button,
 input[type=date]::-webkit-outer-spin-button {
     display: none;
     -webkit-appearance: none;
+}
+#search-by-Username {
+    margin-top: 20px;
+}
+#search-by-Tags {
+    margin-top: 20px;
+}
+#search-block {
+    min-height: 170px;
+}
+#edit-goal {
+    margin-top: 20px;
+}
+#show-goal {
+    margin-bottom: 10px;
+}
+a {
+    text-decoration: underline;
+}
+#rbtnGoal {
+    margin-left: 100px;
 }
 

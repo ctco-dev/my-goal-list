@@ -7,53 +7,33 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+<link rel="shortcut icon" type="image/x-icon" href="images/favicon.ico" />
 <style>
     body, h1 {
         font-family: "Raleway", sans-serif
     }
-
     body, html {
         height: 100%
     }
-
     .bgimg {
-        background-image: url('http://stephaniemulac.com/blog/wp-content/uploads/2015/09/powerfully.jpg');
+        background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.3)), url("/images/background.jpg") center;
         min-height: 100%;
-        background-position: center;
         background-size: cover;
     }
 </style>
-<body onload="addDatLeft();">
-
+<body>
 <div class="bgimg w3-display-container w3-animate-opacity w3-text-white">
     <div class="w3-display-topleft w3-padding-large w3-xlarge">
         C.T.Co
     </div>
     <div class="w3-display-middle">
-        <h1 class="w3-jumbo w3-animate-top">COMING SOON</h1>
+        <h1 class="w3-jumbo w3-animate-top w3-center">My Goal List</h1>
         <hr class="w3-border-grey" style="margin:auto;width:40%">
-        <p id="days-left" class="w3-large w3-center">days left</p>
+        <p class="w3-xlarge w3-center">A dream becomes a goal</br> when action is taken toward its achievement.</p>
     </div>
     <div class="w3-display-bottomleft w3-padding-large">
         <a href="<c:url value='/login.jsp'/>">Log in</a>
     </div>
 </div>
-
-<script>
-    function addDatLeft() {
-        var line;
-        var today = new Date();
-        var deadline = new Date("2018-09-07");
-        if (deadline.getDate() < today.getDate()) {
-            var daysLeftOfMonth = new Date(today.getYear(), today.getMonth() + 1, 0).getDate();
-            line = ((daysLeftOfMonth - today.getDate() + 1) + deadline.getDate()).toString() + " days left"
-        } else {
-            line = ((deadline.getDate() + 1) - today.getDate()).toString() + " days left";
-        }
-        document.getElementById('days-left').innerHTML = line;
-    }
-
-</script>
-
 </body>
 </html>
